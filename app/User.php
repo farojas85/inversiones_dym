@@ -6,6 +6,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Caffeinated\Shinobi\Traits\ShinobiTrait;
+use Caffeinated\Shinobi\Models\Role;
 
 class User extends Authenticatable
 {
@@ -28,4 +29,9 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class)->withTimestamps();
+    }
 }

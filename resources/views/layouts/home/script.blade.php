@@ -39,12 +39,17 @@
     <!--Scripts js-->
     <script src="assets/js/scripts.js"></script>
 
+    <script src="assets/plugins/parsleyjs/parsley.min.js" ></script>
+    <script src="assets/plugins/i18n/es.js"></script>
     <!--mCustomScrollbar js-->
     <script src="assets/plugins/scroll-bar/jquery.mCustomScrollbar.concat.min.js"></script>
 
     <!--DataTables js-->
     <script src="assets/plugins/Datatable/js/jquery.dataTables.js"></script>
     <script src="assets/plugins/Datatable/js/dataTables.bootstrap4.js"></script>
+
+    <!-- Sweet Alerts js -->
+    <script src="assets/plugins/sweetalert2/sweetalert2.min.js"></script>
 
     <!--Dashboard js-->
     <!--<script src="assets/js/dashboard.js"></script>-->

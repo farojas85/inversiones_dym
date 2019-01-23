@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Role;
+use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
@@ -14,6 +14,7 @@ class RoleController extends Controller
         $this->middleware('permission:roles.edit')->only(['edit','update']);
         $this->middleware('permission:roles.show')->only('show');
         $this->middleware('permission:roles.destroy')->only('destroy');
+        $this->middleware('permission:roleTable')->only('table');
     }
 
     public function index()
@@ -29,9 +30,9 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+        $estadoform="create";
+        return view('configuraciones.role.create', compact('estadoform'));
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -40,7 +41,13 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $role = new Role();
+        $role->name = $request->name;
+        $role->slug = $request->slug;
+        $role->description = $request->description;
+        $role->special = $request->special;
+
+        $role->save();
     }
 
     /**
@@ -62,7 +69,8 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        //
+        $estadoform="edit";
+        return view('configuraciones.role.edit',compact('role','estadoform'));
     }
 
     /**
@@ -86,5 +94,10 @@ class RoleController extends Controller
     public function destroy(Role $role)
     {
         //
+    }
+
+    public function table(){
+        $roles=Role::all();
+        return view('configuraciones.role.table',compact('roles'));
     }
 }

@@ -22,7 +22,7 @@
                 </div>
                 <div class="dropdown-list-content">
                     <a href="#" class="dropdown-item dropdown-item-unread">
-                        <img alt="image" src="assets/img/avatar/avatar-1.jpeg" class="rounded-circle dropdown-item-img">
+                        <img alt="image" src="assets/img/users/user-11.jpeg" class="rounded-circle dropdown-item-img">
                         <div class="dropdown-item-desc">
                             <div class="dropdownmsg d-flex">
                                 <div class="">
@@ -138,7 +138,7 @@
             </a>
         </li>
         <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg">
-            <img src="assets/img/avatar/avatar-1.jpeg" alt="profile-user" class="rounded-circle w-32">
+            <img src="assets/img/users/user-11.jpg" alt="profile-user" class="rounded-circle w-32">
             <div class="d-sm-none d-lg-inline-block">Jessica Lee</div></a>
             <div class="dropdown-menu dropdown-menu-right">
                 <a href="profile.html" class="dropdown-item has-icon">

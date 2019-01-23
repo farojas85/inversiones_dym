@@ -37,7 +37,10 @@
     <link rel="stylesheet" href="assets/plugins/morris/morris.css">
 
     <!--mCustomScrollbar css-->
-	<link rel="stylesheet" href="assets/plugins/scroll-bar/jquery.mCustomScrollbar.css">
+    <link rel="stylesheet" href="assets/plugins/scroll-bar/jquery.mCustomScrollbar.css">
+    
+    <!-- Sweet Alert-->
+    <link href="assets/plugins/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
 
 
 </head>
