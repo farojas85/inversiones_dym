@@ -33,6 +33,23 @@
 							</div>
 						</div>
 					</div>
+                </div>
+                <!-- Large Modal -->
+				<div id="modal-large" class="modal fade">
+					<div class="modal-dialog modal-lg" role="document">
+						<div class="modal-content ">
+							<div class="modal-header pd-x-20">
+								<h6 class="modal-title" id="modal-large-title">Message Preview</h6>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body pd-20" id="modal-large-body">
+							</div><
+							<div class="modal-footer">
+							</div>
+						</div>
+					</div>
 				</div>
             <footer class="main-footer">
                 <div class="text-center">

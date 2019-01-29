@@ -21,6 +21,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::middleware(['auth'])->group(function(){	
     Route::resource('roles', 'RoleController');    
-    Route::resource('users', 'UserController');  
+    Route::resource('users', 'UserController');     
+    Route::resource('personals', 'PersonalController');
+    
     Route::get('roleTable', 'RoleController@table');   
 });

@@ -21,12 +21,22 @@
                 <li><a class="slide-item" href="index5.html"><span>HR Dashboard</span></a></li>
             </ul>
         </li>
+        @can('roles.index')
         <li>
-            @can('roles.index')
+            
             <a class="side-menu__item" href="/roles">
-                <i class="side-menu__icon fa fa-gears"></i><span class="side-menu__label">Configuraciones</span></a>
-            @endcan
+                <i class="side-menu__icon fa fa-gears"></i><span class="side-menu__label">Configuraciones</span>
+            </a>
         </li>
+        @endcan
+        @can('personals.index')
+        <li>
+            
+            <a class="side-menu__item" href="/personals">
+                <i class="side-menu__icon fa fa-users"></i><span class="side-menu__label">Personal</span>
+            </a>
+        </li>
+        @endcan
         <li class="slide">
             <a class="side-menu__item" data-toggle="slide" href="#"><i class="side-menu__icon fa fa-tasks"></i><span class="side-menu__label">UI Elements</span><i class="angle fa fa-angle-right"></i></a>
             <ul class="slide-menu">
