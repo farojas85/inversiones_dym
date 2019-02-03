@@ -1,46 +1,25 @@
 <head>
+        <meta charset="utf-8" />
+        <title>@yield('title-page')</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+        <meta content="Coderthemes" name="author" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="assets/images/favicon.ico">
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title-page')-Pr&eacute;stamos</title>
+        <!-- third party css -->
+        <link href="assets/libs/datatables/dataTables.bootstrap4.css" rel="stylesheet" type="text/css" />
+        <link href="assets/libs/datatables/responsive.bootstrap4.css" rel="stylesheet" type="text/css" />
+        <link href="assets/libs/datatables/buttons.bootstrap4.css" rel="stylesheet" type="text/css" />
+        <link href="assets/libs/datatables/select.bootstrap4.css" rel="stylesheet" type="text/css" />
+        <!-- third party css end -->
+        
+        <!-- Plugins css -->
+        <link href="assets/libs/flatpickr/flatpickr.min.css" rel="stylesheet" type="text/css" />
 
-    <!--Favicon -->
-    <link rel="icon" href="favicon.ico" type="image/x-icon"/>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <!--Bootstrap.min css-->
-    <link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.min.css">
-
-    <!--Icons css-->
-    <link rel="stylesheet" href="assets/css/icons.css">
-
-    <!--Style css-->
-    <link rel="stylesheet" href="assets/css/style.css">
-
-    <!--mCustomScrollbar css-->
-    <link rel="stylesheet" href="assets/plugins/scroll-bar/jquery.mCustomScrollbar.css">
-
-    <!--Sidemenu css-->
-    <link rel="stylesheet" href="assets/plugins/toggle-menu/sidemenu.css">
-
-    <!--DataTables css-->
-    <link rel="stylesheet" href="assets/plugins/Datatable/css/dataTables.bootstrap4.css">
-
-
-    <!--Chartist css-->
-    <link rel="stylesheet" href="assets/plugins/chartist/chartist.css">
-    <link rel="stylesheet" href="assets/plugins/chartist/chartist-plugin-tooltip.css">
-
-    <!--Full calendar css-->
-    <link rel="stylesheet" href="assets/plugins/fullcalendar/stylesheet1.css">
-    
-    <!--morris css-->
-    <link rel="stylesheet" href="assets/plugins/morris/morris.css">
-
-    <!--mCustomScrollbar css-->
-    <link rel="stylesheet" href="assets/plugins/scroll-bar/jquery.mCustomScrollbar.css">
-    
-    <!-- Sweet Alert-->
-    <link href="assets/plugins/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
-
-
+        <!-- App css -->
+        <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+        <link href="assets/css/app.min.css" rel="stylesheet" type="text/css" />
 </head>

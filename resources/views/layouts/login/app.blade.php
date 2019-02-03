@@ -8,23 +8,31 @@
     <meta name="description" content="Sistema de Cobranzas" />
     <meta name="author" content="farbesoft" />
     <title>Inversiones DyM</title>
-    <!-- google font -->
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet" type="text/css" />
-	<!-- icons -->
-    <link href="fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
-	<link href="fonts/material-design-icons/material-icon.css" rel="stylesheet" type="text/css" />
-    <!-- bootstrap -->
-	<link href="assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <!-- style -->
-    <link rel="stylesheet" href="assets/css/pages/extra_pages.css">
-	<!-- favicon -->
-    <link rel="shortcut icon" href="assets/img/favicon.ico" /> 
+    <!--Favicon -->
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+    <!-- App css -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/app.min.css" rel="stylesheet" type="text/css" />
 </head>
-<body>
-    @yield('contenido')
-    <!-- start js include path -->
-    <script src="assets/plugins/jquery/jquery.min.js" ></script>
-    <script src="assets/js/pages/extra_pages/pages.js" ></script>
-    <!-- end js include path -->
+<body class="authentication-bg authentication-bg-pattern">
+    <div class="account-pages mt-5 mb-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                @yield('contenido')
+            </div>
+        </div>
+    </div>
+    <footer class="footer footer-alt">
+        2015 - 2018 &copy; UBold theme by <a href="" class="text-white-50">Coderthemes</a> 
+    </footer>
+    <!-- Vendor js -->
+    <script src="assets/js/vendor.min.js"></script>
+
+    <!-- App js -->
+    <script src="assets/js/app.min.js"></script>
+        
 </body>
 </html>

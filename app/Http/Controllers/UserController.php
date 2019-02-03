@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -59,9 +60,11 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        $estadoform="edit";
+        $roles = Role::all();
+        return view('configuraciones.user.edit', compact('estadoform','user','roles'));
     }
 
     /**
@@ -71,9 +74,15 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        //
+        $user->name = $request->name;
+        $user->email = $request->email;        
+        $user->save();
+
+         //Asignamos los roles seleccionados
+         $user->roles()->sync($request->get('roles'));
+        return $user;
     }
 
     /**

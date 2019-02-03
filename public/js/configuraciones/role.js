@@ -128,11 +128,11 @@ $('body').on('click', '#user-frame', function (event) {
         url: 'users',
         type:"GET",
         success: function (response) {
-            $('#tabla-detalle').html(response);
+            $('#tabla-detalle-user').html(response);
         }
     });
 });
-$('body').on('click', '#role-frame', function (event) {
+/*$('body').on('click', '#role-frame', function (event) {
     $.ajax({
         url: 'roleTable',
         type:"GET",
@@ -140,7 +140,7 @@ $('body').on('click', '#role-frame', function (event) {
             $('#tabla-detalle').html(response);
         }
     });
-});
+});*/
 
 //AGREGAR ROLE
 $('body').on('click', '#btn-agregar-usuario', function (event) {
@@ -153,9 +153,10 @@ $('body').on('click', '#btn-agregar-usuario', function (event) {
         url: 'users/create',
         type:"GET",
         success: function (response) {
-            $('#modal-default-title').text(title);
-            $('#modal-default-body').html(response);
-            $('#modal-default').modal('show');
+            $('#modal-large-title').text(title);
+            $('#modal-large-body').html(response);
+            $('#modal-large').modal('show');
         }
     });
 });
+
