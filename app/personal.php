@@ -11,4 +11,9 @@ class personal extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function personalMontos()
+    {
+        return $this->hasMany(personalMonto::class);
+    }
 }

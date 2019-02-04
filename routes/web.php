@@ -23,6 +23,8 @@ Route::middleware(['auth'])->group(function(){
     Route::resource('roles', 'RoleController');    
     Route::resource('users', 'UserController');     
     Route::resource('personals', 'PersonalController');
+    Route::resource('clientes', 'ClienteController');
+    Route::resource('personalmontos', 'PersonalMontoController');
     
     Route::get('roleTable', 'RoleController@table');   
 });

@@ -21,6 +21,16 @@
 <script src="assets/libs/pdfmake/pdfmake.min.js"></script>
 <script src="assets/libs/pdfmake/vfs_fonts.js"></script>
 
+<!-- Plugin js-->
+<script src="assets/libs/parsleyjs/parsley.min.js"></script>
+<script src="assets/libs/i18n/es.js"></script>
+
+<!-- Sweet Alerts js -->
+<script src="assets/libs/sweetalert2/sweetalert2.min.js"></script>
+
+
+
+
 
 <!-- App js-->
 <script src="assets/js/app.min.js"></script>

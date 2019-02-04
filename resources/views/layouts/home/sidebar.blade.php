@@ -51,18 +51,26 @@
                                 <a href="/personals">Personal</a>
                             </li>
                             @endcan
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript: void(0);">
+                            <i class="far fa-money-bill-alt"></i>
+                            <span> Pr&eacute;stamos </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <ul class="nav-second-level" aria-expanded="false">
+                            @can('clientes.index')
                             <li>
-                                <a href="apps-contacts.html">Contacts</a>
+                                <a href="/clientes">Clientes</a>
                             </li>
+                            @endcan
+                            @can('personalmontos.index')
                             <li>
-                                <a href="apps-projects.html">Projects</a>
+                                <a href="/personalmontos">Asignar Montos</a>
                             </li>
-                            <li>
-                                <a href="apps-tickets.html">Tickets</a>
-                            </li>
-                            <li>
-                                <a href="apps-companies.html">Companies</a>
-                            </li>
+                            @endcan
+                            
                         </ul>
                     </li>
 

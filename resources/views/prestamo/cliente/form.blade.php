@@ -40,8 +40,6 @@
                     !!}
                 </div>
             </div>
-        </div>
-        <div class="col-md-6">
             <div class="form-group row">
                 {!! Form::label('celular','Celular',['class' =>'col-md-4 col-form-label text-right']) !!}
                 <div class="col-md-8">
@@ -52,12 +50,14 @@
                     !!}
                 </div>
             </div>
+        </div>
+        <div class="col-md-6">            
             <div class="form-group row">
-                    {!! Form::label('licencia','Licencia',['class' =>'col-md-4 col-form-label text-right']) !!}
+                    {!! Form::label('correo','E-Mail',['class' =>'col-md-4 col-form-label text-right']) !!}
                     <div class="col-md-8">
-                        {!! Form::text('licencia', null,
-                                    [   'class' => 'form-control', 'id' => 'licencia',
-                                        'placeholder' => 'Ingrese Licencia'])
+                        {!! Form::text('correo', null,
+                                    [   'class' => 'form-control', 'id' => 'correo',
+                                        'placeholder' => 'Ingrese Correo Electrónico'])
                         !!}
                     </div>
             </div>
@@ -73,22 +73,24 @@
                 </div>        
             </div>
             <div class="form-group row">
-                {!! Form::label('user_id','Usuario',['class' =>'col-form-label col-md-4 text-right']) !!}
-                <div class="col-md-8" id="span_usuario">
-                    <div class="input-group">
-                        {!! 
-                            Form::select('user_id',$users,null,
-                                            ['class' => 'form-control',
-                                            'placeholder'=> 'Seleccione Usuario']) 
-                        !!}
-                        <div class="input-group-append">
-                            <button class="btn btn-info" type="button"
-                                    id="btn-subcategoria">
-                                <i class="fa fa-pencil"></i>
-                            </button>
-                        </div>
-                    </div> 
-                </div>                                             
+                {!! Form::label('ruc','R.U.C',['class' =>'col-md-4 col-form-label text-right']) !!}
+                <div class="col-md-8">
+                    {!! Form::text('ruc', null,
+                                [   'class' => 'form-control', 'id' => 'ruc',
+                                    'placeholder' => 'Ingrese RUC',
+                                    'maxlength'=>'8',
+                                    'data-parsley-pattern'=>"^[0-9]+$"])
+                    !!}
+                </div>
+            </div>
+            <div class="form-group row">
+                {!! Form::label('razon_social','Razon Social',['class' =>'col-md-4 col-form-label text-right']) !!}
+                <div class="col-md-8">
+                    {!! Form::text('razon_social', null,
+                                [   'class' => 'form-control', 'id' => 'razon_social',
+                                    'placeholder' => 'Ingrese Razón Social'])
+                    !!}
+                </div>
             </div>
         </div>
     </div>
@@ -103,8 +105,8 @@
             </div>	
         </div>      
     </div>
-    <div class="form-group">
-        <button type="button" class="btn btn-success" id="btn-guardar" value="{{ $estadoform }}" name="btn-guardar">
+    <div class="form-group text-center">
+        <button type="button" class="btn btn-success" id="btn-cliente-guardar" value="{{ $estadoform }}" name="btn-guardar">
             <i class="{{ ($estadoform == 'create') ? 'ti-save' : 'fe-refresh-cw '}}"></i>
             {{ ($estadoform =='create') ? 'Guardar' : 'Actualizar' }}
         </button>

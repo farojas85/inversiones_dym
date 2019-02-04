@@ -21,7 +21,7 @@
 				<div class="modal-dialog" role="document">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h5 class="modal-title" id="modal-default-title">Modal title</h5>
+							<h4 class="modal-title" id="modal-default-title">Modal title</h4>
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 								<span aria-hidden="true">×</span>
 							</button>
@@ -39,7 +39,7 @@
 				<div class="modal-dialog modal-lg" role="document">
 					<div class="modal-content ">
 						<div class="modal-header pd-x-20">
-							<h6 class="modal-title" id="modal-large-title">Message Preview</h6>
+							<h4 class="modal-title" id="modal-large-title">Message Preview</h4>
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
