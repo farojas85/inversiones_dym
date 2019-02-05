@@ -37,21 +37,36 @@
                         <table id="model-datatable" class="table table-striped dt-responsive table-sm" >
                             <thead>
                                 <tr>
-                                    <th width="10px">Acciones</th>
+                                    <th >Acciones</th>
                                     <th >ID</th>
                                     <th >Personal</th>
                                     <th >Total Montos</th>
-                                    <th >Total Saldo</th>
-                                    <th>Estado</th>                                 
+                                    <th >Total Saldo</th>                                 
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($personalMontos as $pm)
                                 <tr>
                                     <td>
-                                        
+                                        @can('personalmontos.show')
+                                        <a class="btn btn-blue btn-xs modal-show" 
+                                            title="Listado Montos"
+                                            href="{{ route('personalmontos.show',$pm->id)}}">
+                                            <i class="far fa-eye"></i>
+                                        </a>
+                                        @endcan
+                                        @can('personalmontos.edit')
+                                        <a class="btn btn-warning btn-xs modal-edit" 
+                                            title="Editar Monto Personal"
+                                            href="{{ route('personalmontos.edit',$pm->id)}}">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        @endcan
                                     </td>
-                                    <td>{{ $loop->iteration}}</td>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $pm->nombres }}</td>
+                                    <td>{{ "S/ ".number_format($pm->total_asignado,2) }}</td>
+                                    <td>{{ "S/ ".number_format($pm->total_saldo,2) }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>

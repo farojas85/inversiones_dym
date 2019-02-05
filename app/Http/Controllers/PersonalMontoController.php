@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\personalMonto;
+use App\personal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class PersonalMontoController extends Controller
 {
@@ -46,7 +49,21 @@ class PersonalMontoController extends Controller
      */
     public function create()
     {
-        //
+        $estadoform="create";
+
+        $personals =  Personal::join('role_user','personals.user_id','=','role_user.user_id')
+                                ->where('role_user.role_id','=',4)
+                                ->select(DB::raw("CONCAT(personals.nombres,' ',personals.apellidos) AS nombres"),
+                                        'personals.id')
+                                ->get()
+                                ;
+        /*DB::table('personals as p')
+                            ->join('role_user as ru','p.user_id','=','ru.user_id')
+                            ->where('ru.role_id','=',4)
+                            ->get()
+                            ->pluck(DB::raw("CONCAT(p.nombres,' ',p.apellidos) AS nombres"),'p.id');*/
+
+        return view('prestamo.personalMonto.create', compact('estadoform','personals'));
     }
 
     /**
@@ -57,7 +74,18 @@ class PersonalMontoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+
+        $personal = new personalMonto();
+        $personal->personal_id = $request->personal_id;
+        $personal->monto_asignado = $request->monto_asignado;
+        $personal->monto_saldo = $request->monto_asignado;
+        $personal->fecha = Carbon::now();
+        $personal->consumido = 0;
+        $personal->orden = 1;
+        $personal->asignado_por = Auth::id();
+
+        $personal->save();
     }
 
     /**
@@ -68,7 +96,7 @@ class PersonalMontoController extends Controller
      */
     public function show(personalMonto $personalMonto)
     {
-        //
+        
     }
 
     /**
@@ -77,9 +105,13 @@ class PersonalMontoController extends Controller
      * @param  \App\personalMonto  $personalMonto
      * @return \Illuminate\Http\Response
      */
-    public function edit(personalMonto $personalMonto)
+    public function edit($id)
     {
-        //
+        $personal = personal::findOrFail($id);
+        $personalmontos = personalMonto::where('personal_id','=',$personal->id)
+                                        ->orderBy('fecha','ASC')
+                                        ->get();
+        return view('prestamo.personalMonto.edit',compact('personal','personalmontos'));
     }
 
     /**

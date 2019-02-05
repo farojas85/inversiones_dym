@@ -15,3 +15,78 @@ $('body').on('click', '#btn-agregar', function (event) {
         }
     });
 });
+
+$('body').on('click', '#btn-guardar', function (event) {
+    event.preventDefault();
+
+    estado = $(this).val();
+
+    var form = $('#form'),
+                url = form.attr('action'),
+                method =form.attr('method');
+
+    $('#form').parsley().validate();
+
+    if ($('#form').parsley().isValid()) {
+         $.ajax({
+            url : url,
+            method: method,
+            data : form.serialize(),
+            success: function (response) {
+                
+                if(estado == 'edit'){
+                    textos = "Datos Modificados Satisfactoriamente !";
+                }
+                else if(estado == 'create'){
+                    textos = "Datos Registrados Satisfactoriamente !";   
+                }
+
+                swal({
+                    type : 'success',
+                    title : 'Asignación Montos',
+                    text : textos,
+                    confirmButtonText: 'Aceptar'
+                }).then(function () {
+                     window.location="personalmontos";
+                });
+                
+            },
+            error : function (xhr) {
+                var res = xhr.responseJSON;
+                if ($.isEmptyObject(res) == false) {
+                    $.each(res.errors, function (key, value) {
+                        $('#' + key)
+                            .closest('.form-group')
+                            .addClass('has-error')
+                            .append('<span class="help-block"><strong>' + value + '</strong></span>');
+                    });
+                }
+            }
+        }); 
+    }
+});
+
+$('body').on('click', '.modal-edit', function (event) {
+    event.preventDefault();
+
+    var me = $(this),
+        url = me.attr('href'),
+        title = me.attr('title');  
+
+    $.ajax({
+        url: url,
+        dataType: 'html',
+        success: function (response) {
+            $('#modal-large-title').text(title);
+            $('#modal-large-body').html(response);
+            $('#modal-large').modal('show');
+        }
+    });        
+});
+
+function editar_monto(id){
+    document.getElementById('tr_edit_'+id).style.visibility="visible";
+}
+function cerrar(id){
+    document.getElementById('tr_edit_'+id).style.visibility="hidden";
+}
