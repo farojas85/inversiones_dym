@@ -46,9 +46,14 @@
                                 <a href="/users">Usuarios</a>
                             </li>
                             @endcan
-                            @can('personales.index')
+                            @can('personals.index')
                             <li>
                                 <a href="/personals">Personal</a>
+                            </li>
+                            @endcan
+                            @can('personaladelantos.index')
+                            <li>
+                                <a href="/personaladelantos">Adelanto Personal</a>
                             </li>
                             @endcan
                         </ul>
@@ -68,6 +73,11 @@
                             @can('personalmontos.index')
                             <li>
                                 <a href="/personalmontos">Asignar Montos</a>
+                            </li>
+                            @endcan
+                            @can('prestamos.index')
+                            <li>
+                                <a href="/prestamos">Asignar Pr&eacute;stamos</a>
                             </li>
                             @endcan
                             

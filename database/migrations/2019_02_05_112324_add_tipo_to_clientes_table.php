@@ -14,7 +14,7 @@ class AddTipoToClientesTable extends Migration
     public function up()
     {
         Schema::table('clientes', function (Blueprint $table) {
-            //
+            $table->enum('tipo',['Bueno','Regular','Moroso']);
         });
     }
 
@@ -26,7 +26,7 @@ class AddTipoToClientesTable extends Migration
     public function down()
     {
         Schema::table('clientes', function (Blueprint $table) {
-            $table->enum('tipo',['Bueno','Regular','Moroso']);
+            $table->dropColumn('tipo');
         });
     }
 }

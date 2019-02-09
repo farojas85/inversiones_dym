@@ -16,4 +16,9 @@ class personal extends Model
     {
         return $this->hasMany(personalMonto::class);
     }
+
+    public function PersonalAdelantos()
+    {
+        return $this->hasMany(PersonalAdelanto::class);
+    }
 }

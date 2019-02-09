@@ -25,6 +25,8 @@ Route::middleware(['auth'])->group(function(){
     Route::resource('personals', 'PersonalController');
     Route::resource('clientes', 'ClienteController');
     Route::resource('personalmontos', 'PersonalMontoController');
-    
+    Route::resource('prestamos', 'PrestamoController');    
+    Route::resource('personaladelantos', 'PersonalAdelantoController');    
+
     Route::get('roleTable', 'RoleController@table');   
 });

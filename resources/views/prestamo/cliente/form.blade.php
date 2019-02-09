@@ -1,3 +1,4 @@
+
 <div class="row">
         <div class="col-md-6">
             <div class="form-group row">
@@ -68,9 +69,18 @@
                     Form::textarea('direccion', null,
                                 [   'class' => 'form-control', 'id' => 'direccion',
                                     'placeholder' => 'Ingrese Dirección',
-                                    'rows'=>3])
+                                    'rows'=>2])
                 !!}
                 </div>        
+            </div>
+            <div class="form-group row">
+                {!! Form::label('nro_referencia','Nro. Referencia',['class' =>'col-md-4 col-form-label text-right']) !!}
+                <div class="col-md-8">
+                    {!! Form::text('nro_referencia', null,
+                                [   'class' => 'form-control', 'id' => 'nro_referencia',
+                                    'placeholder' => 'Ingrese Nro. de Referencia'])
+                    !!}
+                </div>
             </div>
             <div class="form-group row">
                 {!! Form::label('ruc','R.U.C',['class' =>'col-md-4 col-form-label text-right']) !!}

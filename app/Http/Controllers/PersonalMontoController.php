@@ -27,19 +27,27 @@ class PersonalMontoController extends Controller
             array('ru.role_id','=',4),
             array('pm.consumido','<>',1)
         );
-        $personalMontos = DB::table('personals as p')
-                            ->join('personal_montos as pm','p.id','=','pm.personal_id')
-                            ->join('role_user as ru','p.user_id','=','ru.user_id')
-                            ->select('p.id',DB::raw("CONCAT(p.nombres,' ',p.apellidos) AS nombres"),
-                                    DB::raw('SUM(monto_asignado) as total_asignado'),
-                                    DB::raw('SUM(monto_saldo) as total_saldo'))
-                            ->where($condicion)
-                            ->groupBy('p.id','nombres')
-                            ->get();
 
-        //$personalMontos = personalMonto::all();
+        $personal = personal::all();
+        
+        if($personal->count() >0){
+            $personalMontos = DB::table('personals as p')
+            ->join('personal_montos as pm','p.id','=','pm.personal_id')
+            ->join('role_user as ru','p.user_id','=','ru.user_id')
+            ->select('p.id',DB::raw("CONCAT(p.nombres,' ',p.apellidos) AS nombres"),
+                    DB::raw('SUM(monto_asignado) as total_asignado'),
+                    DB::raw('SUM(monto_saldo) as total_saldo'))
+            ->where($condicion)
+            ->groupBy('p.id','nombres')
+            ->get();
+        }
+       else{
+        $personalMontos = null;
+       }
 
-        return view('prestamo.personalMonto.index',compact('personalMontos'));
+        // = personalMonto::all();
+
+        return view('prestamo.personalMonto.index',compact('personalMontos','personal'));
     }
 
     /**

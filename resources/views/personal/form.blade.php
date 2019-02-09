@@ -40,8 +40,6 @@
                     !!}
                 </div>
             </div>
-        </div>
-        <div class="col-md-6">
             <div class="form-group row">
                 {!! Form::label('celular','Celular',['class' =>'col-md-4 col-form-label text-right']) !!}
                 <div class="col-md-8">
@@ -52,6 +50,8 @@
                     !!}
                 </div>
             </div>
+        </div>
+        <div class="col-md-6">            
             <div class="form-group row">
                     {!! Form::label('licencia','Licencia',['class' =>'col-md-4 col-form-label text-right']) !!}
                     <div class="col-md-8">
@@ -71,6 +71,15 @@
                                     'rows'=>3])
                 !!}
                 </div>        
+            </div>
+            <div class="form-group row">
+                {!! Form::label('sueldo','Sueldo',['class' =>'col-md-4 col-form-label text-right']) !!}
+                <div class="col-md-8">
+                    {!! Form::number('sueldo', null,
+                                [   'class' => 'form-control', 'id' => 'sueldo',
+                                    'placeholder' => 'Ingrese Sueldo'])
+                    !!}
+                </div>
             </div>
             <div class="form-group row">
                 {!! Form::label('user_id','Usuario',['class' =>'col-form-label col-md-4 text-right']) !!}
@@ -103,7 +112,7 @@
             </div>	
         </div>      
     </div>
-    <div class="form-group">
+    <div class="form-group text-center">
         <button type="button" class="btn btn-success" id="btn-guardar" value="{{ $estadoform }}" name="btn-guardar">
             <i class="{{ ($estadoform == 'create') ? 'ti-save' : 'fe-refresh-cw '}}"></i>
             {{ ($estadoform =='create') ? 'Guardar' : 'Actualizar' }}

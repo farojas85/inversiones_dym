@@ -48,9 +48,12 @@ class PersonalController extends Controller
         $personal->licencia = $request->licencia;
         $personal->direccion = $request->direccion;
         $personal->user_id = $request->user_id;
+        $personal->sueldo = $request->sueldo;
         $personal->estado = 'activo';
 
         $personal->save();
+
+        return $personal;
     }
 
     public function show(personal $personal)
@@ -60,17 +63,35 @@ class PersonalController extends Controller
 
     public function edit(personal $personal)
     {
-        //
+        $estadoform="edit";
+        $users = User::pluck('name','id');
+        return view('personal.edit', compact('estadoform','personal','users'));
     }
 
     public function update(Request $request, personal $personal)
     {
-        //
+        $personal->dni = $request->dni;
+        $personal->apellidos = $request->apellidos;
+        $personal->nombres = $request->nombres;
+        $personal->telefono_fijo = $request->telefono_fijo;
+        $personal->celular = $request->celular;
+        $personal->licencia = $request->licencia;
+        $personal->direccion = $request->direccion;
+        $personal->user_id = $request->user_id;
+        $personal->sueldo = $request->sueldo;
+        $personal->estado = $request->estado;
+
+        $personal->save();
+
+        return $personal;
     }
 
     public function destroy(personal $personal)
     {
-        //
+        $personal->estado="eliminado";
+        $personal->save();
+
+        return $personal;
     }
 
     public function validarDni($dni){

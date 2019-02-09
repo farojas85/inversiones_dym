@@ -53,6 +53,7 @@ class ClienteController extends Controller
         $cliente->celular = $request->celular;
         $cliente->correo = $request->correo;
         $cliente->direccion = $request->direccion;
+        $cliente->nro_referencia = $request->nro_referencia;
         $cliente->estado = 'activo';
 
         $cliente->save();
@@ -100,6 +101,7 @@ class ClienteController extends Controller
         $cliente->celular = $request->celular;
         $cliente->correo = $request->correo;
         $cliente->direccion = $request->direccion;
+        $cliente->nro_referencia = $request->nro_referencia;
         $cliente->estado = $request->estado;
 
         $cliente->save();

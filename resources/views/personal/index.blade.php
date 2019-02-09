@@ -30,12 +30,12 @@
                                 <table id="model-datatable" class="table table-striped table-bordered border-t0 text-nowrap w-100" >
                                     <thead>
                                         <tr>
+                                            <th >Acciones</th>
                                             <th >ID</th>
                                             <th >Apellidos</th>
                                             <th >Nombres</th>
                                             <th >Usuario</th>
-                                            <th>Estado</th>
-                                            <th >Acciones</th>
+                                            <th>Estado</th>                                            
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -50,27 +50,27 @@
                                             }
                                         @endphp
                                         <tr>
+                                            <td>
+                                                @can('personals.edit')
+                                                <a class="btn btn-warning btn-xs modal-edit" 
+                                                    title="Editar Personal"
+                                                    href="{{ route('personals.edit',$persona->id)}}">
+                                                    <i class="fa fa-edit"></i>
+                                                </a>
+                                                @endcan
+                                                @can('personals.destroy')
+                                                <a class="btn btn-danger btn-xs modal-destroy" title="Eliminar Role"
+                                                    href="{{ route('personals.destroy',$persona->id)}}">
+                                                    <i class="fe-trash-2"></i>
+                                                </a>
+                                                @endcan
+                                            </td>
                                             <td>{{ $loop->iteration}}</td>
                                             <td> {{ $persona->apellidos }}</td>
                                             <td> {{ $persona->nombres }}</td>
                                             <td> {{ $persona->user->name }}</td>
                                             <td class="text-center">
                                                 <span class="{{$clase}}">{{$texto}}</span>
-                                            </td>
-                                            <td>
-                                                @can('personals.edit')
-                                                <a class="btn btn-social-icon btn-warning modal-edit" 
-                                                    title="Editar Role"
-                                                    href="{{ route('personals.edit',$persona->id)}}">
-                                                    <i class="fa fa-edit"></i>
-                                                </a>
-                                                @endcan
-                                                @can('personals.destroy')
-                                                <a class="btn btn-social-icon btn-danger modal-destroy" title="Eliminar Role"
-                                                    href="{{ route('personals.destroy',$persona->id)}}">
-                                                    <i class="fa fa-trash-o"></i>
-                                                </a>
-                                                @endcan
                                             </td>
                                         </tr>
                                         @endforeach

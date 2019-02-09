@@ -28,9 +28,6 @@
                         </button>
                         @endcan
                     </div>
-                    <div class="col-md-4">
-
-                    </div>
                 </div>
                 <div class="row">
                     <div class="table-responsive" id="tabla-detalle">
@@ -45,7 +42,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($personalMontos as $pm)
+                                @forelse ($personalMontos as $pm)
                                 <tr>
                                     <td>
                                         @can('personalmontos.show')
@@ -67,6 +64,10 @@
                                     <td>{{ $pm->nombres }}</td>
                                     <td>{{ "S/ ".number_format($pm->total_asignado,2) }}</td>
                                     <td>{{ "S/ ".number_format($pm->total_saldo,2) }}</td>
+                                </tr>
+                                @emtpy
+                                <tr>
+                               <td colspan="5">- Datos No Registrados -</td>
                                 </tr>
                                 @endforeach
                             </tbody>

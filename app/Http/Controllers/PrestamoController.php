@@ -3,81 +3,56 @@
 namespace App\Http\Controllers;
 
 use App\Prestamo;
+use App\Cliente;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class PrestamoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function __construct()
+    {
+        $this->middleware('permission:prestamos.create')->only(['create','store']);
+        $this->middleware('permission:prestamos.index')->only('index');
+        $this->middleware('permission:prestamos.edit')->only(['edit','update']);
+        $this->middleware('permission:prestamos.show')->only('show');
+        $this->middleware('permission:prestamos.destroy')->only('destroy');
+        $this->middleware('permission:prestamoTable')->only('table');
+    }
     public function index()
     {
-        //
+        $prestamos = Prestamo::all();
+        return view('prestamo.deuda.index',compact('prestamos'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        $clientes = Cliente::select(DB::raw("CONCAT(nombres,' ',apellidos) AS nombres"),'id')
+                            ->pluck('nombres','id');
+        return view('prestamo.deuda.create',compact('clientes'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Prestamo  $prestamo
-     * @return \Illuminate\Http\Response
-     */
     public function show(Prestamo $prestamo)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Prestamo  $prestamo
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Prestamo $prestamo)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Prestamo  $prestamo
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Prestamo $prestamo)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Prestamo  $prestamo
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Prestamo $prestamo)
     {
         //
