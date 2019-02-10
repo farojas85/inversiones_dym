@@ -42,14 +42,14 @@
                             @php
                                 switch ($rol->special) {
                                     case '': case null: 
-                                        $alert = "badge badge-dark";
-                                        $text ="--";break;
+                                        $alert = "badge badge-primary";
+                                        $text ="algún acceso";break;
                                     case 'all-access': 
                                         $alert = "badge badge-success";
-                                        $text ="All-access";break;
+                                        $text ="acceso total";break;
                                     case 'no-access': 
-                                        $alert = "badge badge-danger";
-                                        $text ="No-access";break;
+                                        $alert = "badge badge-dark";
+                                        $text ="ningún acceso";break;
                                 }
                             @endphp
                             <tr>

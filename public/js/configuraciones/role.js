@@ -132,15 +132,6 @@ $('body').on('click', '#user-frame', function (event) {
         }
     });
 });
-/*$('body').on('click', '#role-frame', function (event) {
-    $.ajax({
-        url: 'roleTable',
-        type:"GET",
-        success: function (response) {
-            $('#tabla-detalle').html(response);
-        }
-    });
-});*/
 
 //AGREGAR ROLE
 $('body').on('click', '#btn-agregar-usuario', function (event) {

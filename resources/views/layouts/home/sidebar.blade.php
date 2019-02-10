@@ -1,34 +1,24 @@
 <div class="left-side-menu">
-
         <div class="slimscroll-menu">
-
             <!--- Sidemenu -->
             <div id="sidebar-menu">
                 <ul class="metismenu" id="side-menu">
 
                     <li class="menu-title">Navegaci&oacute;n</li>
-
+                    @can('dashboard.index')
                     <li>
                         <a href="javascript: void(0);">
                             <i class="fe-airplay"></i>
-                            <span class="badge badge-success badge-pill float-right">4</span>
-                            <span> Dashboards </span>
+                            <span> Dashboard</span>
+                            <span class="menu-arrow"></span>
                         </a>
                         <ul class="nav-second-level">
                             <li>
-                                <a href="/home">Home 1</a>
-                            </li>
-                            <li>
-                                <a href="dashboard-2.html">Dashboard 2</a>
-                            </li>
-                            <li>
-                                <a href="dashboard-3.html">Dashboard 3</a>
-                            </li>
-                            <li>
-                                <a href="dashboard-4.html">Dashboard 4</a>
+                                <a href="/home">Home</a>
                             </li>
                         </ul>
                     </li>
+                    @endcan                    
                     <li>
                         <a href="javascript: void(0);">
                             <i class="fe-cpu"></i>
@@ -46,6 +36,20 @@
                                 <a href="/users">Usuarios</a>
                             </li>
                             @endcan
+                            @can('permissions.index')
+                            <li>
+                                <a href="/permissions">Permisos</a>
+                            </li>
+                            @endcan
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript: void(0);">
+                            <i class="fe-users"></i>
+                            <span>Personal</span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <ul class="nav-second-level">
                             @can('personals.index')
                             <li>
                                 <a href="/personals">Personal</a>
@@ -54,6 +58,11 @@
                             @can('personaladelantos.index')
                             <li>
                                 <a href="/personaladelantos">Adelanto Personal</a>
+                            </li>
+                            @endcan
+                            @can('personalsalarios.index')
+                            <li>
+                                <a href="/personalsalarios">Pagos Personal</a>
                             </li>
                             @endcan
                         </ul>

@@ -21,4 +21,8 @@ class personal extends Model
     {
         return $this->hasMany(PersonalAdelanto::class);
     }
+    public function PersonalSalalrios()
+    {
+        return $this->hasMany(PersonalSalario::class);
+    }
 }
