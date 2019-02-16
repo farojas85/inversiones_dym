@@ -24,26 +24,26 @@
             <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
                 <!-- item-->
                 <div class="dropdown-header noti-title">
-                    <h6 class="text-overflow m-0">Welcome !</h6>
+                    <h6 class="text-overflow m-0">Bienvenido(a) !</h6>
                 </div>
 
                 <!-- item-->
-                <a href="javascript:void(0);" class="dropdown-item notify-item">
+                <a href="/perfil" class="dropdown-item notify-item">
                     <i class="fe-user"></i>
-                    <span>My Account</span>
+                    <span>Mi Cuenta</span>
                 </a>
 
-                <!-- item-->
+                <!-- item
                 <a href="javascript:void(0);" class="dropdown-item notify-item">
                     <i class="fe-settings"></i>
                     <span>Settings</span>
                 </a>
 
-                <!-- item-->
+                 item
                 <a href="javascript:void(0);" class="dropdown-item notify-item">
                     <i class="fe-lock"></i>
                     <span>Lock Screen</span>
-                </a>
+                </a>-->
 
                 <div class="dropdown-divider"></div>
 
@@ -59,14 +59,6 @@
 
             </div>
         </li>
-
-        <li class="dropdown notification-list">
-            <a href="javascript:void(0);" class="nav-link right-bar-toggle waves-effect waves-light">
-                <i class="fe-settings noti-icon"></i>
-            </a>
-        </li>
-
-
     </ul>
 
     <!-- LOGO -->

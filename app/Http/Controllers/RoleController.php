@@ -6,7 +6,9 @@ use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
-{
+{  
+    var $estado;
+
     public function __construct()
     {
         $this->middleware('permission:roles.create')->only(['create','store']);
@@ -15,6 +17,8 @@ class RoleController extends Controller
         $this->middleware('permission:roles.show')->only('show');
         $this->middleware('permission:roles.destroy')->only('destroy');
         $this->middleware('permission:roleTable')->only('table');
+        $this->estado = array( 
+            'activo' => 'activo','inactivo' =>'inactivo','eliminado' =>'eliminado');
     }
 
     public function index()
@@ -31,7 +35,8 @@ class RoleController extends Controller
     public function create()
     {
         $estadoform="create";
-        return view('configuraciones.role.create', compact('estadoform'));
+        $estados = $this->estado;
+        return view('configuraciones.role.create', compact('estadoform','estados'));
     }
     /**
      * Store a newly created resource in storage.
@@ -46,6 +51,7 @@ class RoleController extends Controller
         $role->slug = $request->slug;
         $role->description = $request->description;
         $role->special = $request->special;
+        $role->estado = 'activo';
 
         $role->save();
     }
@@ -70,19 +76,25 @@ class RoleController extends Controller
     public function edit(Role $role)
     {
         $estadoform="edit";
-        return view('configuraciones.role.edit',compact('role','estadoform'));
+        $estados = $this->estado;
+        return view('configuraciones.role.edit',compact('role','estadoform','estados'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Role  $role
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Role $role)
+    public function update(Request $request,Role $role)
     {
-        //
+        //$role  = Role::findOrFail($id);
+
+        $role->name = $request->name;
+        $role->slug = $request->slug;
+        $role->description = $request->description;
+        $role->special = $request->special;
+        $role->estado = $request->estado;
+
+        $role->save();
+
+        //$role::update( $request->all());
+
+        return $role;
     }
 
     /**
@@ -93,7 +105,8 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
-        //
+        $role->delete();
+        return $role;
     }
 
     public function table(){

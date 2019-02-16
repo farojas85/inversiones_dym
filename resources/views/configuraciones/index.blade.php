@@ -1,5 +1,5 @@
 @extends('layouts.home.app')
-@section('title-page','Configuraciones')
+@section('title-page','Roles')
     
 @section('page-content')
     <div class="row">
@@ -34,7 +34,8 @@
                                 <th >ID</th>
                                 <th >Rol</th>
                                 <th  >Descripción</th>
-                                <th >Special</th>                            
+                                <th >Special</th>
+                                <th>Estado</th>                       
                             </tr>
                         </thead>
                         <tbody>
@@ -42,14 +43,22 @@
                             @php
                                 switch ($rol->special) {
                                     case '': case null: 
-                                        $alert = "badge badge-primary";
+                                        $alert = "badge badge-info";
                                         $text ="algún acceso";break;
                                     case 'all-access': 
-                                        $alert = "badge badge-success";
+                                        $alert = "badge badge-blue";
                                         $text ="acceso total";break;
                                     case 'no-access': 
                                         $alert = "badge badge-dark";
                                         $text ="ningún acceso";break;
+                                }
+                                switch($rol->estado){
+                                    case 'activo':
+                                        $alert2 = "badge badge-success";break;
+                                    case 'inactivo':
+                                        $alert2 = "badge badge-secondary";break;
+                                    case 'eliminado':
+                                        $alert2 = "badge badge-danger";break;
                                 }
                             @endphp
                             <tr>
@@ -70,13 +79,15 @@
                                 </td>
                                 <td>{{ $loop->iteration}}</td>
                                 <td>{{ $rol->name }}</td>
-                                <td>{{ $rol->description }}</td>
+                                <td>{{ $rol->description }}</td>                                
                                 <td>
                                     <div class="{{ $alert }}">
                                         {{ $text }}
                                     </div>
                                 </td>
-                            
+                                <td>
+                                    <span class="{{ $alert2 }}">{{ $rol->estado }}</span>
+                                </td>                            
                             </tr>
                             @endforeach
                         </tbody>

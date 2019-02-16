@@ -18,7 +18,6 @@ class PersonalSalarioController extends Controller
         $this->middleware('permission:personalsalarios.edit')->only(['edit','update']);
         $this->middleware('permission:personalsalarios.show')->only('show');
         $this->middleware('permission:personalsalarios.destroy')->only('destroy');
-        $this->middleware('permission:salariosTable')->only('table');
 
        $this->mes = array(
            '01' =>'Enero',

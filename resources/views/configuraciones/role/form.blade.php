@@ -36,8 +36,18 @@
                 !!}
             </div>
         </div>
-    </div>
-    
+        <div class="form-group row">
+            {!! Form::label('estado','Estado',['class' =>'col-md-3 col-form-label']) !!}
+            <div class="col-md-8">
+                    {!!
+                    Form::select('estado',$estados,null,
+                                [   'class' => 'form-control', 'id' => 'estado',
+                                    'placeholder' =>'Seleccione',
+                                    'required' =>''])
+                !!}
+            </div>
+        </div>
+    </div>    
     <div class="col-md-12">
         <h4 class="header-title">Permiso Especial</h4>
         <div class="form-group text-center">

@@ -14,7 +14,6 @@ class PermissionController extends Controller
         $this->middleware('permission:permissions.edit')->only(['edit','update']);
         $this->middleware('permission:permissions.show')->only('show');
         $this->middleware('permission:permissions.destroy')->only('destroy');
-        $this->middleware('permission:permissionTable')->only('table');
     }
 
     public function index()

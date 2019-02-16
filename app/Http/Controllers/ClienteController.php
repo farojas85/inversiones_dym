@@ -14,7 +14,6 @@ class ClienteController extends Controller
         $this->middleware('permission:clientes.edit')->only(['edit','update']);
         $this->middleware('permission:clientes.show')->only('show');
         $this->middleware('permission:clientes.destroy')->only('destroy');
-        $this->middleware('permission:clienteTable')->only('table');
     }
 
     public function index()

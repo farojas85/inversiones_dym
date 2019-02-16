@@ -18,7 +18,6 @@ class PersonalMontoController extends Controller
         $this->middleware('permission:personalmontos.edit')->only(['edit','update']);
         $this->middleware('permission:personalmontos.show')->only('show');
         $this->middleware('permission:personalmontos.destroy')->only('destroy');
-        $this->middleware('permission:personalmontoTable')->only('table');
     }
 
     public function index()

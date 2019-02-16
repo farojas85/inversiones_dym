@@ -2,25 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
 use Caffeinated\Shinobi\Models\Role;
+use Caffeinated\Shinobi\Models\Permission;
+use App\Modulo;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class UserController extends Controller
+class PermissionRoleController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:users.create')->only(['create','store']);
-        $this->middleware('permission:users.index')->only('index');
-        $this->middleware('permission:users.edit')->only(['edit','update']);
-        $this->middleware('permission:users.show')->only('show');
-        $this->middleware('permission:users.destroy')->only('destroy');
+        $this->middleware('permission:permissionroles.create')->only(['create','store']);
+        $this->middleware('permission:permissionroles.index')->only('index');
+        $this->middleware('permission:permissionroles.edit')->only(['edit','update']);
+        $this->middleware('permission:permissionroles.show')->only('show');
+        $this->middleware('permission:permissionroles.destroy')->only('destroy');
     }
+
     public function index()
     {
-        $users = User::all();
-        return view('configuraciones.user.index',compact('users'));
+        $roles = Role::all();
+
+        return view('configuraciones.permission_role.index',compact('roles'));
     }
 
     /**
@@ -61,11 +63,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function edit($id)
     {
-        $estadoform="edit";
-        $roles = Role::all();
-        return view('configuraciones.user.edit', compact('estadoform','user','roles'));
+        //
     }
 
     /**
@@ -75,15 +75,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, $id)
     {
-        $user->name = $request->name;
-        $user->email = $request->email;        
-        $user->save();
-
-         //Asignamos los roles seleccionados
-         $user->roles()->sync($request->get('roles'));
-        return $user;
+        //
     }
 
     /**
@@ -97,7 +91,17 @@ class UserController extends Controller
         //
     }
 
-    public function perfil(){
-        return view('configuraciones.user.perfil_index');
+    public function mostrarPermisosRol(Request $request)
+    {
+        $role = Role::findOrFail($request->role_id);
+        $permissions = Permission::all();
+        return view('configuraciones.permission_role.permisos',compact('role','permissions'));
+    }
+    
+    public function updatePermissionRol(Request $request, Role $role){
+        //Actualizar los Permisos
+        $role->permissions()->sync($request->get('permissions'));
+
+        return $role;
     }
 }
