@@ -29,14 +29,15 @@
                         <table id="cliente-datatable" class="table table-striped dt-responsive table-sm" >
                             <thead>
                                 <tr>
-                                    <th>Acciones</th>
+                                    <th style="width: 100px;">Acciones</th>
                                     <th >ID</th>
                                     <th >Cliente</th>
-                                    <th >Correo</th>
+                                    <th >Personal</th>
                                     <th >Estado</th>                                    
                                 </tr>
                             </thead>
                             <tbody>
+                            @if ($todo == 1)                          
                                 @foreach ($clientes as $cliente)
                                 @php
                                     switch($cliente->estado)
@@ -49,6 +50,12 @@
                                 @endphp
                                 <tr>
                                     <td>
+                                        @can('clientes.show')
+                                        <a class="btn btn-blue btn-xs modal-cliente-show" title="Ver Cliente"
+                                            href="{{ route('clientes.show',$cliente->id)}}">
+                                            <i class="far fa-eye"></i>
+                                        </a>
+                                        @endcan
                                         @can('clientes.edit')
                                         <a class="btn btn-warning btn-xs modal-cliente-edit" 
                                             title="Editar Cliente"
@@ -65,10 +72,41 @@
                                     </td>
                                     <td>{{ $loop->iteration }}</td>
                                     <td> {{ $cliente->nombres." ".$cliente->apellidos }}</td>
-                                    <td>{{ $cliente->correo}}</td>
+                                    <td>
+                                        @foreach ($cliente->personals as $personal)
+                                            {{ $personal->nombres." ".$personal->apellidos}}
+                                        @endforeach
+                                    </td>
                                     <td> <span class="{{ $alert }}">{{ $cliente->estado }}</span> </td>
                                 </tr>  
                                 @endforeach
+                            @else
+                                @foreach ($clientes as $cliente)
+                                    @php
+                                        switch($cliente->estado)
+                                        {
+                                            case 'activo':$alert = "badge badge-success";break;
+                                            case 'inactivo':$alert = "badge badge-dark";break;
+                                            case 'suspendido':$alert = "badge badge-secondary";break;
+                                            case 'eliminado':$alert = "badge badge-danger";break;
+                                        }
+                                    @endphp
+                                    <tr>
+                                        <td>
+                                            @can('clientes.show')
+                                            <a class="btn btn-blue btn-xs modal-cliente-show" title="Ver Cliente"
+                                                href="{{ route('clientes.show',$cliente->id)}}">
+                                                <i class="far fa-eye"></i>
+                                            </a>
+                                            @endcan
+                                        </td>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $cliente->cli_nombre." ".$cliente->cli_apel }}</td>
+                                        <td>{{ $cliente->per_nombre." ".$cliente->per_apel }}</td>
+                                        <td> <span class="{{ $alert }}">{{ $cliente->estado }}</span> </td>
+                                    </tr>
+                                @endforeach
+                            @endif
                             </tbody>
                         </table>
                     </div>

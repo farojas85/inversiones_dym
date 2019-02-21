@@ -64,6 +64,24 @@ $('body').on('click', '.modal-cliente-edit', function (event) {
     });        
 });
 
+$('body').on('click', '.modal-cliente-show', function (event) {
+    event.preventDefault();
+
+    var me = $(this),
+        url = me.attr('href'),
+        title = me.attr('title');  
+
+    $.ajax({
+        url: url,
+        dataType: 'html',
+        success: function (response) {
+            $('#modal-large-title').text(title);
+            $('#modal-large-body').html(response);
+            $('#modal-large').modal('show');
+        }
+    });        
+});
+
 $('body').on('click', '#btn-cliente-guardar', function (event) {
     event.preventDefault();
 

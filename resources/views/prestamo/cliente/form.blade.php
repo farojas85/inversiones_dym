@@ -102,6 +102,18 @@
                     !!}
                 </div>
             </div>
+            <div class="form-group row">
+                {!! Form::label('personal_id','Personal a Cargo',['class' =>'col-form-label col-md-4 text-right']) !!}
+                <div class="col-md-8">
+                    {!! 
+                        Form::select('personal_id',$personals,null,
+                                        ['class' => 'form-control',
+                                        'placeholder'=> 'Seleccione Personal',
+                                        'id'=>'personal_id',
+                                        'required'=>'']) 
+                    !!} 
+                </div>                                           
+            </div>
         </div>
     </div>
     <div class="form-group row">
