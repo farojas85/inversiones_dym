@@ -2,6 +2,7 @@
 @section('title-page','Adelantos Personal')
 
 @section('page-content')
+
     <section class="section">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/home" class="text-muted">Home</a></li>
@@ -28,13 +29,14 @@
                             </div>
                             <hr>
                             <div class="table-responsive" id="tabla-detalle">
-                                <table id="model-datatable" class="table table-striped table-bordered border-t0 text-nowrap w-100 table-sm" >
+                                <table id="model-datatable" class="table table-striped table-bordered border-t0 text-nowrap w-100 table-sm dt-responsive" >
                                     <thead>
                                         <tr>
-                                            <th >Acciones</th>
+                                            <th width="5px" >Acciones</th>
                                             <th >ID</th>
                                             <th >Personal</th>
                                             <th >Fecha</th>
+                                            <th> Mes</th>
                                             <th >Monto</th>                                            
                                         </tr>
                                     </thead>
@@ -66,6 +68,16 @@
                                             <td>{{ $loop->iteration}}</td>
                                             <td> {{ $personalAdelanto->personal->nombres." ".$personalAdelanto->personal->apellidos}} </td>
                                             <td> {{ $personalAdelanto->fecha}} </td>
+                                            <td>
+                                               @php
+                                                    for($x=1;$x<=count($meses);$x++){
+                                                        $idmes = str_pad($x, 2, "0", STR_PAD_LEFT); 
+                                                        if($idmes == $personalAdelanto->mes_adelanto){
+                                                            echo $meses[$idmes];
+                                                        }
+                                                    }    
+                                               @endphp
+                                            </td>
                                             <td>{{ "S/ ".number_format($personalAdelanto->monto,2)}} </td>
                                         </tr>
                                         @endforeach

@@ -10,4 +10,9 @@ class Cliente extends Model
     {
         return $this->hasMany(Prestamos::class);
     }
+
+    public function personals()
+    {
+        return $this->belongsToMany(personal::class)->withTimestamps();
+    }
 }

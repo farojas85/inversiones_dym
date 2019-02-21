@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\PersonalSalario;
+use App\PersonalAdelanto;
 use App\personal;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class PersonalSalarioController extends Controller
 {
@@ -39,6 +42,7 @@ class PersonalSalarioController extends Controller
     public function index()
     {
         $personalSalarios = PersonalSalario::all();
+        $meses = $this->mes;
         return view('personal.salario.index',compact('personalSalarios'));
     }
 
@@ -59,7 +63,22 @@ class PersonalSalarioController extends Controller
 
     public function store(Request $request)
     {
+        $personalSalario = new PersonalSalario;
+        $personalSalario->personal_id = $request->personal_id;
+        $personalSalario->fecha= $request->fecha;
+        $personalSalario->sueldo = $request->sueldo;
+        $personalSalario->adelantos = $request->adelantos;
+        $personalSalario->mes_pago =$request->mes_pago;
 
+        $personalSalario->save();
+
+        /*$condicion = array(
+            array('personal_id','=',$request->personal_id),
+            array('fecha','=',$request->fecha),
+            array('mes_pago','=',$request->mes_pago)
+        );
+        $personals = PersonalSalario::where($condicion)->get();*/
+        return $personalSalario;        
     }
 
     /**
@@ -112,12 +131,40 @@ class PersonalSalarioController extends Controller
 
     }
 
-    public function sueldoPersonal($id)
-    {
-        $personal = personal::findOrFail($id);
+    public function sueldoPersonal(Request $request){
+        $personal = personal::findOrFail($request->personal_id);
 
-        $sueldo = $personal->sueldo;
-
-        return view('personal.salario.form_sueldo',compact('sueldo'));
+        return $personal->toJson(JSON_PRETTY_PRINT);
     }
+
+    public function adelantosPersonal(Request $request){
+        $condicion = array(
+            array('personal_id',$request->personal_id),
+            array('mes_adelanto',$request->mes_pago)
+        );
+
+        $adelantos = DB::table('personal_adelantos')
+                            ->select(DB::raw('SUM(monto) as adelantos'))
+                            ->where($condicion)
+                            ->get();
+        return $adelantos->toJson(JSON_PRETTY_PRINT);
+    }
+
+    public function tableAdelantosPersonal(Request $request){
+        $condicion = array(
+            array('personal_id',$request->personal_id),
+            array('mes_adelanto',$request->mes_pago)
+        );
+
+        $adelantos =PersonalAdelanto::select('fecha','motivo','monto')
+                            ->where($condicion)
+                            ->get();
+        return view('personal.salario.form_adelantos',compact('adelantos'));
+    }
+    public function pdf() 
+    {
+        $personalSalario = PersonalSalario::latest()->first();
+        return view('personal.salario.pagos_pdf',compact('personalSalario'));
+    }
+
 }

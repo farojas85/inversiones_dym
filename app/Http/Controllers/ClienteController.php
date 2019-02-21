@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Cliente;
+use App\personal;
 use Illuminate\Http\Request;
 
 class ClienteController extends Controller
@@ -20,7 +21,14 @@ class ClienteController extends Controller
     {
         $clientes = Cliente::all();
 
-        return view('prestamo.cliente.index',compact('clientes'));
+        $personals =  Personal::join('role_user','personals.user_id','=','role_user.user_id')
+                                ->where('role_user.role_id','=',4)
+                                ->select(
+                                    DB::raw("CONCAT(personals.nombres,' ',personals.apellidos) AS nombres"),
+                                    'personals.id')
+                                ->pluck('nombres','id');
+
+        return view('prestamo.cliente.index',compact('clientes','personals'));
     }
 
     /**

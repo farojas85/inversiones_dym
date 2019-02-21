@@ -39,7 +39,8 @@ class PersonalAdelantoController extends Controller
     public function index()
     {
         $personaladelantos = PersonalAdelanto::all();
-        return view('personal.adelanto.index',compact('personaladelantos'));
+        $meses = $this->mes;
+        return view('personal.adelanto.index',compact('personaladelantos','meses'));
     }
 
     /**

@@ -14,8 +14,9 @@
     {!! Form::label('fecha','Fecha Adelanto',['class' =>'col-form-label col-md-4 text-right']) !!}
     <div class="col-md-8">
         {!! 
-            Form::date('fecha',null,
-                        ['class' => 'form-control','id'=>'fecha','required'=>''])
+            Form::text('fecha',null,
+                        ['class' => 'form-control','id'=>'fecha','required'=>'',
+                        'placeholder'=>'Seleccione Fecha'])
         !!} 
     </div>                                           
 </div>
@@ -66,3 +67,8 @@
         <i class="mdi mdi-close "></i> Cerrar
     </button>
 </div>
+<script>
+    $( function() {
+        $( "#fecha" ).flatpickr();
+    } );
+</script>

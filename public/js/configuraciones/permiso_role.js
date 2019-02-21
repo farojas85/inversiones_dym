@@ -1,5 +1,5 @@
 function mostrar_permisos(role_id)
-{    
+{   
     $.ajax({
         url: 'permisosRol',
         data:{

@@ -27,7 +27,10 @@
 <!-- Sweet Alerts js -->
 <script src="assets/libs/sweetalert2/sweetalert2.min.js"></script>
 
-
+<!-- Plugins js-->
+<script src="assets/libs/flatpickr/flatpickr.min.js"></script>
+<script src="assets/libs/bootstrap-colorpicker/bootstrap-colorpicker.min.js"></script>
+<script src="assets/libs/clockpicker/bootstrap-clockpicker.min.js"></script>
 
 
 

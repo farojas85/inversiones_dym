@@ -62,8 +62,7 @@ class PersonalMontoController extends Controller
                                 ->where('role_user.role_id','=',4)
                                 ->select(DB::raw("CONCAT(personals.nombres,' ',personals.apellidos) AS nombres"),
                                         'personals.id')
-                                ->get()
-                                ;
+                                ->get();
         /*DB::table('personals as p')
                             ->join('role_user as ru','p.user_id','=','ru.user_id')
                             ->where('ru.role_id','=',4)
