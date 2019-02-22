@@ -154,6 +154,22 @@ $('body').on('click', '#btn-adelantos', function (event) {
 });
 
 
+$('body').on('click', '.modal-show', function (event) {
+    event.preventDefault();
+
+    var me = $(this),
+    url = me.attr('href'),
+    title = me.attr('title');  
+
+    $.ajax({
+        url: url,
+        dataType: 'html',
+        success: function (response) {
+            $('#pago-table').html(response);
+        }
+    });
+});
+
 
 function mostrar_datos(personal_id){
     event.preventDefault();   

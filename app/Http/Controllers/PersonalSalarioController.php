@@ -87,9 +87,10 @@ class PersonalSalarioController extends Controller
      * @param  \App\PersonalSalario  $personalSalario
      * @return \Illuminate\Http\Response
      */
-    public function show(PersonalSalario $personalSalario)
+    public function show($id)
     {
-        //
+        $personalSalario = PersonalSalario::where('id','=',$id)->first();
+        return view('personal.salario.pagos_pdf',compact('personalSalario'));
     }
 
     /**
@@ -143,6 +144,7 @@ class PersonalSalarioController extends Controller
             array('mes_adelanto',$request->mes_pago)
         );
 
+
         $adelantos = DB::table('personal_adelantos')
                             ->select(DB::raw('SUM(monto) as adelantos'))
                             ->where($condicion)
@@ -165,6 +167,10 @@ class PersonalSalarioController extends Controller
     {
         $personalSalario = PersonalSalario::latest()->first();
         return view('personal.salario.pagos_pdf',compact('personalSalario'));
+    }
+
+    public function mostrarPago($id){
+      
     }
 
 }

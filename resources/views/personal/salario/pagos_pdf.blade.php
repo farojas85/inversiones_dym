@@ -48,7 +48,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="table-responsive">
-                        <table class="table mt-2 table-centered nowrap table-sm table-borderless">
+                        <table class="table mt-2 table-centered nowrap table-sm">
                             <thead>
                                 <tr>
                                     <th width="33%">REMUNERACIONES</th>
@@ -116,6 +116,10 @@
                         onclick="imprimir_boleta()">
                             <i class="mdi mdi-printer mr-1"></i> imprimir</a>
                     </button>
+                    &nbsp;
+                    <a href="personalsalarios" class="btn btn-danger waves-effect waves-light">
+                        <i class="mdi mdi-close"></i> Cerrar
+                    </a>
                 </div>
             </div>
         </div>
