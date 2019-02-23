@@ -60,14 +60,10 @@ class PersonalMontoController extends Controller
 
         $personals =  Personal::join('role_user','personals.user_id','=','role_user.user_id')
                                 ->where('role_user.role_id','=',4)
-                                ->select(DB::raw("CONCAT(personals.nombres,' ',personals.apellidos) AS nombres"),
-                                        'personals.id')
-                                ->get();
-        /*DB::table('personals as p')
-                            ->join('role_user as ru','p.user_id','=','ru.user_id')
-                            ->where('ru.role_id','=',4)
-                            ->get()
-                            ->pluck(DB::raw("CONCAT(p.nombres,' ',p.apellidos) AS nombres"),'p.id');*/
+                                ->select(
+                                    DB::raw("CONCAT(personals.nombres,' ',personals.apellidos) AS nombres"),
+                                    'personals.id')
+                                ->pluck('nombres','id');
 
         return view('prestamo.personalMonto.create', compact('estadoform','personals'));
     }
@@ -94,23 +90,15 @@ class PersonalMontoController extends Controller
         $personal->save();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\personalMonto  $personalMonto
-     * @return \Illuminate\Http\Response
-     */
-    public function show(personalMonto $personalMonto)
+    public function show($id)
     {
-        
+        $personal = personal::findOrFail($id);
+        $personalmontos = personalMonto::where('personal_id','=',$personal->id)
+                                        ->orderBy('fecha','ASC')
+                                        ->get();
+        return view('prestamo.personalMonto.show',compact('personal','personalmontos'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\personalMonto  $personalMonto
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $personal = personal::findOrFail($id);
@@ -146,5 +134,14 @@ class PersonalMontoController extends Controller
     public function table()
     {
         //
+    }
+
+    public function editarMontos($id){
+        
+        $personalmontos = personalMonto::where('id','=',$id)->first();
+
+        $personal = Personal::where('id','=',$personalmontos->personal_id)->first();
+        //print_r($personalmontos);
+        return view('prestamo.personalMonto.editarmonto',compact('personalmontos','personal'));
     }
 }

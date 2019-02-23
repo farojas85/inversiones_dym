@@ -30,6 +30,36 @@ $(document).ready(function() {
         "pageLength": 5,
         "lengthMenu": [[5,10, 25, 50, -1], [5,10, 25, 50, "All"]]
     });
+     tabla = $('#edit-datatable').DataTable({
+        "language":
+            {
+                "sProcessing":     "Procesando...",
+                "sLengthMenu":     "Mostrar _MENU_ registros",
+                "sZeroRecords":    "No se encontraron resultados",
+                "sEmptyTable":     "Ningún dato disponible en esta tabla",
+                "sInfo":           "Mostrando del _START_ al _END_ de un total de _TOTAL_",
+                "sInfoEmpty":      "Mostrando del 0 al 0 de un total de 0",
+                "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                "sInfoPostFix":    "",
+                "sSearch":         "Buscar:",
+                "sUrl":            "",
+                "sInfoThousands":  ",",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst":    "Primero",
+                    "sLast":     "Último",
+                    "sNext":     "Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "oAria": {
+                    "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                }
+            },
+        "pageLength": 5,
+        "lengthMenu": [[5,10, 25, 50, -1], [5,10, 25, 50, "All"]]
+    });
+    $( "#fecha" ).flatpickr();
 });
 //AGREGAR ROLE
 $('body').on('click', '#btn-agregar', function (event) {
@@ -99,6 +129,23 @@ $('body').on('click', '#btn-guardar', function (event) {
     }
 });
 
+
+$('body').on('click', '.modal-show', function (event) {
+    event.preventDefault();
+
+    var me = $(this),
+        url = me.attr('href'),
+        title = me.attr('title');  
+
+    $.ajax({
+        url: url,
+        dataType: 'html',
+        success: function (response) {
+            $('#table-detalle').html(response);           
+        }
+    });        
+});
+
 $('body').on('click', '.modal-edit', function (event) {
     event.preventDefault();
 
@@ -110,9 +157,7 @@ $('body').on('click', '.modal-edit', function (event) {
         url: url,
         dataType: 'html',
         success: function (response) {
-            $('#modal-large-title').text(title);
-            $('#modal-large-body').html(response);
-            $('#modal-large').modal('show');
+            $('#table-detalle').html(response);           
         }
     });        
 });
@@ -122,4 +167,28 @@ function editar_monto(id){
 }
 function cerrar(id){
     document.getElementById('tr_edit_'+id).style.visibility="hidden";
+}
+
+function editar_monto_asiganado(id)
+{
+    $.ajax({
+        url: 'editarMontos/'+id,
+        type: 'GET',
+        data:{
+            id : id,
+        },
+        success: function (response) {   
+            $('#modal-default-title').text('Editar Monto Personal');
+            $('#modal-default-body').html(response);
+            $('#modal-default').modal('show');
+        },
+        error: function (xhr) {
+            swal({
+                type: 'error',
+                title: 'Advertencia',
+                text: xhr.responseText
+            });          
+        },
+    });
+    
 }

@@ -6,6 +6,7 @@
 <script src="assets/libs/jquery-knob/jquery.knob.min.js"></script>
 <script src="assets/libs/jquery-sparkline/jquery.sparkline.min.js"></script>    
 <!-- third party js -->
+<script src="assets/libs/jquery-tabledit/jquery.tabledit.min.js"></script>
 <script src="assets/libs/datatables/jquery.dataTables.js"></script>
 <script src="assets/libs/datatables/dataTables.bootstrap4.js"></script>
 <script src="assets/libs/datatables/dataTables.responsive.min.js"></script>

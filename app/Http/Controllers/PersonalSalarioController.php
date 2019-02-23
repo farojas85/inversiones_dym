@@ -72,12 +72,6 @@ class PersonalSalarioController extends Controller
 
         $personalSalario->save();
 
-        /*$condicion = array(
-            array('personal_id','=',$request->personal_id),
-            array('fecha','=',$request->fecha),
-            array('mes_pago','=',$request->mes_pago)
-        );
-        $personals = PersonalSalario::where($condicion)->get();*/
         return $personalSalario;        
     }
 

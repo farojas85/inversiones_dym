@@ -17,6 +17,8 @@ Route::post('sueldoPersonal','PersonalSalarioController@sueldoPersonal');
 Route::post('adelantosPersonal','PersonalSalarioController@adelantosPersonal');
 Route::get('tableAdelantos','PersonalSalarioController@tableAdelantosPersonal');
 Route::get('pdfPagos', 'PersonalSalarioController@pdf');
+Route::get('editarMontos/{id}','PersonalMontoController@editarMontos');
+Route::put('actualizarMonto/{id}','PersonalMontoController@updateMonto')->name('personalmontos.updateMonto');
 
 Route::middleware(['auth'])->group(function(){	
     Route::resource('roles', 'RoleController');    
