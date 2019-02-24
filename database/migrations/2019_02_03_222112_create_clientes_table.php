@@ -14,6 +14,7 @@ class CreateClientesTable extends Migration
     public function up()
     {
         Schema::create('clientes', function (Blueprint $table) {
+            //'activo','inactivo','suspendido','eliminado']
             $table->increments('id');
             $table->char('dni',8);
             $table->char('ruc',11)->nullable();
@@ -24,7 +25,7 @@ class CreateClientesTable extends Migration
             $table->string('celular',15)->nullable();
             $table->string('correo',150)->nullable();
             $table->string('direccion',150)->nullable();
-            $table->enum('estado',['activo','inactivo','suspendido','eliminado']);
+            $table->string('estado');
             $table->timestamps();
         });
     }

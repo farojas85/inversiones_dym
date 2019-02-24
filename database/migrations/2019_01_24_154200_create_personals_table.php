@@ -23,7 +23,7 @@ class CreatePersonalsTable extends Migration
             $table->string('celular',15)->nullable();
             $table->string('licencia',150)->nullable();
             $table->string('direccion',150)->nullable();
-            $table->enum('estado',['activo','inactivo','suspendido','eliminado']);
+            $table->string('estado');
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });

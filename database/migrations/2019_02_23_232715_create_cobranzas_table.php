@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePrestamosTable extends Migration
+class CreateCobranzasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,14 @@ class CreatePrestamosTable extends Migration
      */
     public function up()
     {
-        Schema::create('prestamos', function (Blueprint $table) {
-            //,['Generado','Pendiente','Cancelado','Anulado','Eliminado']
+        Schema::create('cobranzas', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('cliente_id');
-            $table->dateTime('fecha_prestamo');
+            $table->date('fecha');
+            $table->unsignedInteger('prestamo_id');
+            $table->integer('cantidad_cuotas');
             $table->decimal('monto',18,2);
-            $table->decimal('tasa_interes',10,2);
-            $table->dateTime('fecha_vencimiento');
-            $table->string('estado');
+            $table->decimal('saldo',18,2);
+            $table->foreign('prestamo_id')->references('id')->on('prestamos');
             $table->timestamps();
         });
     }
@@ -33,6 +32,6 @@ class CreatePrestamosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('prestamos');
+        Schema::dropIfExists('cobranzas');
     }
 }

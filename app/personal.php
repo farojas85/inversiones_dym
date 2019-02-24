@@ -30,4 +30,9 @@ class personal extends Model
     {
         return $this->belongsToMany(Cliente::class)->withTimestamps();
     }
+
+    public function TipoDocumento() 
+    {
+        return $this->belongsTo(TipoDocumento::class);
+    }
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateClientePrestamosTable extends Migration
+class AddColumnsToPrestamosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateClientePrestamosTable extends Migration
      */
     public function up()
     {
-        Schema::create('cliente_prestamos', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
+        Schema::table('prestamos', function (Blueprint $table) {
+            $table->integer('dias');
+            $table->decimal('cuota',18,2);
         });
     }
 
@@ -26,6 +26,9 @@ class CreateClientePrestamosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cliente_prestamos');
+        Schema::table('prestamos', function (Blueprint $table) {
+            $table->dropColumn('dias');
+            $table->dropColumn('cuota');
+        });
     }
 }

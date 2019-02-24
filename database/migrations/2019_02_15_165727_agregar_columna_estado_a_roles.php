@@ -14,7 +14,7 @@ class AgregarColumnaEstadoARoles extends Migration
     public function up()
     {
         Schema::table('roles', function (Blueprint $table) {
-            $table->enum('estado',['activo','inactivo','eliminado']);
+            $table->string('estado');
         });
     }
 

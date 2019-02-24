@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddTipoToClientesTable extends Migration
+class AddColumnDniToClientesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,7 @@ class AddTipoToClientesTable extends Migration
     public function up()
     {
         Schema::table('clientes', function (Blueprint $table) {
-            //['Bueno','Regular','Moroso']
-            $table->string('tipo');
+            $table->string('dni',12);
         });
     }
 
@@ -27,7 +26,7 @@ class AddTipoToClientesTable extends Migration
     public function down()
     {
         Schema::table('clientes', function (Blueprint $table) {
-            $table->dropColumn('tipo');
+            $table->dropColumn('dni');
         });
     }
 }

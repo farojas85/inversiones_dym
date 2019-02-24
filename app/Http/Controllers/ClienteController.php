@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Cliente;
 use App\personal;
+use App\TipoDocumento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -69,7 +70,9 @@ class ClienteController extends Controller
                                     'personals.id')
                                 ->pluck('nombres','id');
 
-        return view('prestamo.cliente.create', compact('estadoform','personals'));
+        $tipodocumentos = TipoDocumento::pluck('descripcion','id');
+
+        return view('prestamo.cliente.create', compact('estadoform','personals','tipodocumentos'));
     }
 
     /**
@@ -81,6 +84,7 @@ class ClienteController extends Controller
     public function store(Request $request)
     {
         $cliente = new Cliente();
+        $cliente->tipo_documento_id = $request->tipo_documento_id;
         $cliente->dni = $request->dni;
         $cliente->ruc = $request->ruc;
         $cliente->apellidos = $request->apellidos;
@@ -91,6 +95,7 @@ class ClienteController extends Controller
         $cliente->correo = $request->correo;
         $cliente->direccion = $request->direccion;
         $cliente->nro_referencia = $request->nro_referencia;
+        $cliente->tipo ='bueno';
         $cliente->estado = 'activo';
 
         $cliente->save();
@@ -134,8 +139,10 @@ class ClienteController extends Controller
                                     'personals.id')
                                 ->pluck('nombres','id');
 
+        $tipodocumentos = TipoDocumento::pluck('descripcion','id');
 
-        return view('prestamo.cliente.edit', compact('estadoform','cliente','personals'));
+
+        return view('prestamo.cliente.edit', compact('estadoform','cliente','personals','tipodocumentos'));
     }
 
     /**
@@ -147,7 +154,7 @@ class ClienteController extends Controller
      */
     public function update(Request $request, Cliente $cliente)
     {
-
+        $cliente->tipo_documento_id = $request->tipo_documento_id;
         $cliente->dni = $request->dni;
         $cliente->ruc = $request->ruc;
         $cliente->apellidos = $request->apellidos;

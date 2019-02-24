@@ -31,5 +31,6 @@ Route::middleware(['auth'])->group(function(){
     Route::resource('personalsalarios', 'PersonalSalarioController');    
     Route::resource('permissions', 'PermissionController');    
     Route::resource('permissionroles', 'PermissionRoleController');    
-    Route::resource('modulos', 'ModuloController');    
+    Route::resource('modulos', 'ModuloController');
+    
 });

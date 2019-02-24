@@ -13,7 +13,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(
             ModulosTableSeeder::class,
-            PermissionsTableSeeder::class
+            PermissionsTableSeeder::class,
+            TipoDocumentosTableSeeder::class
         );
     }
 }

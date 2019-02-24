@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\personal;
 use App\user;
+use App\TipoDocumento;
 use Illuminate\Http\Request;
 use Peru\Jne\Dni;
 use Peru\Http\ContextClient;
@@ -34,12 +35,15 @@ class PersonalController extends Controller
     {
         $estadoform="create";
         $users = User::pluck('name','id');
-        return view('personal.create', compact('estadoform','users'));
+        $tipodocumentos = TipoDocumento::pluck('descripcion','id');
+
+        return view('personal.create', compact('estadoform','users','tipodocumentos'));
     }
 
     public function store(Request $request)
     {
         $personal = new Personal();
+        $personal->tipo_documento_id = $request->tipo_documento_id;
         $personal->dni = $request->dni;
         $personal->apellidos = $request->apellidos;
         $personal->nombres = $request->nombres;
@@ -65,11 +69,13 @@ class PersonalController extends Controller
     {
         $estadoform="edit";
         $users = User::pluck('name','id');
-        return view('personal.edit', compact('estadoform','personal','users'));
+        $tipodocumentos = TipoDocumento::pluck('descripcion','id');
+        return view('personal.edit', compact('estadoform','personal','users','tipodocumentos'));
     }
 
     public function update(Request $request, personal $personal)
     {
+        $personal->tipo_documento_id = $request->tipo_documento_id;
         $personal->dni = $request->dni;
         $personal->apellidos = $request->apellidos;
         $personal->nombres = $request->nombres;

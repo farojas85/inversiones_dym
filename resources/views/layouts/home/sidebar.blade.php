@@ -78,7 +78,7 @@
                     </ul>
                 </li>
                 @endcan
-                @can('prestamos.index')
+                @can('prestamos.home')
                 <li>
                     <a href="javascript: void(0);">
                         <i class="far fa-money-bill-alt"></i>

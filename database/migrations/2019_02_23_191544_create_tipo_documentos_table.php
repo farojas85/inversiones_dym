@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateModulosTable extends Migration
+class CreateTipoDocumentosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateModulosTable extends Migration
      */
     public function up()
     {
-        Schema::create('modulos', function (Blueprint $table) {
+        Schema::create('tipo_documentos', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nombre',120);
-            $table->string('slug',120);
-            $table->string('descripcion');
-            $table->string('icono')->nullable();
-            $table->string('estado');
+            $table->string('descripcion',190);
+            $table->string('abreviatura',10);
             $table->timestamps();
         });
     }
@@ -31,6 +28,6 @@ class CreateModulosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('modulos');
+        Schema::dropIfExists('tipo_documentos');
     }
 }

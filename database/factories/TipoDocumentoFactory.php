@@ -2,7 +2,7 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(App\ClientePrestamos::class, function (Faker $faker) {
+$factory->define(App\TipoDocumento::class, function (Faker $faker) {
     return [
         //
     ];

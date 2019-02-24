@@ -21,7 +21,7 @@
                 <h4 class="header-title">Listado de Asignaciones</h4>   
                 <div class="row">
                     <div class="col-md-2">
-                        @can('prestamos.create')
+                        @can('clienteprestamos.create')
                         <button class="btn btn-info btn-rounded" id="btn-agregar"
                                 title="Nuevo Préstamo">
                             <i class="fa fa-plus"></i> Nuevo Préstamo
@@ -29,6 +29,7 @@
                         @endcan
                     </div>
                 </div>
+                <hr>
                 <div class="row">
                     <div class="table-responsive" id="tabla-detalle">
                         <table id="model-datatable" class="table table-striped dt-responsive table-sm" >
@@ -43,6 +44,41 @@
                                     <th>Estado</th>
                                 </tr>
                             </thead>
+                            <tbody>
+                                @foreach ($prestamos as $prestamo)
+                                @php
+                                    switch($prestamo->estado){
+                                        case 'Generado':$clase="badge badge-danger";break;
+                                        case 'Pendiente':$clase="badge badge-info";break;
+                                        case 'Cancelado':$clase="badge badge-success";break;
+                                    }
+                                @endphp
+                                <tr>
+                                    <td>
+                                        @can('prestamos.show')
+                                        <a class="btn btn-blue btn-xs modal-cliente-show" title="Ver Préstamo"
+                                            href="{{ route('prestamos.show',$prestamo->id)}}">
+                                            <i class="far fa-eye"></i>
+                                        </a>
+                                        @endcan
+                                    </td>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $prestamo->fecha_prestamo }}</td>
+                                    <td>{{ $prestamo->cliente->nombres." ".$prestamo->cliente->apellidos }}</td>
+                                    <td>{{ "S/ ".number_format($prestamo->monto,2) }}</td>
+                                    <td>
+                                        @if ($prestamo->saldo == '' || $prestamo->saldo == null)
+                                            {{ 'S/ 0.00' }}
+                                        @else
+                                            {{ "S/ ".number_format($prestamo->saldo,2)}}
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <span class="{{ $clase }}">{{ $prestamo->estado }}</span>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </div>

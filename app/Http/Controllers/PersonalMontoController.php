@@ -23,8 +23,7 @@ class PersonalMontoController extends Controller
     public function index()
     {
         $condicion = array(
-            array('ru.role_id','=',4),
-            array('pm.consumido','<>',1)
+            array('ru.role_id','=',4)
         );
 
         $personal = personal::all();

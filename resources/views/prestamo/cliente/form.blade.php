@@ -2,12 +2,24 @@
 <div class="row">
         <div class="col-md-6">
             <div class="form-group row">
-                {!! Form::label('dni','DNI',['class' =>'col-md-4 col-form-label text-right']) !!}
+                {!! Form::label('tipo_documento_id','Tipo Documento',['class' =>'col-form-label col-md-4 text-right']) !!}
+                <div class="col-md-8">
+                    {!! 
+                        Form::select('tipo_documento_id',$tipodocumentos,null,
+                                    ['class' => 'form-control',
+                                    'placeholder'=> 'Seleccione Tipo Documento',
+                                    'id'=>'tipo_documento_id',
+                                    'required'=>'']) 
+                    !!} 
+                </div>                                           
+            </div>
+            <div class="form-group row">
+                {!! Form::label('dni','Nro. Documento',['class' =>'col-md-4 col-form-label text-right']) !!}
                 <div class="col-md-8">
                     {!! Form::text('dni', null,
                                 [   'class' => 'form-control', 'id' => 'dni',
-                                    'placeholder' => 'Ingrese DNI', 'required' =>'',
-                                    'maxlength'=>'8',
+                                    'placeholder' => 'Ingrese Nro. Documento', 'required' =>'',
+                                    'maxlength'=>'12',
                                     'data-parsley-pattern'=>"^[0-9]+$"])
                     !!}
                 </div>
