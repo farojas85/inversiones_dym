@@ -101,6 +101,11 @@
                             <a href="/prestamos">Asignar Pr&eacute;stamos</a>
                         </li>
                         @endcan
+                        @can('cobranzas.index')
+                        <li>
+                            <a href="/cobranzas">Cobranzas</a>
+                        </li>
+                        @endcan
                         
                     </ul>
                 </li>

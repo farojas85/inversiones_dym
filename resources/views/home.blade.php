@@ -2,22 +2,35 @@
 @section('title-page','Home')
     
 @section('page-content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Dashboard</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-                    You are logged in!
-                </div>
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Inversiones DYM</a></li>
+                    <li class="breadcrumb-item active">Res&uacute;menes</li>
+                </ol>
             </div>
+            <h4 class="page-title">Res&uacute;menes</h4>
         </div>
     </div>
 </div>
+@php
+    //Obtenemos Id del Usuatio
+    $user_id = Auth::user()->id;
+    $roles = Auth::user()->roles;
+
+    foreach($roles as $role){
+        $role_name = $role->name;
+    }
+@endphp
+
+@switch($role_name)
+    @case('cobrador')
+        @include('dashboards.cobrador')
+        @break
+    @case('admin')
+        @include('dashboards.admin')
+        @break        
+@endswitch
 @endsection

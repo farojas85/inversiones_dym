@@ -10,8 +10,8 @@ class Prestamo extends Model
     {
         return $this->belongsTo(Cliente::class);
     }
-    public function Deudas()
+    public function cobranzas()
     {
-        return $this->hasMany(Deuda::class);
+        return $this->hasMany(Cobranza::class);
     }
 }

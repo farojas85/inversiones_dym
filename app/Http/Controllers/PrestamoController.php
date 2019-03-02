@@ -6,6 +6,7 @@ use App\Prestamo;
 use App\Cliente;
 use App\personal;
 use App\personalMonto;
+use App\Cobranza;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -27,22 +28,59 @@ class PrestamoController extends Controller
                 '0.20' => '20%',
                 '0.25' => '25%');
 
+        ini_set('max_execution_time', 0);
+
     }
     public function index()
     {
+        //Obtenemos Id del Usuatio
+        $user_id = Auth::user()->id;
+        $roles = Auth::user()->roles;
 
-        $prestamos = DB::table('prestamos as p')
-                        ->leftJoin('cobranzas as c','p.id','=','c.prestamo_id')
-                        ->select(
-                                'p.id','p.cliente_id',
-                                'fecha_prestamo','p.monto','p.estado',
-                                DB::raw('MIN(c.saldo) as saldo')
-                            )
-                        ->groupBy('p.id','p.cliente_id','fecha_prestamo',
-                                'p.monto','p.estado')
-                        ->get();
-        $prestamos = Prestamo::all();
-        return view('prestamo.deuda.index',compact('prestamos'));
+        foreach($roles as $role){
+            $role_name = $role->name;
+        }
+
+        //Obteneos los clientes de acuerdo al rol
+        if($role_name == 'admin' || $role_name == 'master'){
+            $prestamos = DB::table('prestamos as p')
+                            ->leftJoin('cobranzas as c','p.id','=','c.prestamo_id')
+                            ->join('clientes as cli','p.cliente_id','=','cli.id')
+                            ->select(
+                                    'p.id','p.cliente_id',
+                                    DB::raw("CONCAT('cli.nombres',' ','cli.apellidos') as nombres"),
+                                    'fecha_prestamo','p.monto','p.estado',
+                                    DB::raw('MIN(c.saldo) as saldo')
+                                )
+                            ->groupBy('p.id','p.cliente_id','nombres','fecha_prestamo',
+                                    'p.monto','p.estado')
+                            ->get();
+        }
+        else{
+
+            $persona = personal::where('user_id','=',$user_id)->get()->first();
+
+            $prestamos = DB::table('prestamos as p')
+                            ->leftJoin('cobranzas as c','p.id','=','c.prestamo_id')
+                            ->join('clientes as cli','p.cliente_id','=','cli.id')
+                            ->join('cliente_personal as pc', 'cli.id','=','pc.cliente_id')
+                            ->select(
+                                    'p.id','p.cliente_id',
+                                    DB::raw("CONCAT(cli.nombres,' ',cli.apellidos) as nombres"),
+                                    'fecha_prestamo','p.monto','p.estado',
+                                    DB::raw('MIN(c.saldo) as saldo')
+                                )
+                            ->where('pc.personal_id','=',$persona->id)
+                            ->groupBy('p.id','p.cliente_id','nombres','fecha_prestamo',
+                                    'p.monto','p.estado')
+                            ->get();
+        }
+
+
+        //
+       
+        //$prestamos = Prestamo::all();
+        return view('prestamo.deuda.index',compact('prestamos','role_name'));
 
     }
 
@@ -67,7 +105,6 @@ class PrestamoController extends Controller
         else{
             $personal = personal::where('user_id','=',$user_id)->get()->first();
 
-            $this->personal_id = $personal->id;
             $clientes = DB::table('cliente_personal as cp')
                             ->join('personals as p','cp.personal_id', '=', 'p.id')
                             ->join('clientes as c' ,'cp.cliente_id','=', 'c.id')
@@ -217,5 +254,21 @@ class PrestamoController extends Controller
     public function destroy(Prestamo $prestamo)
     {
         //
+    }
+
+    public function mostrarCobranza($id)
+    {
+        $prestamo = Prestamo::findOrFail($id);
+        $contarCobranza = Cobranza::where('prestamo_id',$id)->count();
+
+        $minSaldo = $prestamo->monto;
+        if($contarCobranza >0){
+            $minSaldo = Cobranza::where('prestamo_id',$id)->min('saldo');
+        }
+                
+        $cobranzas = Cobranza::where('prestamo_id',$prestamo->id)
+                            ->orderBy('fecha','DESC')->get();
+
+        return view('prestamo.deuda.mostrarCobranza',compact('prestamo','minSaldo','cobranzas'));
     }
 }
