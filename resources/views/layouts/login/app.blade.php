@@ -26,7 +26,7 @@
         </div>
     </div>
     <footer class="footer footer-alt">
-        2015 - 2018 &copy; UBold theme by <a href="" class="text-white-50">Coderthemes</a> 
+        2019 &copy; Inversiones D&amp;M
     </footer>
     <!-- Vendor js -->
     <script src="assets/js/vendor.min.js"></script>

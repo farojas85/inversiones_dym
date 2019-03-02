@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Cliente;
 use App\personal;
+use App\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -26,22 +29,27 @@ class HomeController extends Controller
 
         $todo = 0;
         //Obteneos los clientes de acuerdo al rol
+        $personals = 0;
         if($role_name == 'admin' || $role_name == 'master'){
 
-            $count_clientes = Cliente::all()->count();
-        
+            $clientes = Cliente::all()->count();
+
+            $personals = DB::table('users as u')
+                            ->join('role_user as ru','u.id', '=','ru.user_id')
+                            ->join('roles as r','ru.role_id','=','r.id')
+                            ->where('r.name','cobrador')
+                            ->count();
+                            
         }
         else{
             $personal = personal::where('user_id','=',$user_id)->get()->first();
 
-            $count_clientes = DB::table('cliente_personal as cp')
+            $clientes = DB::table('cliente_personal as cp')
                             ->join('personals as p','cp.personal_id', '=', 'p.id')
                             ->join('clientes as c' ,'cp.cliente_id','=', 'c.id')
                             ->where('cp.personal_id','=',$personal->id)
-                            ->get()
                             ->count();
-
         }    
-        return view('home',compact('count_clientes'));
+        return view('home',compact('clientes','personals'));
     }
 }

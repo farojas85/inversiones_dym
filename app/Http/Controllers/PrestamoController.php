@@ -48,11 +48,11 @@ class PrestamoController extends Controller
                             ->join('clientes as cli','p.cliente_id','=','cli.id')
                             ->select(
                                     'p.id','p.cliente_id',
-                                    DB::raw("CONCAT('cli.nombres',' ','cli.apellidos') as nombres"),
+                                    DB::raw("CONCAT(cli.nombres,' ',cli.apellidos) as nombres"),
                                     'fecha_prestamo','p.monto','p.estado',
                                     DB::raw('MIN(c.saldo) as saldo')
                                 )
-                            ->groupBy('p.id','p.cliente_id','nombres','fecha_prestamo',
+                            ->groupBy('p.id','p.cliente_id','cli.apellidos','cli.nombres','fecha_prestamo',
                                     'p.monto','p.estado')
                             ->get();
         }
@@ -71,7 +71,7 @@ class PrestamoController extends Controller
                                     DB::raw('MIN(c.saldo) as saldo')
                                 )
                             ->where('pc.personal_id','=',$persona->id)
-                            ->groupBy('p.id','p.cliente_id','nombres','fecha_prestamo',
+                            ->groupBy('p.id','p.cliente_id','cli.apellidos','cli.nombres','fecha_prestamo',
                                     'p.monto','p.estado')
                             ->get();
         }

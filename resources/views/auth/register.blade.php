@@ -4,11 +4,9 @@
 <div class="col-md-8 col-lg-6 col-xl-5">
     <div class="card bg-pattern">
         <div class="card-body p-4">            
-            <div class="text-center w-75 m-auto">
-                <a href="index.html">
-                    <span><img src="assets/images/logo-dark.png" alt="" height="22"></span>
-                </a>
-                <p class="text-muted mb-4 mt-3">No tienes Una Cuenta? Créalo, te tomará menos de un minuto</p>
+            <div class="text-center w-100 m-auto">
+                <h3> <span>Inversiones D&amp;M</span></h3>
+                <p class="text-muted mb-4 mt-3">No tienes Una Cuenta? Créalo</p>
             </div>
             <form method="POST" action="{{ route('register') }}">
                 @csrf

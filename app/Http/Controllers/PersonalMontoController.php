@@ -36,7 +36,7 @@ class PersonalMontoController extends Controller
                     DB::raw('SUM(monto_asignado) as total_asignado'),
                     DB::raw('SUM(monto_saldo) as total_saldo'))
             ->where($condicion)
-            ->groupBy('p.id','nombres')
+            ->groupBy('p.id','p.apellidos','p.nombres')
             ->get();
         }
        else{
