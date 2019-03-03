@@ -49,15 +49,18 @@
 
                 <div class="collapse navbar-collapse" id="navbarsMenu">
                     <ul class="navbar-nav ml-auto">
+                    @auth
                         <li class="nav-item active">
-                            <a class="nav-link" href="#home">Home</a>
+                            <a class="nav-link" href="/home">Home</a>
                         </li>
+                    @else
                         <li class="nav-item">
                             <a class="nav-link" href="/login">Iniciar Sesi&oacute;n</a>
                         </li>
                         <li class="nav-item">
-                                <a class="nav-link" href="/register">Registrarse</a>
-                            </li>
+                            <a class="nav-link" href="/register">Registrarse</a>
+                        </li>
+                    @endauth
                     </ul>
 
                 </div>
@@ -101,8 +104,7 @@
                 </div> <!-- end row -->
             </div> <!-- end container -->
         </footer>
-        <!-- End Footer -->
-        
+        <!-- End Footer -->       
 
         <!-- Back to top -->    
         <a href="#" class="back-to-top" id="back-to-top"> <i class="fa fa-angle-up"></i> </a>
