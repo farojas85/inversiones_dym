@@ -20,8 +20,9 @@ Route::get('pdfPagos', 'PersonalSalarioController@pdf');
 Route::get('editarMontos/{id}','PersonalMontoController@editarMontos');
 Route::put('actualizarMonto/{id}','PersonalMontoController@updateMonto')->name('personalmontos.updateMonto');
 Route::get('mostrarCobranza/{id}','PrestamoController@mostrarCobranza');
-Route::get('nuevaCobranza/{id}/{minsaldo}','CobranzaController@nuevaCobranza');
+Route::get('nuevaCobranza/{id}/{minsaldo}/{cuota}','CobranzaController@nuevaCobranza');
 Route::get('cobranzasTable/{prestamo_id}','CobranzaController@tabla');
+Route::get('pdfCobranza/{cobranza}','CobranzaController@generaPdf')->name('cobranzas.pdf');
 
 Route::middleware(['auth'])->group(function(){	
     Route::resource('roles', 'RoleController');    

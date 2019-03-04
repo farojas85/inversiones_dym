@@ -14,7 +14,7 @@
 			<div class="content-page">
 				<div class="content">
 				<!-- Start Content-->
-				<div class="container-fluid">      
+				<div class="container-fluid" id="container-page">      
 					@yield('page-content')
 				</div>
 				<div class="modal fade" id="modal-default" tabindex="-1" role="dialog" 
@@ -52,6 +52,21 @@
 						</div>
 					</div>
 				</div>
+				<!-- Small Modal -->
+				<div id="modal-small"  class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" 
+						aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">
+					<div class="modal-dialog modal-sm">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title" id="modal-small-title">Small modal</h4>
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+							</div>
+							<div class="modal-body" id="modal-small-body">
+							</div>
+						</div>
+					</div>
+				</div>
+
 				<!-- Footer Start -->
 				<footer class="footer">
 					<div class="container-fluid">

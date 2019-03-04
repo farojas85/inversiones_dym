@@ -10,6 +10,7 @@
             <div id="cardCollpase4" class="collapse show">
                 <input type="hidden" id="prestamo_id" name="prestamo_id" value="{{ $prestamo->id }}" />
                 <input type="hidden" id="min_saldo" name="min_saldo" value="{{ $minSaldo }}" />
+                <input type="hidden" id="cuota" name="cuota" value="{{ $prestamo->cuota }}" />
                 <div class="card-body" style="border:1px solid #4a81d4">
                     <div class="form-group row">
                         <label for="" class="col-form-label col-md-1" >
@@ -136,7 +137,14 @@
                                 <tbody>
                             @foreach ($cobranzas as $cobranza)
                                 <tr>
-                                    <td></td>
+                                    <td>
+                                        <a href="{{ route('cobranzas.pdf',$cobranza->id) }}" 
+                                            title="Mostrar Cobranza"
+                                            class="btn btn-danger btn-xs show-cobranza"
+                                            target="_blank">
+                                            <i class=" far fa-file-pdf"></i>
+                                        </a>
+                                    </td>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $cobranza->fecha }}</td>
                                     <td>{{ $cobranza->cantidad_cuotas }}</td>
