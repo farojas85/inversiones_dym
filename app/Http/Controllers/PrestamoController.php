@@ -49,7 +49,9 @@ class PrestamoController extends Controller
                             ->select(
                                     'p.id','p.cliente_id',
                                     DB::raw("CONCAT(cli.nombres,' ',cli.apellidos) as nombres"),
-                                    'fecha_prestamo','p.monto','p.estado',
+                                    'fecha_prestamo',
+                                    DB::raw('(p.monto + p.monto*p.tasa_interes) as monto'),
+                                    'p.estado',
                                     DB::raw('MIN(c.saldo) as saldo')
                                 )
                             ->groupBy('p.id','p.cliente_id','cli.apellidos','cli.nombres','fecha_prestamo',
@@ -67,7 +69,9 @@ class PrestamoController extends Controller
                             ->select(
                                     'p.id','p.cliente_id',
                                     DB::raw("CONCAT(cli.nombres,' ',cli.apellidos) as nombres"),
-                                    'fecha_prestamo','p.monto','p.estado',
+                                    'fecha_prestamo',
+                                    DB::raw('(p.monto + p.monto*p.tasa_interes) as monto'),
+                                    'p.estado',
                                     DB::raw('MIN(c.saldo) as saldo')
                                 )
                             ->where('pc.personal_id','=',$persona->id)

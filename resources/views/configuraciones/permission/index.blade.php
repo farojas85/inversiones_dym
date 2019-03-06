@@ -32,7 +32,7 @@
                 </div>
                 <hr>
                 <div class="table-responsive" id="tabla-detalle">
-                    <table id="model-datatable" class="table table-striped table-bordered border-t0 text-nowrap w-100 table-sm" >
+                    <table id="model-datatable" class="table table-striped table-bordered table-sm dt-responsive nowrap" >
                         <thead>
                             <tr>
                                 <th  width="10px">Acciones</th>

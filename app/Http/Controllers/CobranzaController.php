@@ -236,13 +236,15 @@ class CobranzaController extends Controller
         Fpdf::Line(4,79,48,79);
 
         //MONTO PRÉSTAMO
+        $monto_total = $cobranza->prestamo->monto ;
+        $monto_total += ($cobranza->prestamo->monto*$cobranza->prestamo->tasa_interes);
         Fpdf::setDash(0,0);
         Fpdf::SetFont('Courier', 'B', 9);
         Fpdf::setXY(4,80);
         Fpdf::Cell(24, 4, utf8_decode("Préstamo  S/: "),0,0,'L',0);
         Fpdf::SetFont('Courier', '', 9);
         Fpdf::setXY(30,80);
-        Fpdf::Cell(48, 4, number_format($cobranza->prestamo->monto,2),0,0,'L',0);
+        Fpdf::Cell(48, 4, number_format($monto_total,2),0,0,'L',0);
 
         //SALDO
         Fpdf::setDash(0,0);

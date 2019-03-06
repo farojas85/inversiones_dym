@@ -8,6 +8,7 @@ use App\personal;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class HomeController extends Controller
 {
@@ -49,7 +50,11 @@ class HomeController extends Controller
                             ->join('clientes as c' ,'cp.cliente_id','=', 'c.id')
                             ->where('cp.personal_id','=',$personal->id)
                             ->count();
-        }    
-        return view('home',compact('clientes','personals'));
+        } 
+
+        $hora = Carbon::now()->format('H:i:s');
+
+        return view('home',compact('clientes','personals','role_name','hora'));
+       
     }
 }

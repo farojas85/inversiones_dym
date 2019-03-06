@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -40,4 +43,5 @@ class LoginController extends Controller
     public function username(){
         return 'name';
     }
+
 }

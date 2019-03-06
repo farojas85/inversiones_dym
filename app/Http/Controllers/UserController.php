@@ -30,7 +30,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        $estadoform = "create";
+        return view('configuraciones.user.create');
     }
 
     /**
@@ -41,7 +42,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**

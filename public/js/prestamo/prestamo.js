@@ -84,7 +84,7 @@ $('body').on('click', '#btn-guardar', function (event) {
                     confirmButtonText: 'Aceptar'
                 }).then(function () {
                    // console.log(response)
-                    window.location="clienteprestamos";
+                    window.location="prestamos";
                 });
                 
             },

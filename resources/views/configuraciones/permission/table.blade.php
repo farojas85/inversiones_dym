@@ -1,4 +1,4 @@
-<table id="table-datatable" class="table table-striped table-bordered border-t0 text-nowrap w-100 table-sm" >
+<table id="table-datatable" class="table table-striped table-bordered dt-responsive nowrap table-sm" >
     <thead>
         <tr>
             <th  width="10px">Acciones</th>

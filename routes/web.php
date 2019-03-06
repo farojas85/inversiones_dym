@@ -4,6 +4,10 @@ Route::get('/', function () {
     return view('bienvenido');
 });
 
+Route::get('/noacceso', function () {
+    return view('noacceso');
+});
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

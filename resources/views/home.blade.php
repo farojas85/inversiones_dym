@@ -38,4 +38,3 @@
 @else 
 {{ Redirect::to('/') }}
 @endauth
-
