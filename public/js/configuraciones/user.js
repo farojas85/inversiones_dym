@@ -230,3 +230,68 @@ $('body').on('click', '#btn-reset-guardar', function (event) {
        }); 
     }
 });
+
+$('body').on('click', '#btn-editar-usuario', function (event) {
+    event.preventDefault();
+
+    $.ajax({
+        url: '/perfilEdit',
+        dataType: 'html',
+        success: function (response) {
+            $('#datos-usuario').html(response);
+        }
+    });        
+});
+
+$('body').on('click', '.btn-cancelar', function (event) {
+    event.preventDefault();
+
+   window.location.href="perfil";
+});
+
+$('body').on('click', '#btn-perfil-guardar', function (event) {
+    event.preventDefault();
+    estado = $(this).val();
+    var form = $('#form'),
+                url = form.attr('action'),
+                method =form.attr('method');
+
+    $('#form').parsley().validate();
+
+    if ($('#form').parsley().isValid()) {
+        $.ajax({
+           url : url,
+           method: method,
+           data : form.serialize(),
+           success: function (response) {
+                
+                if(estado == 'edit'){
+                    textos = "Datos Modificados Satisfactoriamente !";
+                }
+                else if(estado == 'create'){
+                    textos = "Datos Registrados Satisfactoriamente !";   
+                }
+    
+                swal({
+                    type : 'success',
+                    title : 'Usuario',
+                    text : textos,
+                    confirmButtonText: 'Aceptar'
+                }).then(function () {
+                    window.location.href="perfil";                      
+                });                                                 
+           },
+           error : function (xhr) {
+               var res = xhr.responseJSON;
+               if ($.isEmptyObject(res) == false) {
+                   $.each(res.errors, function (key, value) {
+                       $('#' + key)
+                           .closest('.form-group')
+                           .addClass('has-error')
+                           .append('<span class="help-block"><strong>' + value + '</strong></span>');
+                   });
+               }
+           }
+       }); 
+    }
+});

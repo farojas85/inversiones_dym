@@ -120,11 +120,6 @@ class UserController extends Controller
     {
         //
     }
-
-    public function perfil(){
-        return view('configuraciones.user.perfil_index');
-    }
-
     public function table()
     {
         $users = User::all();
@@ -142,5 +137,22 @@ class UserController extends Controller
 
         $mensaje="exito";
         return $mensaje ;
+    }
+
+    public function perfil(){
+        return view('configuraciones.user.perfil_index');
+    }
+
+    public function perfilEdit(){
+        $user = Auth::user();
+        return view('configuraciones.user.perfil_edit',compact('user'));
+    }
+    public function updatePerfil(Request $request, User $user){
+        $user->name = $request->name;
+        $user->email =$request->email;
+
+        $user->save();
+
+        return $user;
     }
 }

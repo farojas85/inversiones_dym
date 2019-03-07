@@ -33,16 +33,16 @@
                     @endphp
                 </p>
                 <div class="text-center mt-3">
-                    <h4 class="font-13 text-uppercase">Acerca de mí :</h4>
+                   <!-- <h4 class="font-13 text-uppercase">Acerca de mí :</h4>-->
                 </div>
             </div>
         </div>
         <div class="col-lg-8 col-xl-8 col-md-4">
-            <div class="card-box">
+            <div class="card-box" id="datos-usuario">
                 <h5 class="mb-3 text-uppercase bg-light p-2">
                     <i class="mdi mdi-account-details mr-1"></i> Datos de Usuario
                 </h5>
-                <div class="row" id="datos-usuario">
+                <div class="row">
                     <div class="col-md-12">
                         <form action="">
                             <input type="hidden" name="user_id" id="user_id" value="{{ Auth::user()->id }}">
@@ -62,10 +62,25 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="password">Contrase&ntilde;a</label>
-                                        <input type="text" class="form-control" id="password" 
-                                            value="************************" name="password" disabled>
+                                    <div class="form-group row">
+                                        <div class="col-md-2">
+                                                <label for="password" class="col-form-label">Contrase&ntilde;a</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" class="form-control" id="password" 
+                                                value="************" name="password" disabled>
+                                        </div>
+                                        <div class="col-md-1">
+                                            @can('users.reset')
+                                            <a class="btn btn-danger modal-reset-password"
+                                                title="Modificar Contraseña"
+                                                href="{{route('users.reset',Auth::user()->id)}}"
+                                            >
+                                                <i class="mdi mdi-key"></i>
+                                            </a>
+                                            @endcan
+                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -80,9 +95,6 @@
                         </form>
                     </div>
                 </div>
-                <h5 class="mb-3 text-uppercase bg-light p-2">
-                    <i class="mdi mdi-account-card-details mr-1"></i> Datos Personales
-                </h5>
             </div>
         </div>
     </div>

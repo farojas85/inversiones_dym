@@ -72,15 +72,15 @@
 					<div class="container-fluid">
 						<div class="row">
 							<div class="col-md-6">
-								2015 - 2018 &copy; UBold theme by <a href="">Coderthemes</a> 
+								2019 &copy; Derechos Reservados <a href="">FarbeSoft</a> 
 							</div>
-							<div class="col-md-6">
+							<!--<div class="col-md-6">
 								<div class="text-md-right footer-links d-none d-sm-block">
 									<a href="javascript:void(0);">About Us</a>
 									<a href="javascript:void(0);">Help</a>
 									<a href="javascript:void(0);">Contact Us</a>
 								</div>
-							</div>
+							</div>-->
 						</div>
 					</div>
 				</footer>

@@ -12,6 +12,8 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/perfil','UserController@perfil')->name('perfil');
+Route::get('/perfilEdit','UserController@perfilEdit')->name('perfiledit');
+Route::post('updatePerfil/{user}','UserController@updatePerfil')->name('perfil.update');
 Route::get('roleTable', 'RoleController@table'); 
 Route::get('permissionTable','PermissionController@table'); 
 Route::get('permissionroleTable','PermissionRoleController@table');    
