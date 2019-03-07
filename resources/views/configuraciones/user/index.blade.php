@@ -1,5 +1,5 @@
 @extends('layouts.home.app')
-@section('title-page','Configuraciones')
+@section('title-page','Usuarios')
    
 @section('page-content')
     <div class="row">
@@ -8,28 +8,31 @@
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="/home">Home</a></li>
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Sistema</a></li>
-                        <li class="breadcrumb-item active">Confguraciones</li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Configuraciones</a></li>
+                        <li class="breadcrumb-item active">Usuario</li>
                     </ol>
                 </div>
-                <h4 class="page-title">Configuraciones</h4>
+                <h4 class="page-title">Usuarios</h4>
             </div>
         </div>
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="header-title">Roles</h4>        
+                    <h4 class="header-title">Usuario</h4>        
                     <div class="table-responsive" id="tabla-detalle">
                         @can('users.create')
-                        <button class="btn btn-info btn-rounded" id="btn-agregar-usuario"
-                                title="Agregar Usuario">
+                        <a href="{{route('users.create')}}" 
+                            title="Nuevo Usuario"
+                            class="btn btn-info btn-rounded btn-agregar-usuario">
                             <i class="fa fa-plus"></i> Agregar Usuario
-                        </button>
+                        </a>
                         @endcan
+                        <br>
+                        <br>
                         <table id="user-datatable" class="table table-striped dt-responsive table-sm nowrap" >
                             <thead>
                                 <tr>
-                                    <th width="5px">Acciones</th>
+                                    <th>Acciones</th>
                                     <th >ID</th>
                                     <th >Usuario</th>
                                     <th >Correo</th>
@@ -47,12 +50,20 @@
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         @endcan
+                                        @can('users.reset')
+                                        <a class="btn btn-blue btn-xs modal-reset-password"
+                                            title="Modificar Contraseña"
+                                            href="{{route('users.reset',$user->id)}}"
+                                        >
+                                            <i class="mdi mdi-key"></i>
+                                        </a>
+                                        @endcan
                                         @can('users.destroy')
                                         <a class="btn btn-danger btn-xs modal-destroy" title="Eliminar Usuario"
                                             href="{{ route('users.destroy',$user->id)}}">
                                             <i class="fe-trash-2"></i>
                                         </a>
-                                        @endcan
+                                        @endcan                                        
                                     </td>
                                     <td> {{ $loop->iteration }}</td>
                                     <td> {{ $user->name }}</td>

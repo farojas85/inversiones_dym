@@ -27,6 +27,9 @@ Route::get('mostrarCobranza/{id}','PrestamoController@mostrarCobranza');
 Route::get('nuevaCobranza/{id}/{minsaldo}/{cuota}','CobranzaController@nuevaCobranza');
 Route::get('cobranzasTable/{prestamo_id}','CobranzaController@tabla');
 Route::get('pdfCobranza/{cobranza}','CobranzaController@generaPdf')->name('cobranzas.pdf');
+Route::get('userTable','UserController@table');
+Route::get('userReset/{user}','UserController@resetPassword')->name('users.reset');
+Route::post('saveReset/{user}','UserController@saveReset')->name('users.savereset');
 
 Route::middleware(['auth'])->group(function(){	
     Route::resource('roles', 'RoleController');    

@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\User;
 use Caffeinated\Shinobi\Models\Role;
 use Illuminate\Http\Request;
-use Auth;
-
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 {
+   
+
     public function __construct()
     {
         $this->middleware('permission:users.create')->only(['create','store']);
@@ -17,6 +20,16 @@ class UserController extends Controller
         $this->middleware('permission:users.show')->only('show');
         $this->middleware('permission:users.destroy')->only('destroy');
     }
+
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
+        ]);
+    }
+
     public function index()
     {
         $users = User::all();
@@ -31,7 +44,8 @@ class UserController extends Controller
     public function create()
     {
         $estadoform = "create";
-        return view('configuraciones.user.create');
+        $roles = Role::pluck('name','id');
+        return view('configuraciones.user.create',compact('estadoform','roles'));
     }
 
     /**
@@ -42,7 +56,16 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        
+        $user = new User;
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+
+        $user->save();
+
+        $user->roles()->sync($request->role_id);
+
+        return $user;
     }
 
     /**
@@ -100,5 +123,24 @@ class UserController extends Controller
 
     public function perfil(){
         return view('configuraciones.user.perfil_index');
+    }
+
+    public function table()
+    {
+        $users = User::all();
+        return view('configuraciones.user.table',compact('users'));
+    }
+
+    public function resetPassword(User $user){
+        return view('configuraciones.user.reset',compact('user'));
+    }
+
+    public function saveReset(Request $request,User $user){      
+
+        $user->password = Hash::make($request->password_nueva);
+        $user->save();
+
+        $mensaje="exito";
+        return $mensaje ;
     }
 }

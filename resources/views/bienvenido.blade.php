@@ -55,11 +55,11 @@
                         </li>
                     @else
                         <li class="nav-item">
-                            <a class="nav-link" href="/login">Iniciar Sesi&oacute;n</a>
+                            <a class="btn btn-custom navbar-btn" href="/login">Iniciar Sesi&oacute;n</a>
                         </li>
-                        <li class="nav-item">
+                        <!--<li class="nav-item">
                             <a class="nav-link" href="/register">Registrarse</a>
-                        </li>
+                        </li>-->
                     @endauth
                     </ul>
 
