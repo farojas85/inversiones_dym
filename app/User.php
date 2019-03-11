@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Caffeinated\Shinobi\Traits\ShinobiTrait;
 use Caffeinated\Shinobi\Models\Role;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -38,5 +39,23 @@ class User extends Authenticatable
     public function personal()
     {
         return $this->hasOne(Personal::class);
+    }
+
+    /*public function hasRole($role)
+    {
+        return DB::table('users as u')
+                    ->join('role_user as ru','u.id','=','ru.user_id')
+                    ->join('roles as r','ru.role_id','=','r.id')
+                    ->where('r.name',$role)
+                    ->get();
+    }*/
+
+    public function hasRole($role)
+    {
+        $flag= false;        
+        if ($this->roles()->where('name', $role)->first()) {
+            $flag =  true;
+        }
+        return $flag;
     }
 }

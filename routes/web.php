@@ -10,7 +10,7 @@ Route::get('/noacceso', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+
 Route::get('/perfil','UserController@perfil')->name('perfil');
 Route::get('/perfilEdit','UserController@perfilEdit')->name('perfiledit');
 Route::post('updatePerfil/{user}','UserController@updatePerfil')->name('perfil.update');
@@ -33,7 +33,12 @@ Route::get('userTable','UserController@table');
 Route::get('userReset/{user}','UserController@resetPassword')->name('users.reset');
 Route::post('saveReset/{user}','UserController@saveReset')->name('users.savereset');
 
-Route::middleware(['auth'])->group(function(){	
+Route::group(['middleware' => 'checkRole:cobrador'], function() {
+    Route::get('/home', 'HomeController@index')->name('home');
+});
+
+
+Route::middleware(['auth'])->group(function(){    
     Route::resource('roles', 'RoleController');    
     Route::resource('users', 'UserController');     
     Route::resource('personals', 'PersonalController');
