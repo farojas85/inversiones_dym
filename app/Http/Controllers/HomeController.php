@@ -40,6 +40,7 @@ class HomeController extends Controller
                             ->join('roles as r','ru.role_id','=','r.id')
                             ->where('r.name','cobrador')
                             ->count();
+            $prestamos = $this->cantidad_prestamos();
                             
         }
         else{
@@ -51,10 +52,13 @@ class HomeController extends Controller
                             ->where('cp.personal_id','=',$personal->id)
                             ->count();
         } 
-
-        $hora = Carbon::now()->format('H:i:s');
-
-        return view('home',compact('clientes','personals','role_name','hora'));
+        return view('home',compact('clientes','personals','prestamos'));
        
     }
+
+    public function cantidad_prestamos(){
+        return DB::table('prestamos')->count();
+    }
+
+
 }

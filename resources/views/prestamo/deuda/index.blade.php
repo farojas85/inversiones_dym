@@ -17,15 +17,19 @@
     </div>
     <div class="col-12">
         <div class="card-box" id="view-detalle">
-            <h4 class="header-title">Listado de Asignaciones</h4>   
+            <h4 class="header-title">Listado de Pr&eacute;stamos</h4>   
             <div class="row">
-                <div class="col-md-2">
+                <div class="col-md-12">
                     @can('prestamos.create')
                     <button class="btn btn-info btn-rounded" id="btn-agregar"
                             title="Nuevo Préstamo">
                         <i class="fa fa-plus"></i> Nuevo Préstamo
                     </button>
                     @endcan
+                    <button class="btn btn-danger btn-rounded" id="btn-reporte"
+                            title="Reporte Préstamos">
+                        <i class="fas fa-file-pdf"></i> Reportes
+                    </button>
                 </div>
             </div>
             <hr>

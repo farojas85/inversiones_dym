@@ -30,9 +30,10 @@ $(document).ready(function() {
         "pageLength": 5,
         "lengthMenu": [[5,10, 25, 50, -1], [5,10, 25, 50, "All"]]
     });
-
     
 });
+
+
 //AGREGAR ROLE
 $('body').on('click', '#btn-agregar', function (event) {
     event.preventDefault();
@@ -269,3 +270,22 @@ function imprimir_boleta(){
 
     window.print();
 }
+
+$('body').on('click', '#btn-reporte', function (event) {
+    event.preventDefault();
+
+    var me = $(this),
+        title = me.attr('title');
+
+    $.ajax({
+        url: '/prestamoReporte',
+        type:"GET",
+        success: function (response) {
+            $('#modal-default-title').text(title);
+            $('#modal-default-body').html(response);
+            $('#modal-default').modal('show');
+        }
+    });
+});
+
+

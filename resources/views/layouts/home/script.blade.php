@@ -33,7 +33,12 @@
 <script src="assets/libs/bootstrap-colorpicker/bootstrap-colorpicker.min.js"></script>
 <script src="assets/libs/clockpicker/bootstrap-clockpicker.min.js"></script>
 
+<!-- Google MAPS API -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8i8Oiy1vn7w8Rpzxj0gnSdNwKk-ZLZdM&callback=initMap""
+    async defer></script>
 
+<!-- gmap js-->
+<script src="assets/libs/gmaps/gmaps.min.js"></script>
 
 <!-- App js-->
 <script src="assets/js/app.min.js"></script>

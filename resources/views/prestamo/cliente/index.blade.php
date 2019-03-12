@@ -26,7 +26,7 @@
                             <i class="fa fa-plus"></i> Agregar Cliente
                         </button>
                         @endcan
-                        <table id="cliente-datatable" class="table table-striped dt-responsive table-sm" >
+                        <table id="cliente-datatable" class="table table-striped dt-responsive table-sm nowrap" >
                             <thead>
                                 <tr>
                                     <th style="width: 100px;">Acciones</th>
@@ -50,6 +50,16 @@
                                 @endphp
                                 <tr>
                                     <td>
+                                        @if($cliente->direccion !='' || $cliente->direccion != null)
+                                            @can('clientes.gmap')
+                                            <a href="{{ route('clientes.gmap',$cliente->id)}}"
+                                                class="btn btn-success btn-xs modal-cliente-gmap"
+                                                title="Ubicación Cliente"
+                                                >
+                                                <i class="mdi mdi-map-marker"></i>
+                                            </a>
+                                            @endcan
+                                        @endif
                                         @can('clientes.show')
                                         <a class="btn btn-blue btn-xs modal-cliente-show" title="Ver Cliente"
                                             href="{{ route('clientes.show',$cliente->id)}}">
@@ -69,6 +79,7 @@
                                             <i class="fe-trash-2"></i>
                                         </a>
                                         @endcan
+                                        
                                     </td>
                                     <td>{{ $loop->iteration }}</td>
                                     <td> {{ $cliente->nombres." ".$cliente->apellidos }}</td>

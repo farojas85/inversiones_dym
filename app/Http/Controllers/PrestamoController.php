@@ -275,4 +275,50 @@ class PrestamoController extends Controller
 
         return view('prestamo.deuda.mostrarCobranza',compact('prestamo','minSaldo','cobranzas'));
     }
+
+    public function rangoFechas($tipo_busqueda){
+        $meses = array(
+            '01' => 'Enero',
+            '02' => 'Febrero',
+            '03' => 'Marzo',
+            '04' => 'Abril',
+            '05' => 'Mayo',
+            '06' => 'Junio',
+            '07' => 'Julio',
+            '08' => 'Agosto',
+            '09' => 'Setiembre',
+            '10' => 'Octubre',
+            '11' => 'Noviembre',
+            '12' => 'Diciembre'
+        );
+        return view('prestamo.deuda.rangofechas',compact('tipo_busqueda','meses'));
+    }
+    public function reporte()
+    {
+        $tipos = array(
+            "01" => 'Diaria',
+            "02" => 'Mensual',
+            "03" => 'Anual'
+        );
+        $personals = DB::table('personals as p')
+                        ->join('role_user as ru' ,'p.user_id','=','ru.user_id')
+                        ->join('roles as r','ru.role_id','=','r.id')
+                        ->select(
+                            DB::raw("CONCAT(p.nombres,' ',p.apellidos) AS nombres"),
+                                'p.id'
+                        )
+                        ->where('r.name','cobrador')
+                        ->pluck('nombres','id');
+        return view('prestamo.deuda.reporte',compact('tipos','personals'));
+    }
+
+    public function vistaresult(Request $request)
+    {   
+        $tipo_busqueda = $request->tipo_busqueda;
+        switch($tipo_busqueda){
+            case '01':
+                
+        }
+        return view('prestamo.deuda.resultado',compact());
+    }
 }

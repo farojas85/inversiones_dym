@@ -189,4 +189,8 @@ class ClienteController extends Controller
 
         $cliente->save();
     }
+
+    public function gmap(Cliente $cliente){
+        return view('prestamo.cliente.gmap',compact('cliente'));
+    }
 }

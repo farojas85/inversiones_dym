@@ -50,5 +50,10 @@ Route::middleware(['auth'])->group(function(){
     Route::resource('permissions', 'PermissionController');    
     Route::resource('permissionroles', 'PermissionRoleController');    
     Route::resource('modulos', 'ModuloController');
-    Route::resource('cobranzas', 'CobranzaController');       
+    Route::resource('cobranzas', 'CobranzaController');  
+    
+    Route::get('/clientes/gmap/{cliente}','ClienteController@gmap')->name('clientes.gmap');
+    Route::get('/prestamoReporte','PrestamoController@reporte')->name('prestamos.reporte');
+    Route::get('/resultReporte','PrestamoController@vistaresult')->name('prestamos.vistaresult');
+    Route::get('/rangofechasPrestamo/{tipo_busqueda}','PrestamoController@rangoFechas');
 });
