@@ -3,9 +3,8 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Carbon\Carbon;
 
-class checkRole
+class checkUser
 {
     /**
      * Handle an incoming request.
@@ -14,18 +13,19 @@ class checkRole
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next,$role)
+    public function handle($request, Closure $next)
     {
         $hora_ini = "08:00:00";
-        $hora_fin = "21:00:00";
+        $hora_fin = "23:59:00";
         $hora_actual = date('H:i:s');
 
-        if($request->user()->hasRole($role) == true){
+        if($request->user()->name == 'jcalzarte'){
             if($hora_actual< $hora_ini || $hora_actual >$hora_fin){
                 auth()->logout();
                 return redirect('/noacceso');
             }
         }
+
         return $next($request);
     }
 }

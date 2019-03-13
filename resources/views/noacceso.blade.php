@@ -77,6 +77,9 @@
                                     <p class="text-muted mb-0">
                                         <h5>Horario de Acceso: 07:00 a.m. hasta 09:00 p.m.</h5>
                                     </p>
+                                    <p>
+                                        <a href="/home" class="btn btn-blue">Volver a Home</a>
+                                    </p>
                                 </div>
 
                             </div> <!-- end card-body -->
@@ -85,6 +88,7 @@
 
                         <div class="row mt-3">
                             <div class="col-12 text-center">
+                                
                             </div> <!-- end col -->
                         </div>
                         <!-- end row -->

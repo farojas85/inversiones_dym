@@ -25,6 +25,8 @@ class PrestamoController extends Controller
         $this->middleware('permission:prestamos.destroy')->only('destroy');
         $this->middleware('permission:clienteprestamoTable')->only('table');
         $this->tasas = array(
+                '0.10' =>'10%',
+                '0.15' => '15%',
                 '0.20' => '20%',
                 '0.25' => '25%');
 
