@@ -1,7 +1,7 @@
 var tabla;
 $(document).ready(function() {
     // Default Datatable
-    tabla = $('#model-datatable').DataTable({
+    tabla = $('#prestamo-datatable').DataTable({
         "language":
             {
                 "sProcessing":     "Procesando...",
@@ -229,28 +229,8 @@ function mostrar_tabla_cobros(prestamo_id){
         success: function (response) {
             $('.table-responsive').html(response);
         }
-    });
+    }); 
 }
-
-/*$('body').on('click', '.show-cobranza', function (event) {
-    event.preventDefault();
-
-    var me = $(this),
-        url = me.attr('href'),
-        title = me.attr('title');  
-
-    $.ajax({
-        url: url,
-        dataType: 'html',
-        success: function (response) {
-            //$('#modal-small-title').text(title);
-            //$('#modal-small-body').html(response);
-            //$('#modal-small').modal('show');
-            $('#container-page').html(response);           
-        }
-    });        
-});*/
-
 
 function imprimir_boleta(){
     var css = '@page { size: 74mm 105mm; margin: 0mm;}',

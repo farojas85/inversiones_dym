@@ -54,6 +54,10 @@ Route::middleware(['auth'])->group(function(){
     
     Route::get('/clientes/gmap/{cliente}','ClienteController@gmap')->name('clientes.gmap');
     Route::get('/prestamoReporte','PrestamoController@reporte')->name('prestamos.reporte');
-    Route::get('/resultReporte','PrestamoController@vistaresult')->name('prestamos.vistaresult');
+    Route::get('/cobranzaReporte','PrestamoController@reporteCobranza')->name('cobranzas.reporte');
     Route::get('/rangofechasPrestamo/{tipo_busqueda}','PrestamoController@rangoFechas');
+    Route::get('/prestamodia','PrestamoController@prestamoDia')->name('prestamos.reportedia');
+    Route::get('/prestamomes','PrestamoController@prestamoMes')->name('prestamos.reportemes');
+    Route::get('/cobranzadia','PrestamoController@cobranzaDia')->name('cobranzas.reportdia');
+    Route::get('/cobranzames','PrestamoController@cobranzaMes')->name('cobranzas.reportemes');
 });

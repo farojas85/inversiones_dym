@@ -34,7 +34,7 @@
 <script src="assets/libs/clockpicker/bootstrap-clockpicker.min.js"></script>
 
 <!-- Google MAPS API -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8i8Oiy1vn7w8Rpzxj0gnSdNwKk-ZLZdM&callback=initMap""
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8i8Oiy1vn7w8Rpzxj0gnSdNwKk-ZLZdM"
     async defer></script>
 
 <!-- gmap js-->

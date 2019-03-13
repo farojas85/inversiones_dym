@@ -14,21 +14,30 @@
     {!! 
         Form::text('fecha_fin',null,
                     ['class' => 'form-control',
-                    'placeholder'=> 'Seleccione Fecha Inicio',
+                    'placeholder'=> 'Seleccione Fecha Final',
                     'id'=>'fecha_fin',
                     'required'=>'']) 
     !!} 
 </div>
 @elseif($tipo_busqueda == '02')
-{!! Form::label('mes','Mes',['class' =>'col-form-label col-md-4 ']) !!}
-    <div class="col-md-8">
-        {!! 
-            Form::select('mes',$meses,null,
-                        ['class' => 'form-control',
-                        'placeholder'=> 'Seleccione Mes',
-                        'id'=>'mes','required'=>'']) 
-        !!} 
-    </div>
+<div class="col-md-6">
+    {!! Form::label('mes_inicio','Mes Inicio',['class' =>'col-form-label']) !!}
+    {!! 
+        Form::select('mes_inicio',$meses,null,
+                    ['class' => 'form-control',
+                    'placeholder'=> 'Seleccione Mes',
+                    'id'=>'mes_inicio','required'=>'']) 
+    !!} 
+</div>
+<div class="col-md-6">
+    {!! Form::label('mes_fin','Mes Fin',['class' =>'col-form-label']) !!}
+    {!! 
+        Form::select('mes_fin',$meses,null,
+                    ['class' => 'form-control',
+                    'placeholder'=> 'Seleccione Mes',
+                    'id'=>'mes_fin','required'=>'']) 
+    !!} 
+</div>
 @endif
 <script>
     $( function() {

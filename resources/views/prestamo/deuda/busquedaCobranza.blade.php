@@ -28,7 +28,7 @@
 <div class="row">
     <div class="col-md-12 text-center">
         <div class="form-group">
-            <button type="button" class="btn btn-success" id="btn-buscar" name="btn-buscar"
+            <button type="button" class="btn btn-success" id="btn-buscar-cobranza" name="btn-buscar-cobranza"
                 onclick="mostrar_resultado()">
                 <i class="fas fa-search"></i> Buscar
             </button>
@@ -59,7 +59,7 @@
             fecha_ini  = $('#fecha_inicio').val();
             fecha_fin = $('#fecha_fin').val();
             $.ajax({
-                url: '/prestamodia',
+                url: '/cobranzadia',
                 data:{
                     tipo_busqueda: tipo_busqueda,
                     fecha_ini: fecha_ini,
@@ -77,7 +77,7 @@
             mes_ini  = $('#mes_inicio').val();
             mes_fin  = $('#mes_fin').val();
             $.ajax({
-                url: '/prestamomes',
+                url: '/cobranzames',
                 data:{
                     personal_id:personal_id,
                     mes_ini: mes_ini,

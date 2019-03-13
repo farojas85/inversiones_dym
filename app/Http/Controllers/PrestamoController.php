@@ -312,13 +312,173 @@ class PrestamoController extends Controller
         return view('prestamo.deuda.reporte',compact('tipos','personals'));
     }
 
-    public function vistaresult(Request $request)
-    {   
-        $tipo_busqueda = $request->tipo_busqueda;
-        switch($tipo_busqueda){
-            case '01':
-                
+    public function prestamoDia(Request $request){
+
+        if($request->personal_id == "%"){
+            $personals = DB::table('prestamos as pr')
+                            ->join('cliente_personal as cp','pr.cliente_id','=','cp.cliente_id')
+                            ->join('personals as p','cp.personal_id','=','p.id')
+                            ->select(
+                                DB::raw('DISTINCT(p.id)'),
+                                DB::raw("CONCAT(p.nombres,' ',p.apellidos) as nombres"))
+                            ->where('fecha_prestamo','>=',$request->fecha_ini)
+                            ->where('fecha_prestamo','<=',$request->fecha_fin)
+                            ->orderBy('p.id','ASC')
+                            ->get();
+            $like_condicion = $request->personal_id;
         }
-        return view('prestamo.deuda.resultado',compact());
+        else{
+            $personals = personal::where('id',$request->personal_id)
+                                    ->orderBy('id','asc')->get();
+            $like_condicion = '%'.$request->personal_id.'%';
+        }
+        $prestamos = null;
+        $fecha_ini = $request->fecha_ini;
+        $fecha_fin = $request->fecha_fin;
+        $prestamos = DB::table('prestamos as pr')
+                        ->join('cliente_personal  as cp','pr.cliente_id', '=', 'cp.cliente_id')
+                        ->join('personals as p','cp.personal_id','=','p.id')
+                        ->join('clientes as c','cp.cliente_id','=','c.id')
+                        ->select('pr.id','fecha_prestamo',
+                                DB::raw("CONCAT(c.nombres,' ',c.apellidos) as cliente"),
+                                DB::raw("CONCAT(p.nombres,' ',p.apellidos) as personal"),
+                                'monto',
+                                DB::raw('(monto*tasa_interes) as interes'),
+                                DB::raw('(monto + monto*tasa_interes) as total'))
+                        ->where('fecha_prestamo','>=',$fecha_ini)
+                        ->where('fecha_prestamo','<=',$fecha_fin)
+                        ->where('p.id','like',$like_condicion)
+                        ->get();
+
+        return view('prestamo.deuda.resultado',compact('personals','prestamos','request'));
+    }
+
+    public function prestamoMes(Request $request){
+
+        $prestamos = null;
+        $mes_ini = $request->mes_ini;
+        $mes_fin = $request->mes_fin;
+
+        if($request->personal_id == "%"){            
+            $prestamos = DB::table('prestamos as pr')
+                            ->join('cliente_personal  as cp','pr.cliente_id', '=', 'cp.cliente_id')
+                            ->join('personals as p','cp.personal_id','=','p.id')
+                            ->join('clientes as c','cp.cliente_id','=','c.id')
+                            ->select(
+                                    DB::raw("MONTH(fecha_prestamo) as mes"),
+                                    DB::raw("CONCAT(p.nombres,' ',p.apellidos) as personal"),
+                                    DB::raw('SUM(monto + monto*tasa_interes) as total'))
+                            ->where(DB::raw("MONTH(fecha_prestamo)"),'>=',$mes_ini)
+                            ->where(DB::raw("MONTH(fecha_prestamo)"),'<=',$mes_fin)
+                            ->groupBy('fecha_prestamo','p.nombres','p.apellidos')
+                            ->orderByRaw('mes ASC, personal ASC')
+                            ->get();            
+        }
+        else{
+            $prestamos = DB::table('prestamos as pr')
+                            ->join('cliente_personal  as cp','pr.cliente_id', '=', 'cp.cliente_id')
+                            ->join('personals as p','cp.personal_id','=','p.id')
+                            ->join('clientes as c','cp.cliente_id','=','c.id')
+                            ->select(
+                                    DB::raw("MONTH(fecha_prestamo) as mes"),
+                                    DB::raw("CONCAT(p.nombres,' ',p.apellidos) as personal"),
+                                    DB::raw('SUM(monto + monto*tasa_interes) as total'))
+                            ->where(DB::raw("MONTH(fecha_prestamo)"),'>=',$mes_ini)
+                            ->where(DB::raw("MONTH(fecha_prestamo)"),'<=',$mes_fin)
+                            ->where('p.id',$request->personal_id)
+                            ->groupBy('fecha_prestamo','p.nombres','p.apellidos')
+                            ->orderByRaw('mes ASC, personal ASC')
+                            ->get();
+        }       
+
+        return view('prestamo.deuda.resultado',compact('prestamos','request'));
+    }
+
+    public function reporteCobranza()
+    {
+        $tipos = array(
+            "01" => 'Diaria',
+            "02" => 'Mensual',
+            "03" => 'Anual'
+        );
+        $personals = DB::table('personals as p')
+                        ->join('role_user as ru' ,'p.user_id','=','ru.user_id')
+                        ->join('roles as r','ru.role_id','=','r.id')
+                        ->select(
+                            DB::raw("CONCAT(p.nombres,' ',p.apellidos) AS nombres"),
+                                'p.id'
+                        )
+                        ->where('r.name','cobrador')
+                        ->pluck('nombres','id');
+        return view('prestamo.deuda.busquedaCobranza',compact('tipos','personals'));
+    }
+
+    public function cobranzaDia(Request $request){
+        if($request->personal_id == "%"){
+            $like_condicion = $request->personal_id;
+        }
+        else{
+            $like_condicion = '%'.$request->personal_id.'%';
+        }
+
+        $cobranzas = null;
+        $fecha_ini = $request->fecha_ini;
+        $fecha_fin = $request->fecha_fin;
+        $cobranzas = DB::table('cobranzas as co')
+                        ->join('prestamos as pr','co.prestamo_id','=','pr.id')
+                        ->join('cliente_personal as cp', 'pr.cliente_id', '=', 'cp.cliente_id')
+                        ->join('personals as p','cp.personal_id','=','p.id')
+                        ->join('clientes as c','cp.cliente_id', '=', 'c.id')
+                        ->select('co.id','co.fecha',
+                            DB::raw("concat(p.nombres,' ',p.apellidos) as personal"),
+                            DB::raw("concat(c.nombres,' ',c.apellidos) as cliente"),
+                            'cantidad_cuotas','co.monto')
+                        ->where('co.fecha','>=',$fecha_ini)
+                        ->where('co.fecha','<=',$fecha_fin)
+                        ->where('p.id','like',$like_condicion)
+                        ->get();
+
+        return view('prestamo.deuda.resultadoCobranza',compact('request','cobranzas'));
+    }
+
+    public function cobranzaMes(Request $request){
+        $cobranzas = null;
+        $mes_ini = $request->mes_ini;
+        $mes_fin = $request->mes_fin;
+
+        if($request->personal_id == "%"){
+            $like_condicion = $request->personal_id;
+            $cobranzas = DB::table('cobranzas as co') 
+                        ->join('prestamos as pr','co.prestamo_id','=','pr.id')
+                        ->join('cliente_personal as cp','pr.cliente_id','=','cp.cliente_id')
+                        ->join('personals as p','cp.personal_id','=','p.id')
+                        ->select(
+                            DB::raw("MONTH(co.fecha) as mes"),
+                            DB::raw("concat(p.nombres,' ',p.apellidos) as personal"),
+                            DB::raw("sum(co.monto) as total"))
+                        ->where(DB::raw('MONTH(co.fecha)'),'>=',$mes_ini)
+                        ->where(DB::raw("MONTH(co.fecha)"),'<=',$mes_fin)
+                        ->groupBy(DB::raw('MONTH(co.fecha)'),'personal')
+                        ->get();
+        }
+        else{
+            $like_condicion = '%'.$request->personal_id.'%';
+            $cobranzas = DB::table('cobranzas as co') 
+                        ->join('prestamos as pr','co.prestamo_id','=','pr.id')
+                        ->join('cliente_personal as cp','pr.cliente_id','=','cp.cliente_id')
+                        ->join('personals as p','cp.personal_id','=','p.id')
+                        ->select(
+                            DB::raw("MONTH(co.fecha) as mes"),
+                            DB::raw("concat(p.nombres,' ',p.apellidos) as personal"),
+                            DB::raw("sum(co.monto) as total"))
+                        ->where(DB::raw('MONTH(co.fecha)'),'>=',$mes_ini)
+                        ->where(DB::raw("MONTH(co.fecha)"),'<=',$mes_fin)
+                        ->where('p.id','=',$request->personal_id)
+                        ->groupBy(DB::raw('MONTH(co.fecha)'),'personal')
+                        ->get();
+        }
+
+        
+        return view('prestamo.deuda.resultadoCobranza',compact('request','cobranzas'));
     }
 }

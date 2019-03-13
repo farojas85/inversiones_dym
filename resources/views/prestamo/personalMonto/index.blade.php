@@ -12,7 +12,7 @@
                     <li class="breadcrumb-item active">Asiganción Montos</li>
                 </ol>
             </div>
-            <h4 class="page-title">Asiganción Montos al Personal</h4>
+            <h4 class="page-title">Asignación Montos al Personal</h4>
         </div>
     </div>
 </div>
