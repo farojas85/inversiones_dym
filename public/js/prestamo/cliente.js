@@ -170,30 +170,35 @@ $('body').on('click', '.modal-cliente-destroy', function (event) {
         cancelButtonColor: '#d33',
         confirmButtonText: 'Si',
         cancelButtonText: 'No'
-    }).then(function(){
-        $.ajax({
-            url: url,
-            type:'POST',
-            data:{
-                '_token':csrf_token,
-                '_method':'DELETE'
-            },
-            success:function(response){
-                swal({
-                    type: 'success',
-                    title: 'Cliente',
-                    text: 'Registro Eliminado Satisfactoriamente'
-                }).then(function(){
-                    window.location="clientes";
-                });
-            },
-            error: function (xhr) {
-                swal({
-                    type: 'error',
-                    title: 'Cliente',
-                    text: xhr.responseText
-                });
-            },
-        });
-    });
+    }).then((result) => {
+        if(result.value){
+            $.ajax({
+                url: url,
+                type:'POST',
+                data:{
+                    '_token':csrf_token,
+                    '_method':'DELETE'
+                },
+                success:function(response){
+                    swal({
+                        type: 'success',
+                        title: 'Cliente',
+                        text: 'Registro Eliminado Satisfactoriamente'
+                    }).then(function(){
+                        window.location="clientes";
+                    });
+                },
+                error: function (xhr) {
+                    swal({
+                        type: 'error',
+                        title: 'Cliente',
+                        text: xhr.responseText
+                    });
+                },
+            });
+        } 
+    })
+        /*function(){
+        
+    });*/
 });

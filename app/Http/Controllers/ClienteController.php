@@ -185,9 +185,15 @@ class ClienteController extends Controller
 
     public function destroy(Cliente $cliente)
     {
-        $cliente->estado = 'eliminado';
+        $personal = DB::table('cliente_personal')
+                        ->where('cliente_id',$cliente->id)
+                        ->first();
+                        
+        $cliente->personals()->detach($personal->id);
 
-        $cliente->save();
+        $cliente->delete();
+
+        return $cliente;
     }
 
     public function gmap(Cliente $cliente){
