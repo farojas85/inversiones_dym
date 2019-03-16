@@ -267,7 +267,7 @@ class PrestamoController extends Controller
         $prestamo = Prestamo::findOrFail($id);
         $contarCobranza = Cobranza::where('prestamo_id',$id)->count();
 
-        $minSaldo = $prestamo->monto;
+        $minSaldo = ($prestamo->monto + $prestamo->monto*$prestamo->tasa_interes);
         if($contarCobranza >0){
             $minSaldo = Cobranza::where('prestamo_id',$id)->min('saldo');
         }

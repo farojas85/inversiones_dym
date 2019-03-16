@@ -37,9 +37,9 @@ Route::group(['middleware' => 'checkRole:cobrador'], function() {
     Route::get('/home', 'HomeController@index')->name('home');
 });
 
-Route::group(['middleware' => 'checkUser:jcalzarte'], function() {
+/*Route::group(['middleware' => 'checkUser:jcalzarte'], function() {
     Route::get('/home', 'HomeController@index')->name('home');
-});
+});*/
 
 
 Route::middleware(['auth'])->group(function(){    
