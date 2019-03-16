@@ -154,9 +154,19 @@
                     url: '/cobranzaReporte',
                     type:"GET",
                     success: function (response) {
-                        $('#modal-default-title').text('Reporte Cobranza');
-                        $('#modal-default-body').html(response);
-                        $('#modal-default').modal('show');
+                        if(response == 0){
+                            swal({
+                                type : 'warning',
+                                title : 'Reporte Cobranzas',
+                                text : 'No tiene Cobranza(s) Realizada(s)',
+                                confirmButtonText: 'Aceptar'
+                            })
+                        }
+                        else{
+                            $('#modal-default-title').text('Reporte Cobranza');
+                            $('#modal-default-body').html(response);
+                            $('#modal-default').modal('show');
+                        }
                     }
                 });
             }

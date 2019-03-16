@@ -261,9 +261,19 @@ $('body').on('click', '#btn-reporte', function (event) {
         url: '/prestamoReporte',
         type:"GET",
         success: function (response) {
-            $('#modal-default-title').text(title);
-            $('#modal-default-body').html(response);
-            $('#modal-default').modal('show');
+            if(response == 0){
+                swal({
+                    type : 'warning',
+                    title : 'Reporte Préstamos',
+                    text : 'No tiene Préstamo(s) Asignado(s)',
+                    confirmButtonText: 'Aceptar'
+                })
+            }
+            else{
+                $('#modal-default-title').text(title);
+                $('#modal-default-body').html(response);
+                $('#modal-default').modal('show');
+            }
         }
     });
 });

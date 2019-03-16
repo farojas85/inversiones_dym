@@ -14,6 +14,7 @@
 <div class="form-group row">
     {!! Form::label('personal_id','Personal',['class' =>'col-form-label col-md-4 ']) !!}
     <div class="col-md-8">
+        @if ($role_name == 'admin' || $role_name == 'master')
         {!! 
             Form::select('personal_id',["%" =>'Todos', $personals ],null,
                         ['class' => 'form-control',
@@ -21,6 +22,14 @@
                         'id'=>'personal_id',
                         'required'=>'']) 
         !!} 
+        @else
+        {!! 
+            Form::select('personal_id',$personals,null,
+                        ['class' => 'form-control',
+                        'id'=>'personal_id',
+                        'required'=>'']) 
+        !!} 
+        @endif 
     </div>
 </div>
 <div class="form-group row" id="rango_fechas">

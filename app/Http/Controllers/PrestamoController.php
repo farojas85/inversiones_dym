@@ -297,21 +297,51 @@ class PrestamoController extends Controller
     }
     public function reporte()
     {
+         //Obtenemos Id del Usuatio
+         $user_id = Auth::user()->id;
+         $roles = Auth::user()->roles;
+ 
+         foreach($roles as $role){
+             $role_name = $role->name;
+         }
+
         $tipos = array(
             "01" => 'Diaria',
             "02" => 'Mensual',
             "03" => 'Anual'
         );
-        $personals = DB::table('personals as p')
-                        ->join('role_user as ru' ,'p.user_id','=','ru.user_id')
-                        ->join('roles as r','ru.role_id','=','r.id')
-                        ->select(
-                            DB::raw("CONCAT(p.nombres,' ',p.apellidos) AS nombres"),
-                                'p.id'
-                        )
-                        ->where('r.name','cobrador')
-                        ->pluck('nombres','id');
-        return view('prestamo.deuda.reporte',compact('tipos','personals'));
+         //Obteneos los clientes de acuerdo al rol
+        if($role_name == 'admin' || $role_name == 'master'){
+            $personals = DB::table('personals as p')
+                            ->join('role_user as ru' ,'p.user_id','=','ru.user_id')
+                            ->join('roles as r','ru.role_id','=','r.id')
+                            ->select(
+                                DB::raw("CONCAT(p.nombres,' ',p.apellidos) AS nombres"),
+                                    'p.id')
+                            ->where('r.name','cobrador')
+                            ->pluck('nombres','p.id');
+            $prestamo_count = Prestamo::count();
+        }
+        else{
+            $personals = personal::select(DB::raw("CONCAT(nombres,' ',apellidos) AS nombres"),
+                                        'id')
+                                ->where('user_id','=',$user_id)
+                                ->pluck('nombres','id');
+
+            $prestamo_count = DB::table('prestamos as pr')
+                                    ->join('cliente_personal as cp','pr.cliente_id','=','cp.cliente_id')
+                                    ->join('personals as p','cp.personal_id','=','p.id')
+                                    ->where('p.user_id',$user_id)
+                                    ->count('pr.id');
+                                
+        }
+
+        if($prestamo_count == 0){
+            return 0;
+        }
+        else {
+            return view('prestamo.deuda.reporte',compact('tipos','personals','role_name'));            
+        }
     }
 
     public function prestamoDia(Request $request){
@@ -372,7 +402,7 @@ class PrestamoController extends Controller
                                     DB::raw('SUM(monto + monto*tasa_interes) as total'))
                             ->where(DB::raw("MONTH(fecha_prestamo)"),'>=',$mes_ini)
                             ->where(DB::raw("MONTH(fecha_prestamo)"),'<=',$mes_fin)
-                            ->groupBy('fecha_prestamo','p.nombres','p.apellidos')
+                            ->groupBy(DB::raw('MONTH(fecha_prestamo)'),'p.nombres','p.apellidos')
                             ->orderByRaw('mes ASC, personal ASC')
                             ->get();            
         }
@@ -388,7 +418,7 @@ class PrestamoController extends Controller
                             ->where(DB::raw("MONTH(fecha_prestamo)"),'>=',$mes_ini)
                             ->where(DB::raw("MONTH(fecha_prestamo)"),'<=',$mes_fin)
                             ->where('p.id',$request->personal_id)
-                            ->groupBy('fecha_prestamo','p.nombres','p.apellidos')
+                            ->groupBy(DB::raw('MONTH(fecha_prestamo)'),'p.nombres','p.apellidos')
                             ->orderByRaw('mes ASC, personal ASC')
                             ->get();
         }       
@@ -398,21 +428,52 @@ class PrestamoController extends Controller
 
     public function reporteCobranza()
     {
+        //Obtenemos Id del Usuatio
+        $user_id = Auth::user()->id;
+        $roles = Auth::user()->roles;
+
+        foreach($roles as $role){
+            $role_name = $role->name;
+        }
+
         $tipos = array(
             "01" => 'Diaria',
             "02" => 'Mensual',
             "03" => 'Anual'
         );
-        $personals = DB::table('personals as p')
-                        ->join('role_user as ru' ,'p.user_id','=','ru.user_id')
-                        ->join('roles as r','ru.role_id','=','r.id')
-                        ->select(
-                            DB::raw("CONCAT(p.nombres,' ',p.apellidos) AS nombres"),
-                                'p.id'
-                        )
-                        ->where('r.name','cobrador')
-                        ->pluck('nombres','id');
-        return view('prestamo.deuda.busquedaCobranza',compact('tipos','personals'));
+       
+         //Obteneos los clientes de acuerdo al rol
+         if($role_name == 'admin' || $role_name == 'master'){
+            $personals = DB::table('personals as p')
+                            ->join('role_user as ru' ,'p.user_id','=','ru.user_id')
+                            ->join('roles as r','ru.role_id','=','r.id')
+                            ->select(
+                                DB::raw("CONCAT(p.nombres,' ',p.apellidos) AS nombres"),
+                                    'p.id')
+                            ->where('r.name','cobrador')
+                            ->pluck('nombres','p.id');
+            $prestamo_count = Prestamo::count();
+        }
+        else{
+            $personals = personal::select(DB::raw("CONCAT(nombres,' ',apellidos) AS nombres"),
+                                        'id')
+                                ->where('user_id','=',$user_id)
+                                ->pluck('nombres','id');
+
+            $prestamo_count = DB::table('prestamos as pr')
+                                    ->join('cliente_personal as cp','pr.cliente_id','=','cp.cliente_id')
+                                    ->join('personals as p','cp.personal_id','=','p.id')
+                                    ->where('p.user_id',$user_id)
+                                    ->count('pr.id');
+                                
+        }
+
+        if($prestamo_count == 0){
+            return 0;
+        }
+        else {
+            return view('prestamo.deuda.busquedaCobranza',compact('tipos','personals','role_name'));
+        }
     }
 
     public function cobranzaDia(Request $request){
