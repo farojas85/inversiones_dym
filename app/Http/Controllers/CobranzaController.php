@@ -87,7 +87,8 @@ class CobranzaController extends Controller
 
     public function destroy(Cobranza $cobranza)
     {
-        //
+        $cobranza->delete();
+        return $cobranza;
     }
 
     public function nuevaCobranza($id,$minsaldo,$cuota){

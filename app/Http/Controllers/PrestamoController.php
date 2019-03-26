@@ -259,7 +259,9 @@ class PrestamoController extends Controller
 
     public function destroy(Prestamo $prestamo)
     {
-        //
+        $prestamo->delete();
+
+        return $prestamo;
     }
 
     public function mostrarCobranza($id)

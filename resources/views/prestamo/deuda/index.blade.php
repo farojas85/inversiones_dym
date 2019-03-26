@@ -76,6 +76,14 @@
                                                 title="Mostrar_Cobranza" onclick="mostrar_cobranza({{$prestamo->id}})">
                                                 <i class="fas fa-donate"></i>
                                             </button>
+                                            @can('prestamos.destroy')
+                                            <a href="{{ route('prestamos.destroy',$prestamo->id) }}"
+                                                title="Eliminar Préstamo"
+                                                class="btn btn-danger btn-xs destroy-prestamo"
+                                                >
+                                                <i class="fe-trash-2"></i>
+                                            </a>
+                                            @endcan
                                         </td>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $prestamo->fecha_prestamo }}</td>
@@ -114,6 +122,7 @@
                                                 title="Mostrar_Cobranza" onclick="mostrar_cobranza({{$prestamo->id}})">
                                                 <i class="fas fa-donate"></i>
                                             </button>
+                                          
                                         </td>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $prestamo->fecha_prestamo }}</td>

@@ -33,9 +33,9 @@ Route::get('userTable','UserController@table');
 Route::get('userReset/{user}','UserController@resetPassword')->name('users.reset');
 Route::post('saveReset/{user}','UserController@saveReset')->name('users.savereset');
 
-Route::group(['middleware' => 'checkRole:cobrador'], function() {
+//Route::group(['middleware' => 'checkRole:cobrador'], function() {
     Route::get('/home', 'HomeController@index')->name('home');
-});
+//});
 
 /*Route::group(['middleware' => 'checkUser:jcalzarte'], function() {
     Route::get('/home', 'HomeController@index')->name('home');

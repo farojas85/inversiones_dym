@@ -278,4 +278,103 @@ $('body').on('click', '#btn-reporte', function (event) {
     });
 });
 
+$('body').on('click', '.destroy-prestamo', function (event) {
+    event.preventDefault();
+
+    
+    var me = $(this),
+        url = me.attr('href'),
+        title = me.attr('title'),
+        csrf_token = $('meta[name="csrf-token"]').attr('content');
+
+    swal({
+        title: title,
+        text: '¿Seguro de Eliminar El Registro? No podrá revertirlo',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if(result.value){
+            $.ajax({
+                url: url,
+                type:'POST',
+                data:{
+                    '_token':csrf_token,
+                    '_method':'DELETE'
+                },
+                success:function(response){
+                    swal({
+                        type: 'success',
+                        title: 'Cliente',
+                        text: 'Registro Eliminado Satisfactoriamente'
+                    }).then(function(){
+                        window.location="prestamos";
+                    });
+                },
+                error: function (xhr) {
+                    swal({
+                        type: 'error',
+                        title: 'Cliente',
+                        text: xhr.responseText
+                    });
+                },
+            });
+        } 
+    })
+});
+
+
+$('body').on('click', '.destroy-cobranza', function (event) {
+    event.preventDefault();
+
+    var me = $(this),
+        url = me.attr('href'),
+        title = me.attr('title'),
+        csrf_token = $('meta[name="csrf-token"]').attr('content');
+
+    prestamo_id = $('#prestamo_id').val();
+
+    swal({
+        title: title,
+        text: '¿Seguro de Eliminar El Registro? No podrá revertirlo',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if(result.value){
+            $.ajax({
+                url: url,
+                type:'POST',
+                data:{
+                    '_token':csrf_token,
+                    '_method':'DELETE'
+                },
+                success:function(response){
+                    swal({
+                        type: 'success',
+                        title: 'Cobranzas',
+                        text: 'Registro Eliminado Satisfactoriamente'
+                    }).then(function(){
+                        mostrar_cobranza(prestamo_id);
+                    });
+                },
+                error: function (xhr) {
+                    swal({
+                        type: 'error',
+                        title: 'Cobranzas',
+                        text: xhr.responseText
+                    });
+                },
+            });
+        } 
+    })
+});
+
+
 
