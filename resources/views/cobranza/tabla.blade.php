@@ -15,10 +15,18 @@
         <td>
             <a href="{{ route('cobranzas.pdf',$cobranza->id) }}" 
                 title="Mostrar Cobranza"
-                class="btn btn-danger btn-xs show-cobranza"
+                class="btn btn-blue btn-xs show-cobranza"
                 target="_blank">
                 <i class=" far fa-file-pdf"></i>
             </a>
+            @can('cobranzas.destroy')
+            <a href="{{ route('cobranzas.destroy',$cobranza->id) }}"
+                title="Eliminar Cobranza"
+                class="btn btn-danger btn-xs destroy-cobranza"
+                >
+                <i class="fe-trash-2"></i>
+            </a>
+            @endcan
         </td>
         <td>{{ $loop->iteration }}</td>
         <td>{{ $cobranza->fecha }}</td>

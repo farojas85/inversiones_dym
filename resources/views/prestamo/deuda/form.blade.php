@@ -69,9 +69,9 @@
             {!! Form::label('fecha_prestamo','Fecha',['class' =>'col-form-label col-md-3']) !!}
             <div class="col-md-9">
                 {!! 
-                    Form::text('fecha_prestamo',null,
+                    Form::text('fecha_prestamo',\Carbon\Carbon::now()->format('d-m-Y'),
                                 ['class' => 'form-control','id'=>'fecha_prestamo','required'=>'',
-                                'placeholder'=>'Seleccione fecha'])
+                                'readonly'=>''])
                 !!} 
             </div>                                           
         </div>
@@ -118,7 +118,7 @@
 
 <script>
     $( function() {
-        $( "#fecha_prestamo" ).flatpickr();
+        //$( "#fecha_prestamo" ).flatpickr();
     } );
     function calcular_cuotas()
     {
@@ -130,9 +130,9 @@
             //console.log(interes)
             monto_final = parseInt(monto) + parseInt(interes);
             //console.log(monto_final)
-            cuota = parseInt(monto_final) / dia;
+            cuota = parseFloat(parseInt(monto_final) / dia);
             //console.log(cuota)
-            $('#cuota').val(cuota);
+            $('#cuota').val(Math.round(cuota*10)/10);
         }
     }
 </script>

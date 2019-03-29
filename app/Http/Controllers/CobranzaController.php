@@ -6,7 +6,9 @@ use App\Cobranza;
 use App\Prestamo;
 use Illuminate\Http\Request;
 use Fpdf;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+
 
 class CobranzaController extends Controller
 {
@@ -46,7 +48,7 @@ class CobranzaController extends Controller
         //Guardamos la Cobranza
 
             $cobranza = new Cobranza;
-            $cobranza->fecha = $request->fecha;
+            $cobranza->fecha = Carbon::now()->format('Y-m-d');
             $cobranza->prestamo_id = $request->prestamo_id;
             $cobranza->cantidad_cuotas = $request->cantidad_cuotas;
             $cobranza->monto = $request->monto;
@@ -106,6 +108,15 @@ class CobranzaController extends Controller
         return view('cobranza.create',compact('estadoform','id','minsaldo','cuota','max_num','max_id'));
     }
 
+    public function obtenerCobranzas(Request $request){
+        $condiciones = [
+            array('prestamo_id','=',$request->prestamo_id),
+            array('fecha','=',Carbon::now()->format('Y-m-d'))
+        ];
+        $nrocobros = Cobranza::where($condiciones)->count();
+
+        return $nrocobros;
+    }
     public function tabla($prestamo_id){
 
         $cobranzas = Cobranza::where('prestamo_id',$prestamo_id)

@@ -58,6 +58,7 @@ class PrestamoController extends Controller
                                 )
                             ->groupBy('p.id','p.cliente_id','cli.apellidos','cli.nombres','fecha_prestamo',
                                     'p.monto','p.estado')
+                            ->orderBy('fecha_prestamo','DESC')
                             ->get();
         }
         else{
@@ -79,6 +80,7 @@ class PrestamoController extends Controller
                             ->where('pc.personal_id','=',$persona->id)
                             ->groupBy('p.id','p.cliente_id','cli.apellidos','cli.nombres','fecha_prestamo',
                                     'p.monto','p.estado')
+                            ->orderBy('fecha_prestamo','DESC')
                             ->get();
         }
 
@@ -146,16 +148,13 @@ class PrestamoController extends Controller
     
         $prestamo = new Prestamo;
         $prestamo->cliente_id = $request->cliente_id;
-        $prestamo->fecha_prestamo = $request->fecha_prestamo;
+        $prestamo->fecha_prestamo = Carbon::now()->format('Y-m-d');
         $prestamo->tasa_interes = $request->tasa_interes;
         $prestamo->monto = $request->monto;
         $prestamo->dias = $request->dias;
         $prestamo->cuota = $request->cuota;
         $prestamo->estado = 'Generado';
-        $prestamo->fecha_prestamo = $request->fecha_prestamo;
-        $prestamo->fecha_vencimiento = \Carbon\Carbon::now();
-        
-       
+        $prestamo->fecha_vencimiento = \Carbon\Carbon::now();       
 
         $condicion = array(
             array('personal_id','=',$request->personal_id),

@@ -126,22 +126,46 @@ function mostrar_cobranza(id)
 $('body').on('click', '.modal-create-cobro', function (event) {
     event.preventDefault();
 
+    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
     id=$('#prestamo_id').val();
     minsaldo = $('#min_saldo').val();
     cuota = $('#cuota').val();
-
+    console.log(id)
     var me = $(this),
         title = me.attr('title');
 
     $.ajax({
-        url: 'nuevaCobranza/'+id+'/'+minsaldo+'/'+cuota,
-        type:"GET",
-        success: function (response) {
-            $('#modal-default-title').text(title);
-            $('#modal-default-body').html(response);
-            $('#modal-default').modal('show');
-        }
+        url: 'obtenerCobranzas',
+        type: 'POST',
+        data:{
+            prestamo_id:id,
+            _token: CSRF_TOKEN,
+            '_method':'POST'
+        },
+        success: function(response){
+            if(response === 1){
+                swal({
+                    type : 'warning',
+                    title : 'Cobranzas',
+                    text : '¡HOY ya ha registrado un Cobro del Préstamo, no puede añadir otro !,',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+            else{
+                $.ajax({
+                    url: 'nuevaCobranza/'+id+'/'+minsaldo+'/'+cuota,
+                    type:"GET",
+                    success: function (response) {
+                        $('#modal-default-title').text(title);
+                        $('#modal-default-body').html(response);
+                        $('#modal-default').modal('show');
+                    }
+                });
+            }
+        },
     });
+    /**/
 });
 
 /*$('body').on('change', '#monto', function (event) {
@@ -151,12 +175,14 @@ $('body').on('click', '.modal-create-cobro', function (event) {
     $('#saldo_nuevo').val((saldo_ant -monto).toFixed(2));
 });*/
 
-$('body').on('keyup', '#cantidad_cuotas', function (event) {
+$('body').on('keyup', '#monto', function (event) {
     event.preventDefault();
     cuota = $('#cuota').val();
-    monto = $(this).val()*cuota;
-    $('#monto').val(($(this).val()*cuota).toFixed(2));
+    monto = $(this).val(); 
     saldo_ant = $('#saldo_anterior').val();
+
+    cantidad_cuotas = parseFloat(monto/cuota).toFixed(2);
+    $('#cantidad_cuotas').val(cantidad_cuotas);    
     $('#saldo_nuevo').val((saldo_ant - monto).toFixed(2));
 });
 

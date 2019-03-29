@@ -35,21 +35,21 @@
                 <span class="input-group-text">Fecha</span>
             </div>
             {!! 
-                Form::text('fecha',null,
-                            ['class' => 'form-control','placeholder'=> 'Ingrese fecha',
+                Form::text('fecha',\Carbon\Carbon::now()->format('d-m-Y'),
+                            ['class' => 'form-control','readonly'=> '',
                             'id'=>'fecha', 'required'=>'']) 
             !!} 
         </div>
     </div>
     <div class="col-md-6">
         <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text">Nro. Cuotas</span>
+            <div class="input-group-prepend" title="Saldo Anterior">
+                <span class="input-group-text">Saldo Ant.</span>
             </div>
             {!! 
-                Form::number('cantidad_cuotas',null,
-                            ['class' => 'form-control','placeholder'=> 'Nro. Cuotas',
-                            'id'=>'cantidad_cuotas','required'=>'']) 
+                Form::number('saldo_anterior',$minsaldo,
+                            ['class' => 'form-control','readonly'=> '',
+                            'id'=>'saldo_anterior', 'required'=>'']) 
             !!}
         </div>
     </div>                                          
@@ -69,13 +69,14 @@
     </div>
     <div class="col-md-6">
         <div class="input-group">
-            <div class="input-group-prepend" title="Saldo Anterior">
-                <span class="input-group-text">Saldo Ant.</span>
+            <div class="input-group-prepend">
+                <span class="input-group-text">Nro. Cuotas</span>
             </div>
             {!! 
-                Form::number('saldo_anterior',$minsaldo,
-                            ['class' => 'form-control','placeholder'=> 'Saldo Anterior',
-                            'id'=>'saldo_anterior', 'required'=>'']) 
+                Form::text('cantidad_cuotas',null,
+                            ['class' => 'form-control','placeholder'=> 'Nro. Cuotas',
+                            'id'=>'cantidad_cuotas','required'=>'',
+                            'readonly' =>'']) 
             !!}
         </div>
     </div>                                      
@@ -89,7 +90,8 @@
             {!! 
                 Form::number('saldo_nuevo',null,
                             ['class' => 'form-control','placeholder'=> 'Ingrese Nro. de Cuotas',
-                            'id'=>'saldo_nuevo', 'required'=>'']) 
+                            'id'=>'saldo_nuevo', 'required'=>''
+                            ,'readonly'=>'']) 
             !!}
         </div>
     </div>                                       
@@ -132,6 +134,16 @@
 </div>
 <script>
     $( function() {
-        $( "#fecha" ).flatpickr();
+        //$( "#fecha" ).flatpickr();
     } );
+    $('body').on('keyup', '#monto', function (event) {
+        event.preventDefault();
+        cuota = $('#cuota').val();
+        monto = $(this).val(); 
+        saldo_ant = $('#saldo_anterior').val();    
+        cantidad_cuotas = parseFloat(monto/cuota).toFixed(2);
+        
+        $('#cantidad_cuotas').val(cantidad_cuotas);    
+        $('#saldo_nuevo').val((saldo_ant - monto).toFixed(2));
+    });
 </script>
