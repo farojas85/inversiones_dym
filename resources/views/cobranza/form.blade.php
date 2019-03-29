@@ -49,7 +49,8 @@
             {!! 
                 Form::number('saldo_anterior',$minsaldo,
                             ['class' => 'form-control','readonly'=> '',
-                            'id'=>'saldo_anterior', 'required'=>'']) 
+                            'id'=>'saldo_anterior', 'required'=>'',
+                            'step'=>'0.10']) 
             !!}
         </div>
     </div>                                          
@@ -63,7 +64,7 @@
             {!! 
                 Form::number('monto',null,
                             ['class' => 'form-control','placeholder'=> 'Ingrese Monto a Pagar',
-                            'id'=>'monto', 'required'=>'']) 
+                            'id'=>'monto', 'required'=>'','step'=>'0.10']) 
             !!} 
         </div>
     </div>
@@ -91,7 +92,7 @@
                 Form::number('saldo_nuevo',null,
                             ['class' => 'form-control','placeholder'=> 'Ingrese Nro. de Cuotas',
                             'id'=>'saldo_nuevo', 'required'=>''
-                            ,'readonly'=>'']) 
+                            ,'readonly'=>'','step'=>'0.10']) 
             !!}
         </div>
     </div>                                       
@@ -105,7 +106,7 @@
             {!! 
                 Form::number('pagado',null,
                             ['class' => 'form-control','placeholder'=> 'Monto Pagado',
-                            'id'=>'pagado', 'required'=>'']) 
+                            'id'=>'pagado', 'required'=>'','step'=>'0.10']) 
             !!}
         </div>
     </div>
@@ -117,7 +118,7 @@
             {!! 
                 Form::number('vuelto',null,
                             ['class' => 'form-control','placeholder'=> 'Monto Vuelto',
-                            'id'=>'vuelto', 'required'=>'']) 
+                            'id'=>'vuelto', 'required'=>'','step'=>'0.10']) 
             !!}
         </div>
     </div>

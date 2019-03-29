@@ -58,7 +58,6 @@ class PrestamoController extends Controller
                                 )
                             ->groupBy('p.id','p.cliente_id','cli.apellidos','cli.nombres','fecha_prestamo',
                                     'p.monto','p.estado')
-                            ->orderBy('fecha_prestamo','DESC')
                             ->get();
         }
         else{
@@ -80,7 +79,6 @@ class PrestamoController extends Controller
                             ->where('pc.personal_id','=',$persona->id)
                             ->groupBy('p.id','p.cliente_id','cli.apellidos','cli.nombres','fecha_prestamo',
                                     'p.monto','p.estado')
-                            ->orderBy('fecha_prestamo','DESC')
                             ->get();
         }
 
@@ -108,7 +106,14 @@ class PrestamoController extends Controller
                             DB::raw("CONCAT(nombres,' ',apellidos) AS nombres"),'id')
                             ->pluck('nombres','id');
             $todo=1;
-            $personal = null;
+            $personal = DB::table('personals as p')
+                            ->join('role_user as ru' ,'p.user_id','=','ru.user_id')
+                            ->join('roles as r','ru.role_id','=','r.id')
+                            ->select(
+                                DB::raw("CONCAT(p.nombres,' ',p.apellidos) AS nombres"),
+                                    'p.id')
+                            ->where('r.name','cobrador')
+                            ->pluck('nombres','p.id');
         }
         else{
             $personal = personal::where('user_id','=',$user_id)->get()->first();
@@ -148,7 +153,7 @@ class PrestamoController extends Controller
     
         $prestamo = new Prestamo;
         $prestamo->cliente_id = $request->cliente_id;
-        $prestamo->fecha_prestamo = Carbon::now()->format('Y-m-d');
+        $prestamo->fecha_prestamo = $request->fecha_prestamo;
         $prestamo->tasa_interes = $request->tasa_interes;
         $prestamo->monto = $request->monto;
         $prestamo->dias = $request->dias;
@@ -295,6 +300,27 @@ class PrestamoController extends Controller
             '12' => 'Diciembre'
         );
         return view('prestamo.deuda.rangofechas',compact('tipo_busqueda','meses'));
+    }
+
+    public function montoAsignado($id){
+        $personalmonto = PersonalMonto::where('personal_id','=',$id)
+                                            ->where('consumido','=',0)
+                                            ->select(
+                                                DB::raw('SUM(monto_asignado) as total_asignado'),
+                                                DB::raw('SUM(monto_saldo) as total_saldo'))
+                                            ->get()->first();
+
+        return view('prestamo.deuda.personalMonto',compact('personalmonto'));
+    }
+
+    public function clientePersonal($id){
+        $clientes = DB::table('cliente_personal as cp')
+                        ->join('personals as p','cp.personal_id', '=', 'p.id')
+                        ->join('clientes as c' ,'cp.cliente_id','=', 'c.id')
+                        ->select(DB::raw("CONCAT(c.nombres,' ',c.apellidos) AS nombres"),'c.id')
+                        ->where('cp.personal_id','=',$id)
+                        ->pluck('nombres','id'); 
+        return view('prestamo.deuda.clientePersonal',compact('clientes'));
     }
     public function reporte()
     {

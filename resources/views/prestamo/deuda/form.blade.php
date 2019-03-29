@@ -1,4 +1,4 @@
-@if ($role_name = 'cobrador')
+@if ($role_name == 'cobrador')
 
 <div class="row">
     <div class="col-md-6">
@@ -23,12 +23,36 @@
     </div>
 </div> 
 @else
-    
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group row">
+            {!! Form::label('personal_id','Personal',['class' =>'col-md-3 col-form-label']) !!}
+            <div class="col-md-9">   
+                {!!  Form::select('personal_id',$personal,null,
+                                    ['class' => 'form-control',
+                                    'placeholder' => 'Seleccione Personal',
+                                    'required'=>'',
+                                    'onchange'=>'mostrar_monto_personal(this.value);mostrar_cliente_personal(this.value)']) !!}
+                
+            </div>            
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group row personal-monto">
+            <div class="col-md-6">
+                {!! Form::label(null,'Asignado: ',['class' =>'col-form-label']) !!}
+            </div>
+            <div class="col-md-6">
+                {!! Form::label(null,'Saldo: ',['class' =>'col-form-label']) !!}
+            </div>              
+        </div>
+    </div>
+</div>
 @endif
 
 <div class="row">
     <div class="col-md-6">
-        <div class="form-group row">
+        <div class="form-group row cliente-personal">
             {!! Form::label('cliente_id','Cliente',['class' =>'col-md-3 col-form-label']) !!}
             <div class="col-md-9">
                 {!! 
@@ -69,9 +93,9 @@
             {!! Form::label('fecha_prestamo','Fecha',['class' =>'col-form-label col-md-3']) !!}
             <div class="col-md-9">
                 {!! 
-                    Form::text('fecha_prestamo',\Carbon\Carbon::now()->format('d-m-Y'),
+                    Form::text('fecha_prestamo',null,
                                 ['class' => 'form-control','id'=>'fecha_prestamo','required'=>'',
-                                'readonly'=>''])
+                                'placeholder'=>'Seleccione Fecha'])
                 !!} 
             </div>                                           
         </div>
@@ -94,7 +118,7 @@
                     Form::number('cuota',null,
                                     ['class' => 'form-control',
                                     'placeholder' => 'Ingrese Cuota',
-                                    'required' => '']) 
+                                    'required' => '','step'=>'0.01']) 
                 !!}
 
             </div>
@@ -118,7 +142,7 @@
 
 <script>
     $( function() {
-        //$( "#fecha_prestamo" ).flatpickr();
+        $( "#fecha_prestamo" ).flatpickr();
     } );
     function calcular_cuotas()
     {
@@ -134,5 +158,24 @@
             //console.log(cuota)
             $('#cuota').val(Math.round(cuota*10)/10);
         }
+    }
+
+    function mostrar_monto_personal(personal_id){
+        $.ajax({
+            url: 'prestamos/personalMonto/'+personal_id,
+            type:"GET",
+            success: function (response) {
+                $('.personal-monto').html(response);
+            }
+        });
+    }
+    function mostrar_cliente_personal(personal_id){
+        $.ajax({
+            url: 'prestamos/clientePersonal/'+personal_id,
+            type:"GET",
+            success: function (response) {
+                $('.cliente-personal').html(response);
+            }
+        }); 
     }
 </script>

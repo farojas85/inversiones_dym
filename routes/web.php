@@ -58,6 +58,8 @@ Route::middleware(['auth'])->group(function(){
     Route::resource('cobranzas', 'CobranzaController');  
     
     Route::get('/clientes/gmap/{cliente}','ClienteController@gmap')->name('clientes.gmap');
+    Route::get('/prestamos/personalMonto/{id}','PrestamoController@montoAsignado')->name('prestamos.personalMontoss');
+    Route::get('/prestamos/clientePersonal/{id}','PrestamoController@clientePersonal')->name('prestamos.clientePersonal');
     Route::get('/prestamoReporte','PrestamoController@reporte')->name('prestamos.reporte');
     Route::get('/cobranzaReporte','PrestamoController@reporteCobranza')->name('cobranzas.reporte');
     Route::get('/rangofechasPrestamo/{tipo_busqueda}','PrestamoController@rangoFechas');
