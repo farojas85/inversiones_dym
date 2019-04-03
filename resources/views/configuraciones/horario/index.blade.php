@@ -32,7 +32,7 @@
                 </div>
                 <hr>
                 <div class="table-responsive" id="tabla-detalle">
-                    <table id="model-datatable" class="table table-striped table-bordered table-sm dt-responsive nowrap table-responsive" >
+                    <table id="model-datatable" class="table table-striped table-bordered table-sm dt-responsive nowrap" >
                         <thead>
                             <tr>
                                 <th  width="10%">Acciones</th>
@@ -47,13 +47,13 @@
                             @foreach ($horarios as $horario)
                             <tr>
                                 <td>
-                                    @can('horarios.show')
+                                    <!--@can('horarios.show')
                                     <a class="btn btn-info btn-xs modal-show" 
                                         title="Ver Permiso"
                                         href="{{ route('horarios.show',$horario->id)}}">
                                         <i class="fa fa-eye"></i>
                                     </a>
-                                    @endcan
+                                    @endcan-->
                                     @can('horarios.edit')
                                     <a class="btn btn-warning btn-xs modal-edit" 
                                         title="Editar Permiso"

@@ -278,8 +278,7 @@ class PrestamoController extends Controller
             $minSaldo = Cobranza::where('prestamo_id',$id)->min('saldo');
         }
                 
-        $cobranzas = Cobranza::where('prestamo_id',$prestamo->id)
-                            ->orderBy('created_at','DESC')->get();
+        $cobranzas = Cobranza::where('prestamo_id',$prestamo->id)->get();
 
         return view('prestamo.deuda.mostrarCobranza',compact('prestamo','minSaldo','cobranzas'));
     }

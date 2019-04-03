@@ -99,45 +99,77 @@ $('body').on('click', '#btn-guardar', function (event) {
     token = $('_token').val();
 
     if ($('#form').parsley().isValid()) {
-        $.ajax({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            url : 'horarios',
-            type: 'POST',
-            data : {
-                '_token':token,
-                user_id : user_id,
-                hora_inicio : hora_inicio,
-                hora_fin : hora_fin,
-                dias : dias
-            },
-            success: function (response) {
-                if(estado == 'edit'){
-                   textos = "Datos Modificados Satisfactoriamente !";
+        if(estado == 'create'){
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url : 'horarios',
+                type: 'POST',
+                data : {
+                    '_token':token,
+                    user_id : user_id,
+                    hora_inicio : hora_inicio,
+                    hora_fin : hora_fin,
+                    dias : dias
+                },
+                success: function (response) {
+                   swal({
+                       type : 'success',
+                       title : 'Horarios',
+                       text : "Datos Registrados Satisfactoriamente !",
+                       confirmButtonText: 'Aceptar'
+                   }).then(function () {
+                        $('#modal-default').modal('hide');
+                        mostrar_tabla();
+                   });      
+               },
+               error : function (xhr) {
+                    swal({
+                        type: 'error',
+                        title: 'Permisos',
+                        text: xhr.responseText
+                    });
                }
-               else if(estado == 'create'){
-                   textos = "Datos Registrados Satisfactoriamente !";   
+            });
+        }
+        else if(estado == 'edit'){
+            id=$('#id').val();
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url : 'horarios/'+id,
+                type: 'POST',
+                data : {
+                    '_token':token,
+                    '_method':'PUT',
+                    user_id : user_id,
+                    hora_inicio : hora_inicio,
+                    hora_fin : hora_fin,
+                    dias : dias
+                },
+                success: function (response) {
+                   swal({
+                       type : 'success',
+                       title : 'Horarios',
+                       text : "Datos Modificados Satisfactoriamente !",
+                       confirmButtonText: 'Aceptar'
+                   }).then(function () {
+                        $('#modal-default').modal('hide');
+                        mostrar_tabla();
+                   });      
+               },
+               error : function (xhr) {
+                    swal({
+                        type: 'error',
+                        title: 'Permisos',
+                        text: xhr.responseText
+                    });
                }
-
-               swal({
-                   type : 'success',
-                   title : 'Horarios',
-                   text : textos,
-                   confirmButtonText: 'Aceptar'
-               }).then(function () {
-                    $('#modal-default').modal('hide');
-                    mostrar_tabla();
-               });      
-           },
-           error : function (xhr) {
-                swal({
-                    type: 'error',
-                    title: 'Permisos',
-                    text: xhr.responseText
-                });
-           }
-       }); 
+            });
+        }
+        
     }
 });
 
@@ -151,3 +183,22 @@ function mostrar_tabla()
         }
     });
 }
+
+
+$('body').on('click', '.modal-edit', function (event) {
+    event.preventDefault();
+
+    var me = $(this),
+        url = me.attr('href'),
+        title = me.attr('title');  
+
+    $.ajax({
+        url: url,
+        dataType: 'html',
+        success: function (response) {
+            $('#modal-default-title').text(title);
+            $('#modal-default-body').html(response);
+            $('#modal-default').modal('show');
+        }
+    });        
+});

@@ -13,13 +13,13 @@
         @foreach ($horarios as $horario)
         <tr>
             <td>
-                @can('horarios.show')
+               <!-- @can('horarios.show')
                 <a class="btn btn-info btn-xs modal-show" 
                     title="Ver Permiso"
                     href="{{ route('horarios.show',$horario->id)}}">
                     <i class="fa fa-eye"></i>
                 </a>
-                @endcan
+                @endcan-->
                 @can('horarios.edit')
                 <a class="btn btn-warning btn-xs modal-edit" 
                     title="Editar Permiso"
@@ -36,10 +36,31 @@
                 @endcan
             </td>
             <td>{{ $loop->iteration}}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>
+                {{ 
+                    $horario->personal($horario->user_id)->nombres." ".
+                    $horario->personal($horario->user_id)->apellidos }}
+            </td>
+            <td>{{ \Carbon\Carbon::parse($horario->hora_inicio)->format("h:i a")}}</td>
+            <td>{{ \Carbon\Carbon::parse($horario->hora_fin)->format("h:i a")}}</td>
+            <td>
+                @php
+                    $dias = explode("-",$horario->dias);
+                    for($i=0;$i<count($dias);$i++)
+                    {
+                        switch($dias[$i]){
+                            case 1: $clase ="badge badge-primary";$nombredia="Lunes";break;
+                            case 2: $clase ="badge badge-success";$nombredia="Martes";break;
+                            case 3: $clase ="badge badge-info";$nombredia="Miércoles";break;
+                            case 4: $clase ="badge badge-warning";$nombredia="Jueves";break;
+                            case 5: $clase ="badge badge-danger";$nombredia="Viernes";break;
+                            case 6: $clase ="badge badge-blue";$nombredia="Sábado";break;
+                            case 7: $clase ="badge badge-pink";$nombredia="Domingo";break;
+                        }
+                        echo "<span class='".$clase."'>".$nombredia."</span>";
+                    }
+                @endphp
+            </td>
         </tr>
         @endforeach
     </tbody>

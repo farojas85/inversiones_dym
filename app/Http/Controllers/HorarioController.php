@@ -58,12 +58,27 @@ class HorarioController extends Controller
 
     public function edit(Horario $horario)
     {
-        //
+        $personals =  Personal::join('role_user','personals.user_id','=','role_user.user_id')
+                                ->select(
+                                    DB::raw("CONCAT(personals.nombres,' ',personals.apellidos) AS nombres"),
+                                    'personals.user_id')
+                                ->pluck('nombres','personals.user_id');
+        $estadoform = "edit";
+        return view('configuraciones.horario.edit',compact('estadoform','personals','horario'));
     }
 
-    public function update(Request $request, Horario $horario)
+    public function update(Request $request,$id)
     {
-        //
+        $horario = Horario::findOrFail($id);
+
+        $horario->user_id = $request->user_id;
+        $horario->hora_inicio = $request->hora_inicio;
+        $horario->hora_fin = $request->hora_fin;
+        $horario->dias = $request->dias;
+
+        $horario->save();
+
+        return $horario;
     }
 
     public function destroy(Horario $horario)
@@ -73,7 +88,7 @@ class HorarioController extends Controller
 
     public function table()
     {
-        $horarios = Horarios::all();
+        $horarios = Horario::all();
         return  view('configuraciones.horario.table',compact('horarios'));
     }
 }

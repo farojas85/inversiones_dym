@@ -49,6 +49,11 @@
                             <a href="/permissionroles">Permisos / Roles</a>
                         </li>
                         @endcan
+                        @can('horarios.index')
+                        <li>
+                            <a href="/horarios">Horario Usuario</a>
+                        </li>
+                        @endcan
                     </ul>
                 </li>
                 @endcan
@@ -101,7 +106,6 @@
                             <a href="/prestamos">Asignar Pr&eacute;stamos</a>
                         </li>
                         @endcan
-                        
                     </ul>
                 </li>
                 @endcan
