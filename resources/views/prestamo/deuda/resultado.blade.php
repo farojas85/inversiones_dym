@@ -23,7 +23,13 @@
                 </tr>
             </thead> 
             <tbody>
+                @php
+                    $total_prestamo=0;
+                @endphp
                 @forelse ($prestamos as $prestamo)
+                @php
+                    $total_prestamo += $prestamo->total;
+                @endphp
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $prestamo->fecha_prestamo }}</td>
@@ -37,6 +43,12 @@
                 </tr>
                 @endforelse
             </tbody> 
+            <tfoot>
+                <tr>
+                    <th colspan="4" class="text-right">Total Pr&eacute;stamo S/</th>
+                    <th>{{ number_format($total_prestamo,2) }}</th>
+                </tr>
+            </tfoot>
         </table>
 @elseif($request->tipo_busqueda == '02')
         <table id="model-datatable" class="table table-striped dt-responsive table-sm" >
@@ -49,7 +61,13 @@
                 </tr>
             </thead> 
             <tbody>
+            @php
+                $total_prestamo=0;
+            @endphp
         @forelse ($prestamos as $prestamo)
+            @php
+                $total_prestamo += $prestamo->total;
+            @endphp
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>
@@ -79,6 +97,12 @@
                 </tr>
         @endforelse
             </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="3" class="text-right">Total Pr&eacute;stamo S/</th>
+                    <th>{{ number_format($total_prestamo,2) }}</th>
+                </tr>
+            </tfoot>
         </table>
 @endif        
     </div>

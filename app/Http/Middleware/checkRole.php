@@ -5,40 +5,33 @@ namespace App\Http\Middleware;
 use Closure;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Session;
+
 
 class checkRole
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
-     */
+    
     public function handle($request, Closure $next,$role)
     {
-        $hora_ini = "08:00:00";
-        $hora_fin = "23:59:00";
-        $hora_actual = date('H:i:s');
+
+        //OBtenemos la Fecha actual
+        $hora_actual = Carbon::now()->format('H:i:s');
+        //Obtenemos el HORARIO DEL USUARIO
         
-        $nom_usu = Auth::user()->name;
+        //OBTENEMOS EL NRO. DEL DÍA DE LA SEMANA
+        $dia_semana = date('N');   
+        //VERIFICAMOS QUE EL DÍA DE HOY SE ENCUENTRA EN LOS
+        //HABILITADOS AL USUARIO        
         
         if($request->user()->hasRole($role) == true){
-        	if($nom_usu == 'jcalzarte'){
-        		if($hora_actual< $hora_ini || $hora_actual >'23:59:00' )
-        		{
-    				auth()->logout();
-    				return redirect('/noacceso');
-        		}
-        	}
-        	else{
-        	    if($hora_actual< $hora_ini || $hora_actual >$hora_fin){
-                    auth()->logout();
-                    return redirect('/noacceso');
-                }    
-        	}
-        	
-            
+            $horario = $request->user()->getHorarios(Auth::user()->id);
+            $pos_dia = strpos($horario->dias, $dia_semana);
+            if(($hora_actual< $horario->hora_ini || $hora_actual > $horario->hora_fin)
+                && $pos_dia !==false && $role == 'cobrador' ){
+                Session()->put('horario',$horario);
+                auth()->logout();
+                return redirect()->route('noaccesonew');
+            }
         }
         return $next($request);
     }

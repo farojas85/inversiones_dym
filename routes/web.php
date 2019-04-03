@@ -7,6 +7,9 @@ Route::get('/', function () {
 Route::get('/noacceso', function () {
     return view('noacceso');
 });
+Route::get('/noacceso2', function () {
+    return view('noacceso2');
+})->name('noaccesonew');
 
 Auth::routes();
 
@@ -34,14 +37,9 @@ Route::get('userTable','UserController@table');
 Route::get('userReset/{user}','UserController@resetPassword')->name('users.reset');
 Route::post('saveReset/{user}','UserController@saveReset')->name('users.savereset');
 
-//Route::group(['middleware' => 'checkRole:cobrador'], function() {
+Route::group(['middleware' => 'checkRole:cobrador'], function() {
     Route::get('/home', 'HomeController@index')->name('home');
-//});
-
-/*Route::group(['middleware' => 'checkUser:jcalzarte'], function() {
-    Route::get('/home', 'HomeController@index')->name('home');
-});*/
-
+});
 
 Route::middleware(['auth'])->group(function(){    
     Route::resource('roles', 'RoleController');    
@@ -56,6 +54,7 @@ Route::middleware(['auth'])->group(function(){
     Route::resource('permissionroles', 'PermissionRoleController');    
     Route::resource('modulos', 'ModuloController');
     Route::resource('cobranzas', 'CobranzaController');  
+    Route::resource('horarios', 'HorarioController');    
     
     Route::get('/clientes/gmap/{cliente}','ClienteController@gmap')->name('clientes.gmap');
     Route::get('/prestamos/personalMonto/{id}','PrestamoController@montoAsignado')->name('prestamos.personalMontoss');
@@ -67,4 +66,5 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/prestamomes','PrestamoController@prestamoMes')->name('prestamos.reportemes');
     Route::get('/cobranzadia','PrestamoController@cobranzaDia')->name('cobranzas.reportdia');
     Route::get('/cobranzames','PrestamoController@cobranzaMes')->name('cobranzas.reportemes');
+    Route::get('horarioTable','HorarioController@table'); 
 });

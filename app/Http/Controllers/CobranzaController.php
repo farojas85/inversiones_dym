@@ -94,6 +94,14 @@ class CobranzaController extends Controller
     }
 
     public function nuevaCobranza($id,$minsaldo,$cuota){
+        //Obtenemos Id del Usuatio
+        $user_id = Auth::user()->id;
+        $roles = Auth::user()->roles;
+
+        foreach($roles as $role){
+            $role_name = $role->name;
+        }
+
         $estadoform="create";
 
         //Obtenemos el máximo según la serie
@@ -105,7 +113,7 @@ class CobranzaController extends Controller
         else{
             $max_num = $max_id + 1;
         }
-        return view('cobranza.create',compact('estadoform','id','minsaldo','cuota','max_num','max_id'));
+        return view('cobranza.create',compact('estadoform','id','minsaldo','cuota','max_num','max_id','role_name'));
     }
 
     public function obtenerCobranzas(Request $request){

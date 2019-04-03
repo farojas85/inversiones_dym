@@ -34,11 +34,37 @@
             <div class="input-group-prepend">
                 <span class="input-group-text">Fecha</span>
             </div>
+            @if ($role_name == 'admin' || $role_name == 'master' )
+                {!! 
+                    Form::text('fecha',\Carbon\Carbon::now()->format('d-m-Y'),
+                                ['class' => 'form-control','readonly'=> '',
+                                'id'=>'fecha', 'required'=>'']) 
+                !!} 
+                <script>
+                    $( function() {
+                        $( "#fecha" ).flatpickr({
+                            locale: {
+                                firstDayOfWeek: 7,
+                                weekdays: {
+                                  shorthand: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                                  longhand: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],         
+                                }, 
+                                months: {
+                                  shorthand: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Оct', 'Nov', 'Dic'],
+                                  longhand: ['Enero', 'Febreo', 'Мarzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                                },
+                            },
+                        });
+                    } );
+                </script>
+            @else
             {!! 
                 Form::text('fecha',\Carbon\Carbon::now()->format('d-m-Y'),
                             ['class' => 'form-control','readonly'=> '',
                             'id'=>'fecha', 'required'=>'']) 
             !!} 
+            @endif
+          
         </div>
     </div>
     <div class="col-md-6">

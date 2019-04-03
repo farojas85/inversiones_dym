@@ -93,7 +93,7 @@
                                             case 'Anulado': $clase="badge badge-dark";break;
                                         }
                                     @endphp
-                                    <span class="{{ $clase }}">{{ $prestamo->estado }}</span>
+                                    <span class="">{{ $prestamo->estado }}</span>
                                 </div>
                             </div>
                         </div>
@@ -114,13 +114,15 @@
             <div id="cardCollpase4" class="collapse show">
                 <div class="card-body" style="border:1px solid #1abc9c">
                     <div class="row form-group">
-                        @can('cobranzas.create')
-                        <button type="button"
-                            class="btn btn-warning btn-sm btn-rounded modal-create-cobro"
-                            title="Nuevo Cobro">
-                            <i class="fas fa-plus"></i> Nuevo Cobro
-                        </button>
-                        @endcan
+                        @if($prestamo->estado != 'Cancelado')
+                            @can('cobranzas.create')
+                            <button type="button"
+                                class="btn btn-warning btn-sm btn-rounded modal-create-cobro"
+                                title="Nuevo Cobro">
+                                <i class="fas fa-plus"></i> Nuevo Cobro
+                            </button>
+                            @endcan
+                        @endif
                     </div>
                     <div class="row table-responsive">
                         <table class="table table-hover table-striped table-sm" id="cobranza-table">
@@ -199,4 +201,51 @@
         "pageLength": 5,
         "lengthMenu": [[5,10, 25, 50, -1], [5,10, 25, 50, "All"]]
     });
+
+     //AGREGAR ROLE
+$('body').on('click', '.modal-create-cobro', function (event) {
+    event.preventDefault();
+
+    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+    id=$('#prestamo_id').val();
+    minsaldo = $('#min_saldo').val();
+    cuota = $('#cuota').val();
+    console.log(id)
+    var me = $(this),
+        title = me.attr('title');
+
+    $.ajax({
+        url: 'obtenerCobranzas',
+        type: 'POST',
+        data:{
+            prestamo_id:id,
+            _token: CSRF_TOKEN,
+            '_method':'POST'
+        },
+        success: function(response){
+            if(response === 1){
+                swal({
+                    type : 'warning',
+                    title : 'Cobranzas',
+                    text : '¡HOY ya ha registrado un Cobro del Préstamo, no puede añadir otro !,',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+            else{
+                $.ajax({
+                    url: 'nuevaCobranza/'+id+'/'+minsaldo+'/'+cuota,
+                    type:"GET",
+                    success: function (response) {
+                        $('#modal-default-title').text(title);
+                        $('#modal-default-body').html(response);
+                        $('#modal-default').modal('show');
+                    }
+                });
+            }
+        },
+    });
+    /**/
+});
+
 </script>

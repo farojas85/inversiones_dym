@@ -41,15 +41,6 @@ class User extends Authenticatable
         return $this->hasOne(Personal::class);
     }
 
-    /*public function hasRole($role)
-    {
-        return DB::table('users as u')
-                    ->join('role_user as ru','u.id','=','ru.user_id')
-                    ->join('roles as r','ru.role_id','=','r.id')
-                    ->where('r.name',$role)
-                    ->get();
-    }*/
-
     public function hasRole($role)
     {
         $flag= false;        
@@ -57,5 +48,14 @@ class User extends Authenticatable
             $flag =  true;
         }
         return $flag;
+    }
+
+    public function horarios()
+    {
+        return $this->hasMany(Horario::class);
+    }
+
+    public function getHorarios($user_id){
+        return $this->horarios()->where('user_id',$user_id)->first();
     }
 }

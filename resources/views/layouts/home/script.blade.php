@@ -3,6 +3,10 @@
 
 <!-- Plugins js-->
 <script src="assets/libs/flatpickr/flatpickr.min.js"></script>
+<script src="assets/libs/bootstrap-colorpicker/bootstrap-colorpicker.min.js"></script>
+<script src="assets/libs/clockpicker/bootstrap-clockpicker.min.js"></script>
+
+<!-- Plugins js-->
 <script src="assets/libs/jquery-knob/jquery.knob.min.js"></script>
 <script src="assets/libs/jquery-sparkline/jquery.sparkline.min.js"></script>    
 <!-- third party js -->
@@ -27,11 +31,6 @@
 
 <!-- Sweet Alerts js -->
 <script src="assets/libs/sweetalert2/sweetalert2.min.js"></script>
-
-<!-- Plugins js-->
-<script src="assets/libs/flatpickr/flatpickr.min.js"></script>
-<script src="assets/libs/bootstrap-colorpicker/bootstrap-colorpicker.min.js"></script>
-<script src="assets/libs/clockpicker/bootstrap-clockpicker.min.js"></script>
 
 <!-- Google MAPS API -->
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8i8Oiy1vn7w8Rpzxj0gnSdNwKk-ZLZdM"

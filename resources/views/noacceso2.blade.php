@@ -75,7 +75,12 @@
                                 <div class="text-center">
                                     <h3 class="mt-4">Acceso No Autorizado</h3>
                                     <p class="text-muted mb-0">
-                                        <h5>Horario de Acceso: 08:00 a.m. hasta 23:59 p.m.</h5>
+                                    @php
+                                        $horario = session()->get('horario');
+                                        $hora_inicio = \Carbon\Carbon::parse($horario->hora_inicio)->format('h:i a');
+                                        $hora_fin = \Carbon\Carbon::parse($horario->hora_fin)->format('h:i a');
+                                    @endphp
+                                        <h5>Horario Permitido: de {{$hora_inicio}} hasta {{ $hora_fin }}</h5>
                                     </p>
                                     <p>
                                         <a href="/home" class="btn btn-blue">Volver a Home</a>
