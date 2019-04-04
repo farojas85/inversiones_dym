@@ -83,7 +83,8 @@ class HorarioController extends Controller
 
     public function destroy(Horario $horario)
     {
-        //
+        $horario->delete();
+        return $horario;
     }
 
     public function table()

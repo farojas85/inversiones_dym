@@ -144,7 +144,7 @@ $('body').on('click', '.modal-create-cobro', function (event) {
             '_method':'POST'
         },
         success: function(response){
-            if(response === 1){
+            if(response == 1){
                 swal({
                     type : 'warning',
                     title : 'Cobranzas',

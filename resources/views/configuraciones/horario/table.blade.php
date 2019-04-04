@@ -48,6 +48,8 @@
                     $dias = explode("-",$horario->dias);
                     for($i=0;$i<count($dias);$i++)
                     {
+                        $clase="";
+                        $nombredia="";
                         switch($dias[$i]){
                             case 1: $clase ="badge badge-primary";$nombredia="Lunes";break;
                             case 2: $clase ="badge badge-success";$nombredia="Martes";break;

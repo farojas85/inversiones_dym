@@ -103,11 +103,11 @@
             <i class="mdi mdi-close "></i> Cerrar
         </button>
     </div>
+    <script>
+        $( function() {
+            $( "#hora_inicio" ).clockpicker({placement:"bottom",align:"left",autoclose:!0,default:"now"});
+            $( "#hora_fin" ).clockpicker({placement:"bottom",align:"left",autoclose:!0,default:"now"});
+        } );
+    </script>
 {!! Form::close() !!}
 
-<script>
-    $( function() {
-        $( "#hora_inicio" ).clockpicker({placement:"bottom",align:"left",autoclose:!0,default:"now"});
-        $( "#hora_fin" ).clockpicker({placement:"bottom",align:"left",autoclose:!0,default:"now"});
-    } );
-</script>

@@ -202,3 +202,50 @@ $('body').on('click', '.modal-edit', function (event) {
         }
     });        
 });
+
+$('body').on('click', '.modal-destroy', function (event) {
+    event.preventDefault();
+
+    var me = $(this),
+        url = me.attr('href'),
+        title = me.attr('title'),
+        csrf_token = $('meta[name="csrf-token"]').attr('content');
+
+    swal({
+        title: title,
+        text: '¿Seguro de Eliminar El Registro? No podrá revertirlo',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if(result.value){
+            $.ajax({
+                url: url,
+                type:'POST',
+                data:{
+                    '_token':csrf_token,
+                    '_method':'DELETE'
+                },
+                success:function(response){
+                    swal({
+                        type: 'success',
+                        title: 'Horarios',
+                        text: 'Registro Eliminado Satisfactoriamente'
+                    }).then(function(){
+                        mostrar_tabla();
+                    });
+                },
+                error: function (xhr) {
+                    swal({
+                        type: 'error',
+                        title: 'Permisos',
+                        text: xhr.responseText
+                    });
+                },
+            });
+        }
+    });
+});

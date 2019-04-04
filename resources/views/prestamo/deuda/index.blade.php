@@ -85,7 +85,7 @@
                                             </a>
                                             @endcan
                                         </td>
-                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $prestamo->id }}</td>
                                         <td>{{ $prestamo->fecha_prestamo }}</td>
                                         <td>{{ $prestamo->nombres }}</td>
                                         <td>{{ "S/ ".number_format($prestamo->monto,2) }}</td>

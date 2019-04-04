@@ -11,6 +11,9 @@ Route::get('/noacceso2', function () {
     return view('noacceso2');
 })->name('noaccesonew');
 
+Route::get('/noacceso3', function () {
+    return view('noacceso3');
+})->name('noaccesonothing');
 Auth::routes();
 
 

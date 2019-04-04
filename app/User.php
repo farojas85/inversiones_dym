@@ -58,4 +58,8 @@ class User extends Authenticatable
     public function getHorarios($user_id){
         return $this->horarios()->where('user_id',$user_id)->first();
     }
+
+    public function countHorarios($user_id){
+        return $this->horarios()->where('user_id',$user_id)->count();
+    }
 }

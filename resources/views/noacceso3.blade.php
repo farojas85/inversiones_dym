@@ -75,32 +75,7 @@
                                 <div class="text-center">
                                     <h3 class="mt-4">Acceso No Autorizado</h3>
                                     <p class="text-muted mb-0">
-                                    @php
-                                        $horario = session()->get('horario');
-                                        $hora_inicio = \Carbon\Carbon::parse($horario->hora_inicio)->format('h:i a');
-                                        $hora_fin = \Carbon\Carbon::parse($horario->hora_fin)->format('h:i a');
-                                        $dias = explode("-",$horario->dias);
-                                        
-                                    @endphp
-                                        <h5>Horario Permitido: </h5>
-                                    @php
-                                    $clase="";
-                                    $nombredia="";
-                                    for($i=0;$i<count($dias);$i++)
-                                    {
-                                        switch($dias[$i]){
-                                            case 1: $clase ="badge badge-pill badge-primary";$nombredia="Lunes";break;
-                                            case 2: $clase ="badge badge-pill badge-success";$nombredia="Martes";break;
-                                            case 3: $clase ="badge badge-pill badge-info";$nombredia="Miércoles";break;
-                                            case 4: $clase ="badge badge-pill badge-warning";$nombredia="Jueves";break;
-                                            case 5: $clase ="badge badge-pill badge-danger";$nombredia="Viernes";break;
-                                            case 6: $clase ="badge badge-pill badge-blue";$nombredia="Sábado";break;
-                                            case 7: $clase ="badge badge-pill badge-pink";$nombredia="Domingo";break;
-                                        }
-                                        echo "<span class='".$clase."'>".$nombredia."</span>";
-                                    }
-                                    @endphp
-                                        <br><h5>DE {{$hora_inicio}} HASTA {{ $hora_fin }}</h5>
+                                        <h5>Solicitar al Administrador, la Habilitación de su Horario Permitido al Sistema</h5>
                                     </p>
                                     <p>
                                         <a href="/home" class="btn btn-blue">Volver a Home</a>

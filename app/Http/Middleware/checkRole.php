@@ -13,24 +13,26 @@ class checkRole
     
     public function handle($request, Closure $next,$role)
     {
-
-        //OBtenemos la Fecha actual
-        $hora_actual = Carbon::now()->format('H:i:s');
-        //Obtenemos el HORARIO DEL USUARIO
-        
-        //OBTENEMOS EL NRO. DEL DÍA DE LA SEMANA
-        $dia_semana = date('N');   
-        //VERIFICAMOS QUE EL DÍA DE HOY SE ENCUENTRA EN LOS
-        //HABILITADOS AL USUARIO        
+        $hora_actual = Carbon::now()->format('H:i:s'); 
         
         if($request->user()->hasRole($role) == true){
-            $horario = $request->user()->getHorarios(Auth::user()->id);
-            $pos_dia = strpos($horario->dias, $dia_semana);
-            if(($hora_actual< $horario->hora_ini || $hora_actual > $horario->hora_fin)
-                && $pos_dia !==false && $role == 'cobrador' ){
-                Session()->put('horario',$horario);
+            $count_horario =  $request->user()->countHorarios(Auth::user()->id);            
+            if($count_horario > 0 && $role == 'cobrador')
+            {
+                $horario = $request->user()->getHorarios(Auth::user()->id);
+
+                $pos_dia = strpos($horario->dias, date('N'));
+
+                if(($hora_actual< $horario->hora_inicio || $hora_actual > $horario->hora_fin)
+                    || $pos_dia === false  ){
+                    Session()->put('horario',$horario);
+                    auth()->logout();
+                    return redirect()->route('noaccesonew');
+                }
+            }
+            else if($count_horario == 0 && $role == 'cobrador'){
                 auth()->logout();
-                return redirect()->route('noaccesonew');
+                return redirect()->route('noaccesonothing');
             }
         }
         return $next($request);
