@@ -211,7 +211,6 @@ $('body').on('click', '.modal-create-cobro', function (event) {
     id=$('#prestamo_id').val();
     minsaldo = $('#min_saldo').val();
     cuota = $('#cuota').val();
-    console.log(id)
     var me = $(this),
         title = me.attr('title');
 
@@ -224,15 +223,8 @@ $('body').on('click', '.modal-create-cobro', function (event) {
             '_method':'POST'
         },
         success: function(response){
-            if(response == 1){
-                swal({
-                    type : 'warning',
-                    title : 'Cobranzas',
-                    text : '¡HOY ya ha registrado un Cobro del Préstamo, no puede añadir otro !,',
-                    confirmButtonText: 'Aceptar'
-                });
-            }
-            else{
+            if(datos.role_name == 'admin' || datos.role_name == 'master')
+            {
                 $.ajax({
                     url: 'nuevaCobranza/'+id+'/'+minsaldo+'/'+cuota,
                     type:"GET",
@@ -243,9 +235,29 @@ $('body').on('click', '.modal-create-cobro', function (event) {
                     }
                 });
             }
+            else{
+                if(datos.nrocobros == 1){
+                    swal({
+                        type : 'warning',
+                        title : 'Cobranzas',
+                        text : '¡HOY ya ha registrado un Cobro del Préstamo, no puede añadir otro !,',
+                        confirmButtonText: 'Aceptar'
+                    });
+                }
+                else{
+                    $.ajax({
+                        url: 'nuevaCobranza/'+id+'/'+minsaldo+'/'+cuota,
+                        type:"GET",
+                        success: function (response) {
+                            $('#modal-default-title').text(title);
+                            $('#modal-default-body').html(response);
+                            $('#modal-default').modal('show');
+                        }
+                    });
+                }
+            }
         },
     });
-    /**/
 });
 
 </script>

@@ -131,7 +131,6 @@ $('body').on('click', '.modal-create-cobro', function (event) {
     id=$('#prestamo_id').val();
     minsaldo = $('#min_saldo').val();
     cuota = $('#cuota').val();
-    console.log(id)
     var me = $(this),
         title = me.attr('title');
 
@@ -143,16 +142,9 @@ $('body').on('click', '.modal-create-cobro', function (event) {
             _token: CSRF_TOKEN,
             '_method':'POST'
         },
-        success: function(response){
-            if(response == 1){
-                swal({
-                    type : 'warning',
-                    title : 'Cobranzas',
-                    text : '¡HOY ya ha registrado un Cobro del Préstamo, no puede añadir otro !,',
-                    confirmButtonText: 'Aceptar'
-                });
-            }
-            else{
+        success: function(datos){
+            if(datos.role_name == 'admin' || datos.role_name == 'master')
+            {
                 $.ajax({
                     url: 'nuevaCobranza/'+id+'/'+minsaldo+'/'+cuota,
                     type:"GET",
@@ -163,17 +155,30 @@ $('body').on('click', '.modal-create-cobro', function (event) {
                     }
                 });
             }
+            else{
+                if(datos.nrocobros == 1){
+                    swal({
+                        type : 'warning',
+                        title : 'Cobranzas',
+                        text : '¡HOY ya ha registrado un Cobro del Préstamo, no puede añadir otro !,',
+                        confirmButtonText: 'Aceptar'
+                    });
+                }
+                else{
+                    $.ajax({
+                        url: 'nuevaCobranza/'+id+'/'+minsaldo+'/'+cuota,
+                        type:"GET",
+                        success: function (response) {
+                            $('#modal-default-title').text(title);
+                            $('#modal-default-body').html(response);
+                            $('#modal-default').modal('show');
+                        }
+                    });
+                }
+            }
         },
     });
-    /**/
 });
-
-/*$('body').on('change', '#monto', function (event) {
-    event.preventDefault();
-    monto = $('#monto').val();
-    saldo_ant = $('#saldo_anterior').val();
-    $('#saldo_nuevo').val((saldo_ant -monto).toFixed(2));
-});*/
 
 $('body').on('keyup', '#monto', function (event) {
     event.preventDefault();
@@ -227,8 +232,8 @@ $('body').on('click', '#btn-guardar-cobranza', function (event) {
                     confirmButtonText: 'Aceptar'
                 }).then(function () {
                     $('#modal-default').modal('hide');
-                    mostrar_tabla_cobros(prestamo_id);
-                    //window.location="prestamos";
+                    //mostrar_tabla_cobros(prestamo_id);
+                    window.location="prestamos";
                 });
                 
             },
@@ -387,7 +392,7 @@ $('body').on('click', '.destroy-cobranza', function (event) {
                         title: 'Cobranzas',
                         text: 'Registro Eliminado Satisfactoriamente'
                     }).then(function(){
-                        mostrar_cobranza(prestamo_id);
+                        window.location.href="prestamos";
                     });
                 },
                 error: function (xhr) {

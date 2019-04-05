@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Cobranza;
 use App\Prestamo;
-use Illuminate\Http\Request;
 use Fpdf;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -89,7 +90,28 @@ class CobranzaController extends Controller
 
     public function destroy(Cobranza $cobranza)
     {
+        //OBTENEMOS DATOS DEL PRÉSTAMO DE LA COBRANZA
+        $cobro_hoy = new Cobranza;
+        $cobro_hoy = $cobranza;
+        $prestamo = Prestamo::findOrFail($cobranza->prestamo_id);
+        //ELIMINAMOS LA COBRANZA
         $cobranza->delete();
+        //OBTENEMOS LA CANTIDAD DE COBRANZAS
+        $contar_cobranza_prestamo = Cobranza::where('prestamo_id',$prestamo->id)->count();  
+        //OBTENEMOS LA ÚLTIMA COBRANZA
+        $ultima_cobranza = Cobranza::where('prestamo_id',$prestamo->id)
+                                        ->orderBy('created_at','DESC')
+                                        ->first();
+        //MODIFICAMOS LOS CAMPOS DEL PRESTAMO
+        if($prestamo->estado == 'Cancelado' && $contar_cobranza_prestamo >0){
+            $prestamo->estado = 'Pendiente';
+        }
+        else if($prestamo->estado == 'Pendiente' && $contar_cobranza_prestamo == 0 ){
+            $prestamo->estado = "Generado";
+        }
+        //----------------
+        $prestamo->save();
+        
         return $cobranza;
     }
 
@@ -117,13 +139,25 @@ class CobranzaController extends Controller
     }
 
     public function obtenerCobranzas(Request $request){
+        //Obtenemos Id del Usuatio
+        $user_id = Auth::user()->id;
+        $roles = Auth::user()->roles;
+        $role_name="";
+        foreach($roles as $role){
+            $role_name = $role->name;
+        }
+ 
         $condiciones = [
             array('prestamo_id','=',$request->prestamo_id),
             array('fecha','=',Carbon::now()->format('Y-m-d'))
         ];
         $nrocobros = Cobranza::where($condiciones)->count();
 
-        return $nrocobros;
+        $data = [
+            'role_name'=>$role_name,
+            'nrocobros'=>$nrocobros
+        ];
+        return response()->json($data);
     }
     public function tabla($prestamo_id){
 

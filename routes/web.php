@@ -31,7 +31,7 @@ Route::get('tableAdelantos','PersonalSalarioController@tableAdelantosPersonal');
 Route::get('pdfPagos', 'PersonalSalarioController@pdf');
 Route::get('editarMontos/{id}','PersonalMontoController@editarMontos');
 Route::put('actualizarMonto/{id}','PersonalMontoController@updateMonto')->name('personalmontos.updateMonto');
-Route::get('mostrarCobranza/{id}','PrestamoController@mostrarCobranza');
+Route::get('mostrarCobranza/{id}','PrestamoController@mostrarCobranza')->name('mostrarcobranza');
 Route::post('obtenerCobranzas','CobranzaController@obtenerCobranzas');
 Route::get('nuevaCobranza/{id}/{minsaldo}/{cuota}','CobranzaController@nuevaCobranza');
 Route::get('cobranzasTable/{prestamo_id}','CobranzaController@tabla');
