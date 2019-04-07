@@ -66,12 +66,12 @@
                                     @endphp
                                     <tr>
                                         <td>
-                                           <!-- @can('prestamos.show')
-                                            <a class="btn btn-blue btn-xs modal-cliente-show" title="Ver Préstamo"
-                                                href="{{ route('prestamos.show',$prestamo->id)}}">
-                                                <i class="far fa-eye"></i>
+                                            @can('prestamos.edit')
+                                            <a class="btn btn-warning btn-xs modal-edit" title="Editar Préstamo"
+                                                href="{{ route('prestamos.edit',$prestamo->id)}}">
+                                                <i class="fa fa-edit"></i>
                                             </a>
-                                            @endcan-->
+                                            @endcan
                                             <button type="button" class="btn btn-success btn-xs mostrar-cobranza" 
                                                 title="Mostrar_Cobranza" onclick="mostrar_cobranza({{$prestamo->id}})">
                                                 <i class="fas fa-donate"></i>

@@ -128,8 +128,8 @@
                         <table class="table table-hover table-striped table-sm" id="cobranza-table">
                                 <thead>
                                     <tr>
-                                        <th width="10px">Acciones</th>
-                                        <th width="5px">#</th>
+                                        <th width="10%">Acciones</th>
+                                        <th width="5%">#</th>
                                         <th>fecha</th>
                                         <th>Nro. Cuotas</th>
                                         <th>Monto</th>
@@ -140,6 +140,14 @@
                             @foreach ($cobranzas as $cobranza)
                                 <tr>
                                     <td>
+                                        @if ($role_name == 'admin' || $role_name == 'master')
+                                        <button type="button" 
+                                                title="Editar Cobranza"
+                                                class="btn btn-warning btn-xs edit-cobranza"
+                                                onclick="editar_cobranza({{ $cobranza->id }})">
+                                                <i class=" far fa-edit"></i>
+                                        </button> 
+                                        @endif
                                         <a href="{{ route('cobranzas.pdf',$cobranza->id) }}" 
                                             title="Mostrar Cobranza"
                                             class="btn btn-blue btn-xs show-cobranza"
@@ -259,5 +267,30 @@ $('body').on('click', '.modal-create-cobro', function (event) {
         },
     });
 });
+
+
+function editar_cobranza(cobranza_id){
+    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        url: 'editarCobranza',
+        type:"GET",
+        data:{
+            _token: CSRF_TOKEN,
+            prestamo_id : $('#prestamo_id').val(),
+            minsaldo: $('#min_saldo').val(),
+            cuota: $('#cuota').val(),
+            cobranza_id: cobranza_id
+        },
+        success: function (response) {
+            $('#modal-default-title').text('Editar Cobranza');
+            $('#modal-default-body').html(response);
+            $('#modal-default').modal('show');
+        }
+    });   
+}
 
 </script>

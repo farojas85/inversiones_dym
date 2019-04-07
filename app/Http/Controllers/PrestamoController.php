@@ -16,6 +16,8 @@ class PrestamoController extends Controller
 {
     var $tasas;
     var $personal_id;
+    var $estadoprestamo;
+
     public function __construct()
     {
         $this->middleware('permission:prestamos.create')->only(['create','store']);
@@ -24,21 +26,29 @@ class PrestamoController extends Controller
         $this->middleware('permission:prestamos.show')->only('show');
         $this->middleware('permission:prestamos.destroy')->only('destroy');
         $this->middleware('permission:clienteprestamoTable')->only('table');
+        
         $this->tasas = array(
                 '0.10' =>'10%',
                 '0.15' => '15%',
                 '0.20' => '20%',
                 '0.25' => '25%');
+        
+        $this->estadoprestamo = [
+            'Generado' => 'Generado',
+            'Pendiente' => 'Pendiente',
+            'Cancelado' => 'Cancelado'
+        ];
 
         ini_set('max_execution_time', 0);
-
     }
+
     public function index()
     {
+       
         //Obtenemos Id del Usuatio
         $user_id = Auth::user()->id;
         $roles = Auth::user()->roles;
-
+ 
         foreach($roles as $role){
             $role_name = $role->name;
         }
@@ -95,6 +105,7 @@ class PrestamoController extends Controller
         //Obtenemos Id del Usuatio
         $user_id = Auth::user()->id;
         $roles = Auth::user()->roles;
+ 
         foreach($roles as $role){
             $role_name = $role->name;
         }
@@ -252,24 +263,200 @@ class PrestamoController extends Controller
     }
 
     public function edit(Prestamo $prestamo)
-    {
-        //
+    {    
+        //Obtenemos Id del Usuatio
+        $user_id = Auth::user()->id;
+        $roles = Auth::user()->roles;
+ 
+        foreach($roles as $role){
+            $role_name = $role->name;
+        }
+
+        $clientes = Cliente::select( 
+                                DB::raw("CONCAT(nombres,' ',apellidos) AS nombres"),'id')
+                            ->pluck('nombres','id');
+
+
+        $personal = DB::table('prestamos as pr')
+                        ->join('cliente_personal as cp','pr.cliente_id','=','cp.cliente_id')
+                        ->join('personals as pe','cp.personal_id','=','pe.id')
+                        ->join('personal_montos as pm','cp.personal_id','=','pm.personal_id')
+                        ->select(
+                            'pe.id',
+                            DB::raw("CONCAT(pe.nombres,' ',pe.apellidos) AS nombres"),
+                            DB::raw('SUM(monto_asignado) as total_asignado'),
+                            DB::raw('SUM(monto_saldo) as total_saldo'))
+                        ->where('pr.id',$prestamo->id)
+                        ->groupBy('pe.id','pe.nombres','pe.apellidos')
+                        ->get()->first();
+        
+        $tasas = $this->tasas;
+
+        $estadoprestamo = $this->estadoprestamo;
+        $estadoform = 'edit';
+
+        return view('prestamo.deuda.edit',compact('clientes','personal','tasas','role_name',
+                                                'estadoform','prestamo','estadoprestamo'));
     }
 
     public function update(Request $request, Prestamo $prestamo)
     {
-        //
+        //Guardamos damos del Request
+        $prestamo->cliente_id = $request->cliente_id;
+        $prestamo->fecha_prestamo = $request->fecha_prestamo;
+        $prestamo->tasa_interes = $request->tasa_interes;
+        $prestamo->monto = $request->monto;
+        $prestamo->dias = $request->dias;
+        $prestamo->cuota = $request->cuota;
+        $prestamo->estado = $request->estado; 
+
+
+        $condicion = array(
+            array('personal_id','=',$request->personal_id),
+            array('consumido','=',0)
+        );
+
+        //Obtenemos los montos no consumidos del personal;
+        $personalmonto = personalMonto::where($condicion)->get();
+        //OBTENEMOS DATOS DEL PRÉSTAMO ANTES DE ACTUALIZARLO
+        $prestamo_anterior = Prestamo::findOrFail($prestamo->id);
+        //OBTENEMOS LA DIFERENCIA DE MONTOS
+        $dif_montos = ($request->monto > $prestamo_anterior->monto) ? 
+                        ($request->monto - $prestamo_anterior->monto) : 
+                        ($prestamo_anterior->monto - $request->monto);
+        
+
+        //Actualizamos el Saldo Disponible
+        $tempo=0;
+        $siguiente = 0;
+        foreach ($personalmonto as $persmon) {
+
+            if($siguiente == 0){
+
+                if($dif_montos <= $persmon->monto_saldo){
+
+                    $condicion2 = array(
+                        array('id','=',$persmon->id),
+                        array('consumido','=',0)
+                    );
+
+                    $personalmonto2 = personalMonto::where($condicion2)->get()->first();
+                    
+                    $personalmonto2->monto_saldo = ($request->monto > $prestamo_anterior->monto) ? 
+                                                    ($personalmonto2->monto_saldo - $dif_montos) : 
+                                                    ($personalmonto2->monto_saldo + $dif_montos);
+    
+                    if($personalmonto2->monto_saldo == 0)
+                    {   
+                        $personalmonto2->consumido = 1;
+                    }
+                    else if($personalmonto2->monto_saldo >0 && 
+                            $personalmonto2->monto_saldo <= $persmon->monto_asignado){
+                        $personalmonto2->consumido = 0;
+                    }
+    
+                    $personalmonto2->save();
+    
+                    break;
+                }
+                else if($dif_montos > $persmon->monto_saldo){    
+
+                    $tempo = $dif_montos - $persmon->monto_saldo;   
+
+                    $condicion3 = array(
+                        array('id','=',$persmon->id),
+                        array('consumido','=',0)
+                    );
+
+                    $personalmonto3 = personalMonto::where($condicion3)->get()->first();
+    
+                    $personalmonto3->monto_saldo = ($request->monto > $prestamo_anterior->monto) ? 
+                                                    ($personalmonto3->monto_saldo - $dif_montos) : 
+                                                    ($personalmonto3->monto_saldo + $dif_montos);
+    
+                    if($personalmonto3->monto_saldo == 0)
+                    {   
+                        $personalmonto3->consumido = 1;
+                    }
+                    else if($personalmonto3->monto_saldo >0 && 
+                            $personalmonto3->monto_saldo <= $persmon->monto_asignado){
+                        $personalmonto3->consumido = 0;
+                    }
+    
+                    $personalmonto3->save();
+    
+                    $siguiente = 1;
+                    continue;
+                }
+            }
+            else if($siguiente == 1){
+
+                $condicion4 = array(
+                    array('id','=',$persom->id),
+                    array('consumido','=',0)
+                );
+
+                $personalmonto4 = personalMonto::where($condicion4)->get()->first();
+
+                $personalmonto4->monto_saldo = ($request->monto > $prestamo_anterior->monto) ? 
+                                                    ($personalmonto4->monto_saldo - $tempo) : 
+                                                    ($personalmonto4->monto_saldo + $tempo);
+
+                if($personalmonto4->monto_saldo == 0)
+                {   
+                    $personalmonto4->consumido = 1;
+                }
+                else if($personalmonto4->monto_saldo >0 && 
+                        $personalmonto4->monto_saldo <= $persmon->monto_asignado){
+                    $personalmonto4->consumido = 0;
+                }
+
+                $personalmonto4->save();
+
+                break;
+            }            
+        } 
+
+        //GUARDAMOS EL PRÉSTAMO
+        $prestamo->save();
+
+        return $prestamo;
     }
 
     public function destroy(Prestamo $prestamo)
     {
-        $prestamo->delete();
+        //OBTENEMOS EL ID DEL PERSONAL A CARGO DEL CLIENTE
+        $persona = DB::table('cliente_personal')
+                        ->select('personal_id')
+                        ->where('cliente_id','=',$prestamo->cliente_id)
+                        ->get()->first();
+                        
+   
+        //obtenemos datos del monto asignado al personal
+        $personalmonto = personalMonto::where('personal_id',$persona->personal_id)
+                                    ->orderBy('created_at','DESC')
+                                    ->get()->first();
 
+        //actualizamos el monto
+        $personalmonto->monto_saldo =   $personalmonto->monto_saldo  + $prestamo->monto;
+        $personalmonto->consumido = ($personalmonto->consumido == 1) ? 0 :1;
+        $personalmonto->save();
+        //ELIMINAS EL PRESTAMO
+        $prestamo->delete();
+        
         return $prestamo;
     }
 
     public function mostrarCobranza($id)
     {
+        //Obtenemos Id del Usuatio
+        $user_id = Auth::user()->id;
+        $roles = Auth::user()->roles;
+ 
+        foreach($roles as $role){
+            $role_name = $role->name;
+        }
+
         $prestamo = Prestamo::findOrFail($id);
         $contarCobranza = Cobranza::where('prestamo_id',$id)->count();
 
@@ -280,7 +467,7 @@ class PrestamoController extends Controller
                 
         $cobranzas = Cobranza::where('prestamo_id',$prestamo->id)->get();
 
-        return view('prestamo.deuda.mostrarCobranza',compact('prestamo','minSaldo','cobranzas'));
+        return view('prestamo.deuda.mostrarCobranza',compact('prestamo','minSaldo','cobranzas','role_name'));
     }
 
     public function rangoFechas($tipo_busqueda){
@@ -321,15 +508,16 @@ class PrestamoController extends Controller
                         ->pluck('nombres','id'); 
         return view('prestamo.deuda.clientePersonal',compact('clientes'));
     }
+
     public function reporte()
     {
-         //Obtenemos Id del Usuatio
-         $user_id = Auth::user()->id;
-         $roles = Auth::user()->roles;
+        //Obtenemos Id del Usuatio
+        $user_id = Auth::user()->id;
+        $roles = Auth::user()->roles;
  
-         foreach($roles as $role){
-             $role_name = $role->name;
-         }
+        foreach($roles as $role){
+            $role_name = $role->name;
+        }
 
         $tipos = array(
             "01" => 'Diaria',
@@ -457,7 +645,7 @@ class PrestamoController extends Controller
         //Obtenemos Id del Usuatio
         $user_id = Auth::user()->id;
         $roles = Auth::user()->roles;
-
+ 
         foreach($roles as $role){
             $role_name = $role->name;
         }

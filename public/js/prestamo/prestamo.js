@@ -198,6 +198,25 @@ $('body').on('keyup', '#pagado', function (event) {
     $('#vuelto').val((pagado - monto).toFixed(2));
 });
 
+
+$('body').on('click', '.modal-edit', function (event) {
+    event.preventDefault();
+
+    var me = $(this),
+        url = me.attr('href'),
+        title = me.attr('title');  
+
+    $.ajax({
+        url: url,
+        dataType: 'html',
+        success: function (response) {
+            $('#modal-large-title').text(title);
+            $('#modal-large-body').html(response);
+            $('#modal-large').modal('show');
+        }
+    });        
+});
+
 $('body').on('click', '#btn-guardar-cobranza', function (event) {
     event.preventDefault();
 

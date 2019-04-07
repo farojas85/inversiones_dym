@@ -84,7 +84,26 @@ class CobranzaController extends Controller
 
     public function update(Request $request, Cobranza $cobranza)
     {
-        //
+        //Guardamos la Cobranza
+        $cobranza->fecha = Carbon::now()->format('Y-m-d');
+        $cobranza->prestamo_id = $request->prestamo_id;
+        $cobranza->cantidad_cuotas = $request->cantidad_cuotas;
+        $cobranza->monto = $request->monto;
+        $cobranza->saldo = $request->saldo_nuevo;
+        $cobranza->serie = $request->serie;
+        $cobranza->numero = $request->numero;
+        $cobranza->pagado = $request->pagado;
+        $cobranza->vuelto = $request->vuelto;
+        $cobranza->save();
+
+        //Actualizamos el Estado del Préstamo
+        $prestamo = Prestamo::findOrFail($request->prestamo_id);
+
+        $prestamo->estado = ($request->saldo_nuevo == 0) ? 'Cancelado' : 'Pendiente';
+        
+        $prestamo->save();
+
+        return $cobranza;
     }
 
 
@@ -136,6 +155,17 @@ class CobranzaController extends Controller
             $max_num = $max_id + 1;
         }
         return view('cobranza.create',compact('estadoform','id','minsaldo','cuota','max_num','max_id','role_name'));
+    }
+
+    public function editarCobranza(Request $request){
+       
+        $estadoform="edit";
+        $prestamo_id =$request->prestamo_id;
+        $minsaldo = $request->minsaldo;
+        $cuota = $request->cuota;
+ 
+        $cobranza = Cobranza::findOrFail($request->cobranza_id);
+        return view('cobranza.edit',compact('estadoform','prestamo_id','minsaldo','cuota','cobranza'));
     }
 
     public function obtenerCobranzas(Request $request){
