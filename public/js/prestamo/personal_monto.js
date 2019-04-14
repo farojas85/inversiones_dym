@@ -168,27 +168,3 @@ function editar_monto(id){
 function cerrar(id){
     document.getElementById('tr_edit_'+id).style.visibility="hidden";
 }
-
-function editar_monto_asiganado(id)
-{
-    $.ajax({
-        url: 'editarMontos/'+id,
-        type: 'GET',
-        data:{
-            id : id,
-        },
-        success: function (response) {   
-            $('#modal-default-title').text('Editar Monto Personal');
-            $('#modal-default-body').html(response);
-            $('#modal-default').modal('show');
-        },
-        error: function (xhr) {
-            swal({
-                type: 'error',
-                title: 'Advertencia',
-                text: xhr.responseText
-            });          
-        },
-    });
-    
-}

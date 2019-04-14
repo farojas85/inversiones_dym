@@ -26,6 +26,13 @@ class PersonalMontoController extends Controller
             array('ru.role_id','=',4)
         );
 
+        $user_id = Auth::user()->id;
+        $roles = Auth::user()->roles;
+ 
+        foreach($roles as $role){
+            $role_name = $role->name;
+        }
+
         $personal = personal::all();
         
         if($personal->count() >0){
@@ -45,7 +52,7 @@ class PersonalMontoController extends Controller
 
         // = personalMonto::all();
 
-        return view('prestamo.personalMonto.index',compact('personalMontos','personal'));
+        return view('prestamo.personalMonto.index',compact('personalMontos','personal','role_name'));
     }
 
     /**
@@ -93,7 +100,7 @@ class PersonalMontoController extends Controller
     {
         $personal = personal::findOrFail($id);
         $personalmontos = personalMonto::where('personal_id','=',$personal->id)
-                                        ->orderBy('fecha','ASC')
+                                        ->orderBy('fecha','DESC')
                                         ->get();
         return view('prestamo.personalMonto.show',compact('personal','personalmontos'));
     }
@@ -102,7 +109,7 @@ class PersonalMontoController extends Controller
     {
         $personal = personal::findOrFail($id);
         $personalmontos = personalMonto::where('personal_id','=',$personal->id)
-                                        ->orderBy('fecha','ASC')
+                                        ->orderBy('fecha','DESC')
                                         ->get();
         return view('prestamo.personalMonto.edit',compact('personal','personalmontos'));
     }
@@ -115,8 +122,17 @@ class PersonalMontoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, personalMonto $personalMonto)
-    {
-        //
+    {    
+        $personalMonto = personalMonto::findOrFail($request->id);
+
+        $personalMonto->personal_id = $request->personal_id;
+        $personalMonto->monto_asignado = $request->monto_asignado;
+        $personalMonto->monto_saldo = $request->monto_saldo;
+        $personalMonto->fecha = $request->fecha;
+        $personalMonto->consumido = $request->consumido;
+        $personalMonto->save();
+
+        return $personalMonto;
     }
 
     /**
@@ -125,9 +141,11 @@ class PersonalMontoController extends Controller
      * @param  \App\personalMonto  $personalMonto
      * @return \Illuminate\Http\Response
      */
-    public function destroy(personalMonto $personalMonto)
+    public function destroy($id)
     {
-        //
+        $personalMonto = personalMonto::findOrFail($id);
+        $personalMonto->delete();
+        return $personalMonto;
     }
 
     public function table()
@@ -136,11 +154,23 @@ class PersonalMontoController extends Controller
     }
 
     public function editarMontos($id){
-        
-        $personalmontos = personalMonto::where('id','=',$id)->first();
 
-        $personal = Personal::where('id','=',$personalmontos->personal_id)->first();
+        $estadoform = "edit";
+        
+        $personalmonto = personalMonto::where('id','=',$id)->first();
+
+        $personal = Personal::where('id','=',$personalmonto->personal_id)->first();
+        
+        $estados = [
+            '0' => 'Disponible',
+            '1' => 'Consumido'
+        ];
         //print_r($personalmontos);
-        return view('prestamo.personalMonto.editarmonto',compact('personalmontos','personal'));
+        return view('prestamo.personalMonto.editarmonto',compact('personalmonto','personal','estadoform','estados'));
+    }
+
+    public function updateMonto(Request $request,$id){
+
+       
     }
 }

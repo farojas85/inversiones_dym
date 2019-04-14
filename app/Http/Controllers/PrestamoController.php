@@ -68,6 +68,7 @@ class PrestamoController extends Controller
                                 )
                             ->groupBy('p.id','p.cliente_id','cli.apellidos','cli.nombres','fecha_prestamo',
                                     'p.monto','p.estado')
+                            ->orderBy('p.fecha_prestamo','DESC')
                             ->get();
         }
         else{
@@ -89,6 +90,7 @@ class PrestamoController extends Controller
                             ->where('pc.personal_id','=',$persona->id)
                             ->groupBy('p.id','p.cliente_id','cli.apellidos','cli.nombres','fecha_prestamo',
                                     'p.monto','p.estado')
+                            ->orderBy('p.fecha_prestamo','DESC')
                             ->get();
         }
 
@@ -439,7 +441,8 @@ class PrestamoController extends Controller
 
         //actualizamos el monto
         $personalmonto->monto_saldo =   $personalmonto->monto_saldo  + $prestamo->monto;
-        $personalmonto->consumido = ($personalmonto->consumido == 1) ? 0 :1;
+        
+        $personalmonto->consumido = ($personalmonto->monto_saldo  == 0) ? 1 :0;
         $personalmonto->save();
         //ELIMINAS EL PRESTAMO
         $prestamo->delete();
@@ -465,7 +468,7 @@ class PrestamoController extends Controller
             $minSaldo = Cobranza::where('prestamo_id',$id)->min('saldo');
         }
                 
-        $cobranzas = Cobranza::where('prestamo_id',$prestamo->id)->get();
+        $cobranzas = Cobranza::where('prestamo_id',$prestamo->id)->orderBy('fecha','DESC')->get();
 
         return view('prestamo.deuda.mostrarCobranza',compact('prestamo','minSaldo','cobranzas','role_name'));
     }

@@ -46,7 +46,6 @@
                             <thead>
                                 <tr>
                                     <th >Acciones</th>
-                                    <th >ID</th>
                                     <th >fecha</th>
                                     <th >Cliente</th>
                                     <th >Monto Deuda</th>                                 
@@ -85,8 +84,7 @@
                                             </a>
                                             @endcan
                                         </td>
-                                        <td>{{ $prestamo->id }}</td>
-                                        <td>{{ $prestamo->fecha_prestamo }}</td>
+                                        <td>{{ date('d/m/Y',strtotime($prestamo->fecha_prestamo)) }}</td>
                                         <td>{{ $prestamo->nombres }}</td>
                                         <td>{{ "S/ ".number_format($prestamo->monto,2) }}</td>
                                         <td>
@@ -124,7 +122,6 @@
                                             </button>
                                           
                                         </td>
-                                        <td>{{ $loop->iteration }}</td>
                                         <td>{{ $prestamo->fecha_prestamo }}</td>
                                         <td>{{ $prestamo->nombres }}</td>
                                         <td>{{ "S/ ".number_format($prestamo->monto,2) }}</td>
@@ -179,5 +176,22 @@
                     }
                 });
             }
+            $('body').on('click', '.modal-edit', function (event) {
+                event.preventDefault();
+            
+                var me = $(this),
+                    url = me.attr('href'),
+                    title = me.attr('title');  
+            
+                $.ajax({
+                    url: url,
+                    dataType: 'html',
+                    success: function (response) {
+                        $('#modal-large-title').text(title);
+                        $('#modal-large-body').html(response);
+                        $('#modal-large').modal('show');
+                    }
+                });        
+            });
     </script>
 @endsection

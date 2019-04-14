@@ -129,7 +129,6 @@
                                 <thead>
                                     <tr>
                                         <th width="10%">Acciones</th>
-                                        <th width="5%">#</th>
                                         <th>fecha</th>
                                         <th>Nro. Cuotas</th>
                                         <th>Monto</th>
@@ -163,8 +162,7 @@
                                         </a>
                                         @endcan
                                     </td>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $cobranza->fecha }}</td>
+                                    <td>{{ date("d/m/Y", strtotime($cobranza->fecha)) }}</td>
                                     <td>{{ $cobranza->cantidad_cuotas }}</td>
                                     <td>{{ "S/ ".number_format($cobranza->monto,2) }}</td>
                                     <td>{{ "S/ ".number_format($cobranza->saldo,2) }}</td>        

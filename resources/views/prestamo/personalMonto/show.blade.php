@@ -41,7 +41,6 @@
             <table id="show-datatable" class="table table-striped dt-responsive table-sm" >
                 <thead  class="thead-dark">
                     <tr>
-                        <th class="text-white">#</th>
                         <th class="text-white">Fecha</th>
                         <th class="text-white">Monto Asignado</th>
                         <th class="text-white">Monto Saldo</th>
@@ -61,8 +60,7 @@
                     }
                     @endphp
                     <tr>
-                        <td>{{ $pm->id }}</td>
-                        <td>{{ $pm->fecha }}</td>
+                        <td>{{date('d/m/Y',strtotime($pm->fecha)) }}</td>
                         <td>{{ "S/ ".number_format($pm->monto_asignado,2) }}</td>
                         <td>{{ "S/ ".number_format($pm->monto_saldo,2) }}</td>
                         <td>

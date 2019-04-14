@@ -46,10 +46,20 @@ class CobranzaController extends Controller
      */
     public function store(Request $request)
     {           
+        //Obtenemos Id del Usuatio
+        $user_id = Auth::user()->id;
+        $roles = Auth::user()->roles;
+
+        foreach($roles as $role){
+            $role_name = $role->name;
+        }
+        
         //Guardamos la Cobranza
 
             $cobranza = new Cobranza;
-            $cobranza->fecha = Carbon::now()->format('Y-m-d');
+            $cobranza->fecha = ($role_name == 'cobrador') ? Carbon::now()->format('Y-m-d'):  $request->fecha;
+            //$cobranza->fecha = $request->fecha;
+            //$cobranza->fecha = Carbon::now()->format('Y-m-d');
             $cobranza->prestamo_id = $request->prestamo_id;
             $cobranza->cantidad_cuotas = $request->cantidad_cuotas;
             $cobranza->monto = $request->monto;
@@ -85,7 +95,9 @@ class CobranzaController extends Controller
     public function update(Request $request, Cobranza $cobranza)
     {
         //Guardamos la Cobranza
-        $cobranza->fecha = Carbon::now()->format('Y-m-d');
+        //$cobranza->fecha = Carbon::now()->format('Y-m-d');
+        //$cobranza->fecha = $request->fecha;
+        $cobranza->fecha = ($role_name == 'cobrador') ? Carbon::now()->format('Y-m-d'):  $request->fecha;
         $cobranza->prestamo_id = $request->prestamo_id;
         $cobranza->cantidad_cuotas = $request->cantidad_cuotas;
         $cobranza->monto = $request->monto;
@@ -224,7 +236,7 @@ class CobranzaController extends Controller
         Fpdf::Cell(20, 4, "Fecha     : ",0,1,'L',0);
         Fpdf::SetFont('Courier', '', 8);
         Fpdf::setXY(24,16);
-        Fpdf::Cell(48, 4, $cobranza->created_at,0,0,'L',0);
+        Fpdf::Cell(48, 4, date('d/m/Y', strtotime($cobranza->fecha)),0,0,'L',0);
 
         $cliente = $cobranza->prestamo->cliente->nombres;
         $cliente .= " ".$cobranza->prestamo->cliente->apellidos;
