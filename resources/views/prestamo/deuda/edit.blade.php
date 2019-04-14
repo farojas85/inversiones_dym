@@ -22,6 +22,7 @@
                 </div>
                 <div class="col-md-6">
                     {!! Form::label(null,'Saldo: '.$personal->total_saldo,['class' =>'col-form-label']) !!}
+                    {!! Form::hidden('hdd_saldo', $personal->total_saldo , [ 'id' => 'hdd_saldo']) !!}                    
                 </div>              
             </div>
         </div>

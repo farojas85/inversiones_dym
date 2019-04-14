@@ -1,3 +1,4 @@
+
 var tabla;
 $(document).ready(function() {
     // Default Datatable
@@ -62,45 +63,69 @@ $('body').on('click', '#btn-guardar', function (event) {
                 url = form.attr('action'),
                 method =form.attr('method');
 
+    total_saldo = $('#hdd_saldo').val();
+
+    
     $('#form').parsley().validate();
-
-    if ($('#form').parsley().isValid()) {
-         $.ajax({
-            url : url,
-            method: method,
-            data : form.serialize(),
-            success: function (response) {
-                
-                if(estado == 'edit'){
-                    textos = "Datos Modificados Satisfactoriamente !";
+    
+    
+    if(typeof(total_saldo) === 'undefined' || total_saldo === null || total_saldo === 0){
+        swal({
+            type: 'error',
+            title: 'Advertencia',
+            text: 'Monto No Asignado y/o Consumido'
+        });
+    }
+    else{
+        
+        if ($('#form').parsley().isValid()) {
+             $.ajax({
+                url : url,
+                method: method,
+                data : form.serialize(),
+                success: function (response) {
+                 
+                    if(response == '0'){
+                        swal({
+                            type : 'error',
+                            title : 'Préstamos',
+                            text : 'Monto No Asignado y/o Consumido',
+                            confirmButtonText: 'Aceptar'
+                        });
+                    }
+                    else{
+                        if(estado == 'edit'){
+                            textos = "Datos Modificados Satisfactoriamente !";
+                        }
+                        else if(estado == 'create'){
+                            textos = "Datos Registrados Satisfactoriamente !";   
+                        }
+        
+                        swal({
+                            type : 'success',
+                            title : 'Préstamos',
+                            text : textos,
+                            confirmButtonText: 'Aceptar'
+                        }).then(function () {
+                            window.location="prestamos";
+                        });
+                    }
+                    
+                    
+                },
+                error : function (xhr) {
+                    var res = xhr.responseJSON;
+                    if ($.isEmptyObject(res) === false) {
+                        $.each(res.errors, function (key, value) {
+                            $('#' + key)
+                                .closest('.form-group')
+                                .addClass('has-error')
+                                .append('<span class="help-block"><strong>' + value + '</strong></span>');
+                        });
+                    }
                 }
-                else if(estado == 'create'){
-                    textos = "Datos Registrados Satisfactoriamente !";   
-                }
-
-                swal({
-                    type : 'success',
-                    title : 'Préstamos',
-                    text : textos,
-                    confirmButtonText: 'Aceptar'
-                }).then(function () {
-                   // console.log(response)
-                    window.location="prestamos";
-                });
-                
-            },
-            error : function (xhr) {
-                var res = xhr.responseJSON;
-                if ($.isEmptyObject(res) == false) {
-                    $.each(res.errors, function (key, value) {
-                        $('#' + key)
-                            .closest('.form-group')
-                            .addClass('has-error')
-                            .append('<span class="help-block"><strong>' + value + '</strong></span>');
-                    });
-                }
-            }
-        }); 
+            }); 
+        }
     }
 });
 
@@ -251,14 +276,13 @@ $('body').on('click', '#btn-guardar-cobranza', function (event) {
                     confirmButtonText: 'Aceptar'
                 }).then(function () {
                     $('#modal-default').modal('hide');
-                    //mostrar_tabla_cobros(prestamo_id);
                     window.location="prestamos";
                 });
                 
             },
             error : function (xhr) {
                 var res = xhr.responseJSON;
-                if ($.isEmptyObject(res) == false) {
+                if ($.isEmptyObject(res) === false) {
                     $.each(res.errors, function (key, value) {
                         $('#' + key)
                             .closest('.form-group')

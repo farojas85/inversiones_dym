@@ -178,84 +178,103 @@ class PrestamoController extends Controller
             array('personal_id','=',$request->personal_id),
             array('consumido','=',0)
         );
-
+    
+        
         $personalmonto = personalMonto::where($condicion)->get();
-
-        $tempo = null;
-        $i=0;
-        foreach($personalmonto as $persmon){
-            $tempo[$i] = array(
-                'id' => $persmon->id,
-                'monto_saldo' => $persmon->monto_saldo,
-                'consumido' => $persmon->consumido
-            );
-            $i+=1; 
+        
+        $personalmontos = PersonalMonto::where('personal_id','=',$request->personal_id)
+                                            ->where('consumido','=',0)
+                                            ->select(
+                                                DB::raw('SUM(monto_asignado) as total_asignado'),
+                                                DB::raw('SUM(monto_saldo) as total_saldo'))
+                                            ->get()->first();
+        $monto_saldo = $personalmontos->total_saldo ;
+        
+        if( $monto_saldo === 0 || $monto_saldo === '' || $monto_saldo === null)
+        {
+            return 0;
+        }
+        else{
+            $tempo = null;
+            $i=0;
+            foreach($personalmonto as $persmon){
+                $tempo[$i] = array(
+                    'id' => $persmon->id,
+                    'monto_saldo' => $persmon->monto_saldo,
+                    'consumido' => $persmon->consumido
+                );
+                $i+=1; 
+            }
+            
+            for($x=0;$x<count($tempo);$x++){
+                if( $request->monto <= $tempo[$x]['monto_saldo'] ){
+                    $condicion2 = array(
+                        array('id','=',$tempo[$x]['id']),
+                        array('consumido','=',0)
+                    );
+                    $personalmonto2 = personalMonto::where($condicion2)->get()->first();
+                    $personalmonto2->monto_saldo = $personalmonto2->monto_saldo- $request->monto;
+    
+                    if($personalmonto2->monto_saldo == 0)
+                    {   
+                        $personalmonto2->consumido = 1;
+                    }
+    
+                    $personalmonto2->save();
+    
+                    break;
+                }
+                else if($request->monto > $tempo[$x]['monto_saldo']){
+                    $temp1 =  $request->monto - $tempo[$x]['monto_saldo'];
+                    $temp2 = $request->monto - $temp1;
+    
+                    $condicion3 = array(
+                        array('id','=',$tempo[$x]['id']),
+                        array('consumido','=',0)
+                    );
+                    $personalmonto3 = personalMonto::where($condicion3)->get()->first();
+    
+                    $personalmonto3->monto_saldo =  $personalmonto3->monto_saldo - $temp2;
+    
+                    if($personalmonto3->monto_saldo == 0 )
+                    {
+                        $personalmonto3->consumido = 1;
+                    }
+    
+                    $personalmonto3->save();
+    
+    
+                    $condicion4 = array(
+                        array('id','=',$tempo[$x+1]['id']),
+                        array('consumido','=',0)
+                    );
+                    $personalmonto4 = personalMonto::where($condicion4)->get()->first();
+    
+                    $personalmonto4->monto_saldo =  $personalmonto4->monto_saldo - $temp1;
+    
+                    if($personalmonto4->monto_saldo == 0 )
+                    {
+                        $personalmonto4->consumido = 1;
+                    }
+    
+                    $personalmonto4->save();
+    
+                    break;
+    
+                }
+            }
+            //Actualizamos el Saldo Disponible      
+            
+    
+            //Guardamos el Préstamo
+            $prestamo->save();
+    
+            return $personalmonto;
         }
         
-        for($x=0;$x<count($tempo);$x++){
-            if( $request->monto <= $tempo[$x]['monto_saldo'] ){
-                $condicion2 = array(
-                    array('id','=',$tempo[$x]['id']),
-                    array('consumido','=',0)
-                );
-                $personalmonto2 = personalMonto::where($condicion2)->get()->first();
-                $personalmonto2->monto_saldo = $personalmonto2->monto_saldo- $request->monto;
-
-                if($personalmonto2->monto_saldo == 0)
-                {   
-                    $personalmonto2->consumido = 1;
-                }
-
-                $personalmonto2->save();
-
-                break;
-            }
-            else if($request->monto > $tempo[$x]['monto_saldo']){
-                $temp1 =  $request->monto - $tempo[$x]['monto_saldo'];
-                $temp2 = $request->monto - $temp1;
-
-                $condicion3 = array(
-                    array('id','=',$tempo[$x]['id']),
-                    array('consumido','=',0)
-                );
-                $personalmonto3 = personalMonto::where($condicion3)->get()->first();
-
-                $personalmonto3->monto_saldo =  $personalmonto3->monto_saldo - $temp2;
-
-                if($personalmonto3->monto_saldo == 0 )
-                {
-                    $personalmonto3->consumido = 1;
-                }
-
-                $personalmonto3->save();
-
-
-                $condicion4 = array(
-                    array('id','=',$tempo[$x+1]['id']),
-                    array('consumido','=',0)
-                );
-                $personalmonto4 = personalMonto::where($condicion4)->get()->first();
-
-                $personalmonto4->monto_saldo =  $personalmonto4->monto_saldo - $temp1;
-
-                if($personalmonto4->monto_saldo == 0 )
-                {
-                    $personalmonto4->consumido = 1;
-                }
-
-                $personalmonto4->save();
-
-                break;
-
-            }
-        }
-        //Actualizamos el Saldo Disponible      
+       
         
-
-        //Guardamos el Préstamo
-        $prestamo->save();
-
-        return $personalmonto;
+        
     
     }
 

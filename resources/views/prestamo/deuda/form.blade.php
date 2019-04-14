@@ -18,6 +18,7 @@
             </div>
             <div class="col-6">
                 <label  class="col-form-control">Saldo : {{ $personalmontos->total_saldo }}</label>
+                {!! Form::hidden('hdd_saldo', $personalmontos->total_saldo , [ 'id' => 'hdd_saldo']) !!} 
             </div>              
         </div>
     </div>
@@ -143,6 +144,7 @@
     $( function() {
         $( "#fecha_prestamo" ).flatpickr();
     } );
+
     function calcular_cuotas()
     {
         monto =$('#monto').val();
