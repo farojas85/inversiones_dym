@@ -19,6 +19,8 @@
                     <th >fecha</th>
                     <th>Personal</th>
                     <th >Cliente</th>
+                    <th>Monto Pr&eacute;stamo</th>
+                    <th>Inter&eacute;s</th>
                     <th>Total Pr&eacute;stamo</th>
                 </tr>
             </thead> 
@@ -35,6 +37,8 @@
                     <td>{{ $prestamo->fecha_prestamo }}</td>
                     <td>{{ $prestamo->personal }}</td>
                     <td>{{ $prestamo->cliente }}</td>
+                    <td>S/ {{ number_format($prestamo->monto,2) }}</td>
+                    <td>S/ {{ number_format($prestamo->interes,2) }}</td>
                     <td>S/ {{ number_format($prestamo->total,2) }}</td>
                 </tr>
                 @empty

@@ -80,16 +80,14 @@ class PrestamoController extends Controller
                             ->join('clientes as cli','p.cliente_id','=','cli.id')
                             ->join('cliente_personal as pc', 'cli.id','=','pc.cliente_id')
                             ->select(
-                                    'p.id','p.cliente_id',
+                                    'p.id','p.cliente_id','p.fecha_prestamo',
                                     DB::raw("CONCAT(cli.nombres,' ',cli.apellidos) as nombres"),
-                                    'fecha_prestamo',
                                     DB::raw('(p.monto + p.monto*p.tasa_interes) as monto'),
                                     'p.estado',
                                     DB::raw('MIN(c.saldo) as saldo')
                                 )
                             ->where('pc.personal_id','=',$persona->id)
-                            ->groupBy('p.id','p.cliente_id','cli.apellidos','cli.nombres','fecha_prestamo',
-                                    'p.monto','p.estado')
+                            ->groupBy('p.id','p.fecha_prestamo','p.cliente_id','p.monto','p.estado')
                             ->orderBy('p.fecha_prestamo','DESC')
                             ->get();
         }
@@ -616,6 +614,7 @@ class PrestamoController extends Controller
                         ->where('fecha_prestamo','>=',$fecha_ini)
                         ->where('fecha_prestamo','<=',$fecha_fin)
                         ->where('p.id','like',$like_condicion)
+                        ->orderBy('fecha_prestamo','DESC')
                         ->get();
 
         return view('prestamo.deuda.resultado',compact('personals','prestamos','request'));
