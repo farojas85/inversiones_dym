@@ -17,6 +17,8 @@
 <script src="assets/libs/datatables/responsive.bootstrap4.min.js"></script>
 <script src="assets/libs/datatables/dataTables.buttons.min.js"></script>
 <script src="assets/libs/datatables/buttons.bootstrap4.min.js"></script>
+<script src="assets/libs/datatables/jszip.min.js"></script>
+<script src="assets/libs/datatables/buttons.colVis.min.js"></script>
 <script src="assets/libs/datatables/buttons.html5.min.js"></script>
 <script src="assets/libs/datatables/buttons.flash.min.js"></script>
 <script src="assets/libs/datatables/buttons.print.min.js"></script>

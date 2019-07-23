@@ -32,7 +32,20 @@ class ClienteController extends Controller
         $todo = 0;
         //Obteneos los clientes de acuerdo al rol
         if($role_name == 'admin' || $role_name == 'master'){
-            $clientes = Cliente::all();
+            $clientes = DB::table('clientes as c')
+                            ->leftJoin('prestamos as p','c.id','=','p.cliente_id')
+                            ->leftJoin('cobranzas as co','p.id','=','co.prestamo_id')
+                            ->join('cliente_personal as cp','c.id','=','cp.cliente_id')
+                            ->join('personals as ps','cp.personal_id','=','ps.id')
+                            ->select('c.id','c.apellidos as cli_apellidos','c.nombres as cli_nombres','c.direccion','c.estado',
+                                'ps.apellidos as per_apellidos','ps.nombres as per_nombres',
+                                DB::raw("MAX(co.fecha) as fecha_cobranza"))
+                            ->where('p.estado', '<>','Cancelado')
+                            ->groupBy('c.id','c.apellidos','c.nombres','c.direccion','c.estado',
+                                        'ps.apellidos','ps.nombres')
+                            ->orderBy('c.apellidos','ASC')
+                            ->orderBy('c.nombres','ASC')
+                            ->get();
             $todo=1;
         }
         else{
@@ -43,10 +56,20 @@ class ClienteController extends Controller
                 $personal_id = $per->id;
             }
             $clientes = DB::table('cliente_personal as cp')
-                            ->join('personals as p','cp.personal_id', '=', 'p.id')
+                            ->join('personals as ps','cp.personal_id', '=', 'ps.id')
                             ->join('clientes as c' ,'cp.cliente_id','=', 'c.id')
-                            ->select('c.id','c.nombres as cli_nombre','c.apellidos as cli_apel','p.nombres as per_nombre','p.apellidos as per_apel','c.estado')
+                            ->leftJoin('prestamos as p','c.id','=','p.cliente_id')
+                            ->leftJoin('cobranzas as co','p.id','=','co.prestamo_id')
+                            ->select('c.id','c.nombres as cli_nombre','c.apellidos as cli_apel','c.direccion',
+                                        'ps.nombres as per_nombre','ps.apellidos as per_apel','c.estado',
+                                        DB::raw("MAX(co.fecha) as fecha_cobranza")
+                                )
                             ->where('cp.personal_id','=',$personal_id)
+                            ->where('p.estado','<>','Cancelado' )
+                            ->groupBy('c.id','c.apellidos','c.nombres','c.direccion',
+                                        'ps.apellidos','ps.nombres','c.estado')
+                            ->orderBy('c.apellidos','ASC')
+                            ->orderBy('c.nombres','ASC')
                             ->get();
         }        
 

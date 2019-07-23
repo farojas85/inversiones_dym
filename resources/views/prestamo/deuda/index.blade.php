@@ -39,7 +39,7 @@
                     </button>
                 </div>
             </div>
-            <div class="row">
+            <div class="row mt-2">
                 <div class="col-12">
                     <div class="table-responsive" id="tabla-detalle">
                         <table id="prestamo-datatable" class="table table-striped dt-responsive table-sm" >

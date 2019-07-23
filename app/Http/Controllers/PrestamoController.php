@@ -60,15 +60,17 @@ class PrestamoController extends Controller
                             ->join('clientes as cli','p.cliente_id','=','cli.id')
                             ->select(
                                     'p.id','p.cliente_id',
-                                    DB::raw("CONCAT(cli.nombres,' ',cli.apellidos) as nombres"),
+                                    DB::raw("CONCAT(cli.apellidos,' ',cli.nombres) as nombres"),
                                     'fecha_prestamo',
                                     DB::raw('(p.monto + p.monto*p.tasa_interes) as monto'),
                                     'p.estado',
                                     DB::raw('MIN(c.saldo) as saldo')
                                 )
+                            ->where('p.estado','<>','Cancelado')
                             ->groupBy('p.id','p.cliente_id','cli.apellidos','cli.nombres','fecha_prestamo',
                                     'p.monto','p.estado')
                             ->orderBy('p.fecha_prestamo','DESC')
+                            ->orderBy('nombres','ASC')
                             ->get();
         }
         else{
@@ -81,14 +83,17 @@ class PrestamoController extends Controller
                             ->join('cliente_personal as pc', 'cli.id','=','pc.cliente_id')
                             ->select(
                                     'p.id','p.cliente_id','p.fecha_prestamo',
-                                    DB::raw("CONCAT(cli.nombres,' ',cli.apellidos) as nombres"),
+                                    DB::raw("CONCAT(cli.apellidos,' ',cli.nombres) as nombres"),
                                     DB::raw('(p.monto + p.monto*p.tasa_interes) as monto'),
                                     'p.estado',
                                     DB::raw('MIN(c.saldo) as saldo')
                                 )
                             ->where('pc.personal_id','=',$persona->id)
+                            ->where('p.estado','<>','Cancelado')
                             ->groupBy('p.id','p.fecha_prestamo','p.cliente_id','p.monto','p.estado')
                             ->orderBy('p.fecha_prestamo','DESC')
+                            ->orderBy('cli.apellidos','ASC')
+                            ->orderBy('cli.nombres','ASC')
                             ->get();
         }
 
@@ -610,7 +615,8 @@ class PrestamoController extends Controller
                                 DB::raw("CONCAT(p.nombres,' ',p.apellidos) as personal"),
                                 'monto',
                                 DB::raw('(monto*tasa_interes) as interes'),
-                                DB::raw('(monto + monto*tasa_interes) as total'))
+                                DB::raw('(monto + monto*tasa_interes) as total'),
+                                'pr.estado')
                         ->where('fecha_prestamo','>=',$fecha_ini)
                         ->where('fecha_prestamo','<=',$fecha_fin)
                         ->where('p.id','like',$like_condicion)

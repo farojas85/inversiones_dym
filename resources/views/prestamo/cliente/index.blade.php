@@ -33,7 +33,8 @@
                                     <th >ID</th>
                                     <th >Cliente</th>
                                     <th >Personal</th>
-                                    <th >Estado</th>                                    
+                                    <th >Estado</th>
+                                    <th>Tipo Cliente</th>                                   
                                 </tr>
                             </thead>
                             <tbody>
@@ -82,13 +83,39 @@
                                         
                                     </td>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td> {{ $cliente->nombres." ".$cliente->apellidos }}</td>
+                                    <td> {{ $cliente->cli_apellidos." ".$cliente->cli_nombres }}</td>
                                     <td>
-                                        @foreach ($cliente->personals as $personal)
-                                            {{ $personal->nombres." ".$personal->apellidos}}
-                                        @endforeach
+                                        {{  $cliente->per_apellidos." ".$cliente->per_nombres  }}
                                     </td>
                                     <td> <span class="{{ $alert }}">{{ $cliente->estado }}</span> </td>
+                                    <td>
+                                        @php
+                                            $fecha_cobranza = \Carbon\Carbon::parse($cliente->fecha_cobranza);
+                                            $ahora = \Carbon\Carbon::now();
+                                            $dias = 0;
+                                            if($cliente->fecha_cobranza == '' || $cliente->fecha_cobranza == null)
+                                            {   
+                                                $tipo_cliente = "Regular";
+                                                $alertipo = "badge badge-warning";
+                                            } 
+                                            else{
+                                                $dias = $fecha_cobranza->diffInDays($ahora);
+                                                if($dias == 0 || $dias == 1){
+                                                    $tipo_cliente = "Bueno";
+                                                    $alertipo = "badge badge-success";
+                                                } 
+                                                else if($dias >=2 && $dias <=5){
+                                                    $tipo_cliente = "Regular";
+                                                    $alertipo = "badge badge-warning";
+                                                }
+                                                else if( $dias > 5){
+                                                    $tipo_cliente = "Moroso";
+                                                    $alertipo = "badge badge-danger";
+                                                }
+                                            }
+                                        @endphp
+                                        <span class="{{ $alertipo }}">{{ $tipo_cliente }}</span>
+                                    </td>
                                 </tr>  
                                 @endforeach
                             @else
@@ -112,9 +139,40 @@
                                             @endcan
                                         </td>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $cliente->cli_nombre." ".$cliente->cli_apel }}</td>
-                                        <td>{{ $cliente->per_nombre." ".$cliente->per_apel }}</td>
+                                        <td>{{ $cliente->cli_apel." ".$cliente->cli_nombre }}</td>
+                                        <td>{{ $cliente->per_apel." ".$cliente->per_nombre }}</td>
                                         <td> <span class="{{ $alert }}">{{ $cliente->estado }}</span> </td>
+                                        <td>
+                                            @php
+                                                $fecha_cobranza = \Carbon\Carbon::parse($cliente->fecha_cobranza);
+                                                $ahora = \Carbon\Carbon::now();
+                                                $dias = 0;
+                                                if($cliente->fecha_cobranza == '' || $cliente->fecha_cobranza == null)
+                                                {   
+                                                    $tipo_cliente = "Regular";
+                                                    $alertipo = "badge badge-warning";
+                                                } 
+                                                else{
+                                                    $dias = $fecha_cobranza->diffInDays($ahora);
+                                                    if($dias == 0 || $dias == 1){
+                                                        $tipo_cliente = "Bueno";
+                                                        $alertipo = "badge badge-success";
+                                                    } 
+                                                    else if($dias >=2 && $dias <=5){
+                                                        $tipo_cliente = "Regular";
+                                                        $alertipo = "badge badge-warning";
+                                                    }
+                                                    else if( $dias > 5){
+                                                        $tipo_cliente = "Moroso";
+                                                        $alertipo = "badge badge-danger";
+                                                    }
+                                                }
+                                            @endphp
+                                        <span class="{{ $alertipo }}"
+                                            title="Ultimo día de Cobranza {{  $fecha_cobranza->format('d-m-Y') }}">
+                                            {{ $tipo_cliente }}
+                                        </span>
+                                        </td>
                                     </tr>
                                 @endforeach
                             @endif
@@ -130,3 +188,4 @@
 @section('scripties')
     <script src="js/prestamo/cliente.js"></script>
 @endsection
+

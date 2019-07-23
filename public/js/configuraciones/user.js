@@ -35,29 +35,38 @@ $('#user-datatable').DataTable({
     "lengthMenu": [[5,10, 25, 50, -1], [5,10, 25, 50, "All"]],
     dom: 'Bfrtip',
     "buttons":
-        [   
+        [
             {
-                extend: 'copy',
-                text: "<i class='far fa-copy'></i> Copiar",
-                className:"btn btn-blue",
-
-            }, 
+                extend: 'colvis',
+                text:'Mostrar',
+                className:"btn btn-warning",
+            },
             {
-                extend:'csv',
-                text: "<i class='far fa-file-code'></i> CSV",
-                className:"btn btn-success"
+                extend:'excelHtml5',
+                text: "<i class='far fa-file-excel'></i> Excel",
+                className:"btn btn-success",
+                exportOptions:{
+                    columns : ':visible:not(.not-export-col)',
+                }
             }, 
             {
                 extend:'pdf',
                 text: "<i class='far fa-file-pdf'></i> PDF",
                 className:"btn btn-danger",
-                title:"Listado de Usuarios"
+                title:"Listado de Usuarios",
+                exportOptions:{
+                    columns : ':visible:not(.not-export-col)',
+                }
             }
             ,{
                 extend:'print',
                 text: "<i class='fas fa-print'></i> Imprimir",
-                className:"btn btn-pink"
-            },]
+                className:"btn btn-primary",
+                exportOptions:{
+                    columns : ':visible:not(.not-export-col)',
+                }
+            },
+        ]
 });
 
 $('body').on('click', '.modal-user-edit', function (event) {

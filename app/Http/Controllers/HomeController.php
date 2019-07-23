@@ -31,6 +31,7 @@ class HomeController extends Controller
         $todo = 0;
         //Obteneos los clientes de acuerdo al rol
         $personals = 0;
+        $prestamos = null;
         if($role_name == 'admin' || $role_name == 'master'){
 
             $clientes = Cliente::all()->count();

@@ -29,7 +29,41 @@ $(document).ready(function() {
                 }
             },
         "pageLength": 5,
-        "lengthMenu": [[5,10, 25, 50, -1], [5,10, 25, 50, "All"]]
+        "lengthMenu": [[5,10, 25, 50, -1], [5,10, 25, 50, "All"]],
+        dom: 'Bfrtip',
+        "buttons":
+            [
+                {
+                    extend: 'colvis',
+                    text:'Mostrar',
+                    className:"btn btn-warning",
+                },
+                {
+                    extend:'excelHtml5',
+                    text: "<i class='far fa-file-excel'></i> Excel",
+                    className:"btn btn-success",
+                    exportOptions:{
+                        columns : ':visible:not(.not-export-col)',
+                    }
+                }, 
+                {
+                    extend:'pdf',
+                    text: "<i class='far fa-file-pdf'></i> PDF",
+                    className:"btn btn-danger",
+                    title:"Listado de Usuarios",
+                    exportOptions:{
+                        columns : ':visible:not(.not-export-col)',
+                    }
+                }
+                ,{
+                    extend:'print',
+                    text: "<i class='fas fa-print'></i> Imprimir",
+                    className:"btn btn-primary",
+                    exportOptions:{
+                        columns : ':visible:not(.not-export-col)',
+                    }
+                },
+            ]
     });
     
 });

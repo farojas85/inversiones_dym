@@ -22,6 +22,7 @@
                     <th>Monto Pr&eacute;stamo</th>
                     <th>Inter&eacute;s</th>
                     <th>Total Pr&eacute;stamo</th>
+                    <th>Estado</th>
                 </tr>
             </thead> 
             <tbody>
@@ -40,6 +41,7 @@
                     <td>S/ {{ number_format($prestamo->monto,2) }}</td>
                     <td>S/ {{ number_format($prestamo->interes,2) }}</td>
                     <td>S/ {{ number_format($prestamo->total,2) }}</td>
+                    <td>{{ $prestamo->estado }}</td>
                 </tr>
                 @empty
                 <tr>
