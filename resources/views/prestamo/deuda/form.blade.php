@@ -141,9 +141,19 @@
 </div>
 
 <script>
-    $( function() {
-        $( "#fecha_prestamo" ).flatpickr();
-    } );
+    $( "#fecha_prestamo" ).flatpickr({
+        locale: {
+            firstDayOfWeek: 7,
+            weekdays: {
+                shorthand: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                longhand: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],         
+            }, 
+            months: {
+                shorthand: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Оct', 'Nov', 'Dic'],
+                longhand: ['Enero', 'Febreo', 'Мarzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            },
+        },
+    });
 
     function calcular_cuotas()
     {

@@ -15,24 +15,24 @@
                 <th >fecha</th>
                 <th>Personal</th>
                 <th >Cliente</th>
-                <th>Total Cobranza</th>
+                <th>Total Cobranza S/</th>
             </tr>
         </thead> 
         <tbody>
             @php($total_cobranza = 0)
-            @forelse ($cobranzas as $cobro)
-            @php($total_cobranza += $cobro->monto)
-                <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $cobro->fecha }}</td>
-                    <td>{{ $cobro->personal }}</td>
-                    <td>{{ $cobro->cliente }}</td>
-                    <td>{{ number_format($cobro->monto,2) }}</td>
-                </tr>
+            @forelse ($cobrianza as $cobro)
+            @php($total_cobranza += $cobro['monto'])
+            <tr>
+                <td>{{ $cobro['id_cobranza'] }}</td>
+                <td>{{ $cobro['fecha'] }}</td>
+                <td>{{ $cobro['personal'] }}</td>
+                <td>{{ $cobro['cliente'] }}</td>
+                <td>{{ number_format($cobro['monto'],2) }}</td>
+            </tr>
             @empty
-                <tr>
-                    <td colspan="5" class="text-center">-- DATOS NO REGISTRADOS --</td>
-                </tr>
+            <tr>
+                <td colspan="5" class="text-center">-- DATOS NO REGISTRADOS --</td>
+            </tr>
             @endforelse
         </tbody>
         <tfoot>

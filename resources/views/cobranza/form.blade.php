@@ -36,9 +36,9 @@
             </div>
             @if ($role_name == 'admin' || $role_name == 'master' )
                 {!! 
-                    Form::text('fecha',\Carbon\Carbon::now()->format('d-m-Y'),
+                    Form::text('fecha',null,
                                 ['class' => 'form-control','readonly'=> '',
-                                'id'=>'fecha', 'required'=>'']) 
+                                'id'=>'fecha', 'required'=>'', 'placeholder' =>'Seleccione Fecha']) 
                 !!} 
                 <script>
                     $( function() {
