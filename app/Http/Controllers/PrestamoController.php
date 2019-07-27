@@ -729,19 +729,7 @@ class PrestamoController extends Controller
         $cobranzas = null;
         $fecha_ini = $request->fecha_ini;
         $fecha_fin = $request->fecha_fin;
-        /*$cobranzas = DB::table('cobranzas as co')
-                            ->join('prestamos as pr','co.prestamo_id','=','pr.id')
-                            ->join('cliente_personal as cp', 'pr.cliente_id', '=', 'cp.cliente_id')
-                            ->join('personals as p','cp.personal_id','=','p.id')
-                            ->join('clientes as c','cp.cliente_id', '=', 'c.id')
-                            ->select('co.id','co.fecha',
-                                DB::raw("concat(p.nombres,' ',p.apellidos) as personal"),
-                                DB::raw("concat(c.nombres,' ',c.apellidos) as cliente"),
-                                'cantidad_cuotas','co.monto')
-                            ->where('co.fecha','>=',$fecha_ini)
-                            ->where('co.fecha','<=',$fecha_fin)
-                            ->where('p.id','like',$like_condicion)
-                            ->get();*/
+  
         $fechas = array();
         //OBTENEMOS TODOS LOS CLIENTES QUE SE LES HA COBRADOR EN RANGO DE FECHA SELECCIONADO
         $clientes_personal = DB::table('cobranzas as co')
@@ -791,6 +779,8 @@ class PrestamoController extends Controller
                         'cliente' => $personal_Cliente->cliente,
                         'monto' => 0
                     );
+
+                    array_push($cobrianza,$cobra);
                 }
                 else {
                     foreach($cobros as $cobro) {
@@ -801,9 +791,10 @@ class PrestamoController extends Controller
                             'cliente' => $cobro->cliente,
                             'monto' => $cobro->monto
                         );
+                        array_push($cobrianza,$cobra);
                     }
                 }
-                array_push($cobrianza,$cobra);
+               
                 $fe_ini = strtotime ( '+1 day' , strtotime ( $fe_ini ) );
                 $fe_ini = Date('Y-m-d',$fe_ini);
                 $id +=1;

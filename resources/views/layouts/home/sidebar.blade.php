@@ -57,7 +57,7 @@
                     </ul>
                 </li>
                 @endcan
-                @can('rrhh.index')
+                @can('personal.index')
                 <li>
                     <a href="javascript: void(0);">
                         <i class="fe-users"></i>
@@ -78,6 +78,16 @@
                         @can('personalsalarios.index')
                         <li>
                             <a href="/personalsalarios">Pagos Personal</a>
+                        </li>
+                        @endcan
+                        @can('personalgastos.index')
+                        <li>
+                            <a href="/personalgastos">Gastos Personal</a>
+                        </li>
+                        @endcan
+                        @can('personalresumen.index')
+                        <li>
+                            <a href="/resumenpersonal">Resumen Diario</a>
                         </li>
                         @endcan
                     </ul>

@@ -40,6 +40,9 @@ Route::get('pdfCobranza/{cobranza}','CobranzaController@generaPdf')->name('cobra
 Route::get('userTable','UserController@table');
 Route::get('userReset/{user}','UserController@resetPassword')->name('users.reset');
 Route::post('saveReset/{user}','UserController@saveReset')->name('users.savereset');
+Route::get('personalgastos/busqueda_modal','PersonalGastoController@busqueda_modal');  
+Route::get('personalgastos/table','PersonalGastoController@table');  
+Route::get('resumenpersonal','ResumenController@index');
 
 Route::group(['middleware' => 'checkRole:cobrador'], function() {
     Route::get('/home', 'HomeController@index')->name('home');
@@ -53,7 +56,8 @@ Route::middleware(['auth'])->group(function(){
     Route::resource('personalmontos', 'PersonalMontoController');
     Route::resource('prestamos', 'PrestamoController');    
     Route::resource('personaladelantos', 'PersonalAdelantoController');    
-    Route::resource('personalsalarios', 'PersonalSalarioController');    
+    Route::resource('personalsalarios', 'PersonalSalarioController'); 
+    Route::resource('personalgastos','PersonalGastoController');  
     Route::resource('permissions', 'PermissionController');    
     Route::resource('permissionroles', 'PermissionRoleController');    
     Route::resource('modulos', 'ModuloController');
@@ -70,5 +74,5 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/prestamomes','PrestamoController@prestamoMes')->name('prestamos.reportemes');
     Route::get('/cobranzadia','PrestamoController@cobranzaDia')->name('cobranzas.reportdia');
     Route::get('/cobranzames','PrestamoController@cobranzaMes')->name('cobranzas.reportemes');
-    Route::get('horarioTable','HorarioController@table'); 
+    Route::get('horarioTable','HorarioController@table');
 });

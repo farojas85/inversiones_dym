@@ -15,7 +15,11 @@ class CreatePersonalGastosTable extends Migration
     {
         Schema::create('personal_gastos', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('personal_id');
+            $table->string('descripcion',191);
+            $table->date('fecha');
             $table->timestamps();
+            $table->foreign('personal_id')->references('id')->on('personals');
         });
     }
 

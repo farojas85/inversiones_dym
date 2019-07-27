@@ -26,6 +26,12 @@ class personal extends Model
         return $this->hasMany(PersonalSalario::class);
     }
 
+    public function PersonalGastos()
+    {
+        return $this->hasMany(PersonalGasto::class);
+    }
+
+
     public function clientes()
     {
         return $this->belongsToMany(Cliente::class)->withTimestamps();
