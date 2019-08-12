@@ -43,6 +43,7 @@ Route::post('saveReset/{user}','UserController@saveReset')->name('users.saverese
 Route::get('personalgastos/busqueda_modal','PersonalGastoController@busqueda_modal');  
 Route::get('personalgastos/table','PersonalGastoController@table');  
 Route::get('resumenpersonal','ResumenController@index');
+Route::get('/resumen/exportar','ResumenController@exportar_excel');
 
 Route::group(['middleware' => 'checkRole:cobrador'], function() {
     Route::get('/home', 'HomeController@index')->name('home');
@@ -75,4 +76,6 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/cobranzadia','PrestamoController@cobranzaDia')->name('cobranzas.reportdia');
     Route::get('/cobranzames','PrestamoController@cobranzaMes')->name('cobranzas.reportemes');
     Route::get('horarioTable','HorarioController@table');
+    Route::get('/resumendia','ResumenController@busqueda_resumen');
+    
 });

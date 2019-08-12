@@ -1,6 +1,6 @@
 @extends('layouts.home.app')
 @section('title-page','Clientes')
-   
+
 @section('page-content')
     <div class="row">
         <div class="col-12">
@@ -21,10 +21,10 @@
                     <h4 class="header-title">Listado Clientes</h4>        
                     <div class="table-responsive" id="tabla-detalle">
                         @can('users.create')
-                        <button class="btn btn-info btn-rounded" id="btn-agregar-cliente"
-                                title="Agregar Cliente">
-                            <i class="fa fa-plus"></i> Agregar Cliente
-                        </button>
+                            <button class="btn btn-info btn-rounded" id="btn-agregar-cliente"
+                                    title="Agregar Cliente">
+                                <i class="fa fa-plus"></i> Agregar Cliente
+                            </button>
                         @endcan
                         <table id="cliente-datatable" class="table table-striped dt-responsive table-sm nowrap" >
                             <thead>

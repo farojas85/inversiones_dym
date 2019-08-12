@@ -76,8 +76,8 @@
                         <div class="home-fullscreen">
                             <div class="full-screen">
                                 <div class="home-wrapper home-wrapper-alt">
-                                    <h2 class="text-white">Sistema de Gesti&oacute;n de Pr&eacute;stamos, Cr&eacute;ditos y Cobranza</h2>
-                                    <h4 class="">Administre sus clientes, personal de cobros, sus pr&eacute;stamos y cobranzas de manera r&aacute;pida.</h4>
+                                    <h2 style="color:#5cb85c">Sistema de Gesti&oacute;n de Pr&eacute;stamos, Cr&eacute;ditos y Cobranza</h2>
+                                    <h4><font  style="color:#5cb85c">Administre sus clientes, personal de cobros, sus pr&eacute;stamos y cobranzas de manera r&aacute;pida.</font></h4>
                                 </div>
                             </div>
                         </div>

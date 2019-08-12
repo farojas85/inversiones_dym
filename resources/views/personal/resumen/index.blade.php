@@ -21,26 +21,45 @@
         <div class="card-body">
             <h4 class="header-title">Resumen diario</h4> 
             <div class="row mt-2">
-                <label for="personal_id" class="col-form-label col-form-label-sm col-md-2">
+                <label for="personal_id" class="col-form-label col-form-label-sm col-md-1">
                     Personal:
                 </label>
-                <div class="col-md-4">
-            @if ($role_name == 'admin' || $role_name == 'master')
-                <select id="personal_id" name="personal_id"
-                    class="form-control form-control-sm">
-                    <option class="%">Todos</option>
+                    <div class="col-md-3">
+                @if ($role_name == 'admin' || $role_name == 'master')
+                    <select id="personal_id" name="personal_id"
+                        class="form-control form-control-sm" >
+                        <option value="%">Todos</option>
+                        @foreach ($personals as $pe)
+                        <option value="{{ $pe->id }}">{{ $pe->nombres }} {{ $pe->apellidos }}</option>
+                        @endforeach
+                    </select>
+                @else
                     @foreach ($personals as $pe)
-                    <option value="{{ $pe->id }}">{{ $pe->nombres }} {{ $pe->apellidos }}</option>
+                        <input type="hidden" name="personal_id" id="personal_id" value ="{{ $pe->id }}">
+                        <input type="text" class="form-control form-control-sm" 
+                        value="{{ $pe->nombres }} {{ $pe->apellidos }}"
+                        readonly>
                     @endforeach
-                </select>
-            @else
-                @foreach ($personals as $pe)
-                    <input type="text" class="form-control form-control-sm" 
-                    value="{{ $pe->nombres }} {{ $pe->apellidos }}"
-                    readonly>
-                @endforeach
-            @endif
-                </div>          
+                @endif
+                </div>
+                <label for="fecha_ini" class="col-form-label col-form-label-sm col-md1">Fecha Ini:</label>
+                <div class="col-md-2">
+                    <input type="text" name="fecha_ini" id="fecha_ini" 
+                            class="form-control form-control-sm" placeholder="Seleccione Fecha">
+                </div>
+                <label for="fecha_fin" class="col-form-label col-form-label-sm col-md1">Fecha Fin:</label>
+                <div class="col-md-2">
+                    <input type="text" name="fecha_fin" id="fecha_fin" 
+                            class="form-control form-control-sm" placeholder="Seleccione Fecha">
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-sm btn-primary" onclick="mostrar_busqueda()">
+                        <i class="fa fa-search"></i> Buscar
+                    </button>
+                    <a href="/resumen/exportar" class="btn btn-sm btn-success">
+                        <i class="far fa-file-excel"></i> Descargar
+                    </a>
+                </div>
             </div>      
             <div class="table-responsive mt-2" id="tabla-detalle">
                 <table id="cliente-datatable" class="table table-striped dt-responsive table-sm nowrap" >
@@ -88,4 +107,7 @@
         </div>
     </div>
 </div>
+@endsection
+@section('scripties')
+    <script src="js/principal/resumen_diario.js"></script>
 @endsection
