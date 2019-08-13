@@ -1,10 +1,13 @@
-<h4 class="header-title">Reporte de Cobranzas 
+<h4 class="header-title">Reporte de Cobranzas
     <a href="prestamos" class="btn btn-danger d-print-none">
         <i class="fas fa-times"></i> Cerrar
     </a>
     <button class="btn btn-blue btn-imprimir d-print-none">
         <i class="fas fa-print"></i> Imprimir
     </button>
+    <a href="/cobranza/exportar/{{ $request->tipo_busqueda }}" class="btn btn-success btn">
+        <i class="fas fa-file-excel"></i> Descargar
+    </a>
 </h4>
 <div class="table-responsive" id="tabla-detalle">
 @if ($request->tipo_busqueda=='01')
@@ -51,7 +54,7 @@
                 <th>Personal</th>
                 <th>Total Cobranza</th>
             </tr>
-        </thead> 
+        </thead>
         <tbody>
                 @php($total_cobranza = 0)
             @forelse ($cobranzas as $cobro)

@@ -9,6 +9,7 @@ use App\personalMonto;
 use App\Cobranza;
 use Carbon\Carbon;
 use App\Exports\PrestamosExport;
+use App\Exports\CobranzasExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -724,6 +725,9 @@ class PrestamoController extends Controller
     }
 
     public function cobranzaDia(Request $request){
+
+        if(Session::has('cobranzas')) { Session::forget('cobranzas');}
+
         if($request->personal_id == "%"){
             $like_condicion = $request->personal_id;
         }
@@ -734,7 +738,7 @@ class PrestamoController extends Controller
         $cobranzas = null;
         $fecha_ini = $request->fecha_ini;
         $fecha_fin = $request->fecha_fin;
-  
+
         $fechas = array();
         //OBTENEMOS TODOS LOS CLIENTES QUE SE LES HA COBRADOR EN RANGO DE FECHA SELECCIONADO
         $clientes_personal = DB::table('cobranzas as co')
@@ -744,9 +748,9 @@ class PrestamoController extends Controller
                                     ->where('co.fecha','<=',$fecha_fin)
                                     ->where('cp.personal_id','like',$like_condicion)
                                     ->distinct()->get(['pr.cliente_id']);
-        
-        $cobrianza = array();    
-        $id = 1;  
+
+        $cobrianza = array();
+        $id = 1;
         foreach($clientes_personal as $cp) {
             $fe_ini = $request->fecha_ini;
             $fe_fin = $request->fecha_fin;
@@ -766,7 +770,7 @@ class PrestamoController extends Controller
                                 ->orderBy('cliente','ASC')
                                 ->orderby('co.fecha','ASC')
                                 ->get();
-                
+
                 if(count($cobros) == 0){
                     $personal_Cliente = DB::table('cliente_personal as cp')
                                             ->join('personals as pe','cp.personal_id','=','pe.id')
@@ -799,17 +803,21 @@ class PrestamoController extends Controller
                         array_push($cobrianza,$cobra);
                     }
                 }
-               
+
                 $fe_ini = strtotime ( '+1 day' , strtotime ( $fe_ini ) );
                 $fe_ini = Date('Y-m-d',$fe_ini);
                 $id +=1;
-            }     
-        }           
+            }
+        }
 
+        Session::put('cobranzas',$cobrianza);
         return view('prestamo.deuda.resultadoCobranza',compact('request','cobranzas','cobrianza'));
     }
 
     public function cobranzaMes(Request $request){
+
+        if(Session::has('cobranzas')) { Session::forget('cobranzas');}
+
         $cobranzas = null;
         $mes_ini = $request->mes_ini;
         $mes_fin = $request->mes_fin;
@@ -846,12 +854,21 @@ class PrestamoController extends Controller
                         ->get();
         }
 
-        
+        Session::put('cobranzas',$cobranzas->toArray());
+
         return view('prestamo.deuda.resultadoCobranza',compact('request','cobranzas'));
     }
 
     public function excelPrestamos() {
         $prestamos = Session::get('prestamos');
         return Excel::download(new PrestamosExport($prestamos),'Prestamos.xlsx');
+    }
+
+    public function excelCobranzas($tipo) {
+        $parametros = [
+            $cobranzas = Session::get('cobranzas'),
+            $tipo
+        ];
+        return Excel::download(new CobranzasExport($parametros),'Cobranzas.xlsx');
     }
 }

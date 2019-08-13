@@ -46,6 +46,7 @@ Route::get('resumenpersonal','ResumenController@index');
 Route::get('/resumen/exportar','ResumenController@exportar_excel');
 Route::get('/cliente/exportar','ClienteController@excel')->name('cliente.exportar');
 Route::get('/prestamo/exportar','PrestamoController@excelPrestamos')->name('prestamo.exportar');
+Route::get('/cobranza/exportar/{tipo}','PrestamoController@excelCobranzas')->name('cobranza.exportar');
 
 Route::group(['middleware' => 'checkRole:cobrador'], function() {
     Route::get('/home', 'HomeController@index')->name('home');
