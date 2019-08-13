@@ -17,11 +17,11 @@ class ResumenController extends Controller
 
     public function index()
     {
-        
+
         //Obtenemos Id del Usuatio
         $user_id = Auth::user()->id;
         $roles = Auth::user()->roles;
- 
+
         foreach($roles as $role){
             $role_name = $role->name;
         }
@@ -43,14 +43,12 @@ class ResumenController extends Controller
                             ->orderBy('p.nombres','ASC')
                             ->get();
 
-           
-
         }
         else{
             $personals = personal::where('user_id','=',$user_id)->get();
         }
 
-        $resumen = array();     
+        $resumen = array();
         $x=0;
         foreach($personals as $pe){
             $f_ini = $fecha_ini;
@@ -69,15 +67,15 @@ class ResumenController extends Controller
                     $total_recibido = DB::table('personal_montos')
                                         ->where($condicion_recibido)
                                         ->sum('personal_montos.monto_asignado');
-                }              
-                
+                }
+
                 //Obtenemos el Total de Préstamos del Personal
                 $total_prestamo = DB::table('prestamos as pr')
                                         ->join('cliente_personal as cp','pr.cliente_id','=','cp.cliente_id')
                                         ->where('cp.personal_id','=',$pe->id)
                                         ->where('pr.fecha_prestamo','=',$f_ini)
                                         ->sum('pr.monto');
-                
+
                 //OBTENER TOTAL DE COBROS DEL DÍA
                 $total_cobro = DB::table('cobranzas as co')
                                     ->join('prestamos as pr','co.prestamo_id','=','pr.id')
@@ -111,7 +109,7 @@ class ResumenController extends Controller
                 $f_ini = Date('Y-m-d',$f_ini);
                 $t+=1;
             }
-        }          
+        }
         return view('personal.resumen.index',compact('role_name','personals','resumen'));
     }
 
@@ -120,7 +118,7 @@ class ResumenController extends Controller
         //Obtenemos Id del Usuatio
         $user_id = Auth::user()->id;
         $roles = Auth::user()->roles;
- 
+
         foreach($roles as $role){
             $role_name = $role->name;
         }
@@ -146,7 +144,7 @@ class ResumenController extends Controller
             $personals = personal::where('id','=',$request->personal_id)->get();
         }
 
-        $resumen = array();     
+        $resumen = array();
         $x=0;
         foreach($personals as $pe){
             $f_ini = $request->fecha_ini;
@@ -165,15 +163,15 @@ class ResumenController extends Controller
                     $total_recibido = DB::table('personal_montos')
                                         ->where($condicion_recibido)
                                         ->sum('personal_montos.monto_asignado');
-                }              
-                
+                }
+
                 //Obtenemos el Total de Préstamos del Personal
                 $total_prestamo = DB::table('prestamos as pr')
                                         ->join('cliente_personal as cp','pr.cliente_id','=','cp.cliente_id')
                                         ->where('cp.personal_id','=',$pe->id)
                                         ->where('pr.fecha_prestamo','=',$f_ini)
                                         ->sum('pr.monto');
-                
+
                 //OBTENER TOTAL DE COBROS DEL DÍA
                 $total_cobro = DB::table('cobranzas as co')
                                     ->join('prestamos as pr','co.prestamo_id','=','pr.id')
@@ -207,15 +205,15 @@ class ResumenController extends Controller
                 $f_ini = Date('Y-m-d',$f_ini);
                 $t+=1;
             }
-        }        
-         
+        }
+
         Session::put('resumenes',$resumen);
 
         return view('personal.resumen.busqueda',compact('role_name','personals','resumen'));
     }
 
     public function exportar_excel()
-    { 
+    {
         //return Session::get('resumenes');
         $resumenes = Session::get('resumenes');
         $export = new ResumensExport(Session::get('resumenes'));

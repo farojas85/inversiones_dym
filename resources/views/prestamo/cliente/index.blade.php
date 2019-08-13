@@ -9,23 +9,33 @@
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="/home">Home</a></li>
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Pr&eacute;stamos</a></li>
-                        <li class="breadcrumb-item active">Clientes</li>
+                        <li class="breadcrumb-item active">Reporte Clientes</li>
                     </ol>
                 </div>
                 <h4 class="page-title">Clientes</h4>
             </div>
         </div>
-        <div class="col-12">
+    </div>
+    <div class="row">
+        <div class="col-12" id="detalle-vista">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="header-title">Listado Clientes</h4>        
-                    <div class="table-responsive" id="tabla-detalle">
-                        @can('users.create')
-                            <button class="btn btn-info btn-rounded" id="btn-agregar-cliente"
-                                    title="Agregar Cliente">
-                                <i class="fa fa-plus"></i> Agregar Cliente
+                    <h4 class="header-title">Listado Clientes</h4>
+                    <div class="row mb-2">
+                        <div class="col-md-12">
+                            @can('users.create')
+                                <button class="btn btn-info btn-rounded" id="btn-agregar-cliente"
+                                        title="Agregar Cliente">
+                                    <i class="fa fa-plus"></i> Agregar Cliente
+                                </button>
+                            @endcan
+                            <button class="btn btn-danger btn-rounded" id="btn-reporte-cliente"
+                                    title="Reporte Clientes">
+                                <i class="fa fa-file"></i> Reporte Clientes
                             </button>
-                        @endcan
+                        </div>
+                    </div>
+                    <div class="table-responsive" id="tabla-detalle">
                         <table id="cliente-datatable" class="table table-striped dt-responsive table-sm nowrap" >
                             <thead>
                                 <tr>
@@ -34,11 +44,11 @@
                                     <th >Cliente</th>
                                     <th >Personal</th>
                                     <th >Estado</th>
-                                    <th>Tipo Cliente</th>                                   
+                                    <th>Tipo Cliente</th>
                                 </tr>
                             </thead>
                             <tbody>
-                            @if ($todo == 1)                          
+                            @if ($todo == 1)
                                 @foreach ($clientes as $cliente)
                                 @php
                                     switch($cliente->estado)
@@ -80,7 +90,6 @@
                                             <i class="fe-trash-2"></i>
                                         </a>
                                         @endcan
-                                        
                                     </td>
                                     <td>{{ $loop->iteration }}</td>
                                     <td> {{ $cliente->cli_apellidos." ".$cliente->cli_nombres }}</td>
@@ -94,16 +103,16 @@
                                             $ahora = \Carbon\Carbon::now();
                                             $dias = 0;
                                             if($cliente->fecha_cobranza == '' || $cliente->fecha_cobranza == null)
-                                            {   
+                                            {
                                                 $tipo_cliente = "Regular";
                                                 $alertipo = "badge badge-warning";
-                                            } 
+                                            }
                                             else{
                                                 $dias = $fecha_cobranza->diffInDays($ahora);
                                                 if($dias == 0 || $dias == 1){
                                                     $tipo_cliente = "Bueno";
                                                     $alertipo = "badge badge-success";
-                                                } 
+                                                }
                                                 else if($dias >=2 && $dias <=5){
                                                     $tipo_cliente = "Regular";
                                                     $alertipo = "badge badge-warning";
@@ -116,7 +125,7 @@
                                         @endphp
                                         <span class="{{ $alertipo }}">{{ $tipo_cliente }}</span>
                                     </td>
-                                </tr>  
+                                </tr>
                                 @endforeach
                             @else
                                 @foreach ($clientes as $cliente)
@@ -148,16 +157,16 @@
                                                 $ahora = \Carbon\Carbon::now();
                                                 $dias = 0;
                                                 if($cliente->fecha_cobranza == '' || $cliente->fecha_cobranza == null)
-                                                {   
+                                                {
                                                     $tipo_cliente = "Regular";
                                                     $alertipo = "badge badge-warning";
-                                                } 
+                                                }
                                                 else{
                                                     $dias = $fecha_cobranza->diffInDays($ahora);
                                                     if($dias == 0 || $dias == 1){
                                                         $tipo_cliente = "Bueno";
                                                         $alertipo = "badge badge-success";
-                                                    } 
+                                                    }
                                                     else if($dias >=2 && $dias <=5){
                                                         $tipo_cliente = "Regular";
                                                         $alertipo = "badge badge-warning";

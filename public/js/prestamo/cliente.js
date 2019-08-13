@@ -42,7 +42,7 @@ $(document).ready(function() {
                     exportOptions:{
                         columns : ':visible:not(.not-export-col)',
                     }
-                }, 
+                },
                 {
                     extend:'pdf',
                     text: "<i class='far fa-file-pdf'></i> PDF",
@@ -86,7 +86,7 @@ $('body').on('click', '.modal-cliente-edit', function (event) {
 
     var me = $(this),
         url = me.attr('href'),
-        title = me.attr('title');  
+        title = me.attr('title');
 
     $.ajax({
         url: url,
@@ -96,7 +96,7 @@ $('body').on('click', '.modal-cliente-edit', function (event) {
             $('#modal-large-body').html(response);
             $('#modal-large').modal('show');
         }
-    });        
+    });
 });
 
 $('body').on('click', '.modal-cliente-show', function (event) {
@@ -104,7 +104,7 @@ $('body').on('click', '.modal-cliente-show', function (event) {
 
     var me = $(this),
         url = me.attr('href'),
-        title = me.attr('title');  
+        title = me.attr('title');
 
     $.ajax({
         url: url,
@@ -114,7 +114,7 @@ $('body').on('click', '.modal-cliente-show', function (event) {
             $('#modal-large-body').html(response);
             $('#modal-large').modal('show');
         }
-    });        
+    });
 });
 
 
@@ -123,8 +123,7 @@ $('body').on('click', '.modal-cliente-gmap', function (event) {
 
     var me = $(this),
         url = me.attr('href'),
-        title = me.attr('title'); 
-    
+        title = me.attr('title');
     $.ajax({
         url: url,
         dataType: 'html',
@@ -134,7 +133,7 @@ $('body').on('click', '.modal-cliente-gmap', function (event) {
             $('#modal-large-body').html(response);
             $('#modal-large').modal('show');
         }
-    });        
+    });
 });
 
 $('body').on('click', '#btn-cliente-guardar', function (event) {
@@ -154,23 +153,22 @@ $('body').on('click', '#btn-cliente-guardar', function (event) {
            method: method,
            data : form.serialize(),
            success: function (response) {
-               
                if(estado == 'edit'){
                    textos = "Datos Modificados Satisfactoriamente !";
                }
                else if(estado == 'create'){
-                   textos = "Datos Registrados Satisfactoriamente !";   
+                   textos = "Datos Registrados Satisfactoriamente !";
                }
 
                swal({
                    type : 'success',
-                   title : 'Usuario',
+                   title : 'Clientes',
                    text : textos,
                    confirmButtonText: 'Aceptar'
                }).then(function () {
-                    window.location="clientes";
+                    tabla_clientes()
+                    $('#modal-large').modal('hide');
                });
-               
            },
            error : function (xhr) {
                var res = xhr.responseJSON;
@@ -183,7 +181,7 @@ $('body').on('click', '#btn-cliente-guardar', function (event) {
                    });
                }
            }
-       }); 
+       });
     }
 });
 
@@ -219,7 +217,7 @@ $('body').on('click', '.modal-cliente-destroy', function (event) {
                         title: 'Cliente',
                         text: 'Registro Eliminado Satisfactoriamente'
                     }).then(function(){
-                        window.location="clientes";
+                        tabla_clientes();
                     });
                 },
                 error: function (xhr) {
@@ -230,9 +228,56 @@ $('body').on('click', '.modal-cliente-destroy', function (event) {
                     });
                 },
             });
-        } 
+        }
     })
-        /*function(){
-        
-    });*/
 });
+
+function tabla_clientes() {
+    $.ajax({
+        url: 'clienteTabla',
+        type:"GET",
+        success: function (response) {
+            $('#tabla-detalle').html(response);
+        }
+    });
+}
+
+$('body').on('click', '#btn-reporte-cliente', function (event) {
+    event.preventDefault();
+
+    $.ajax({
+        url: 'clienteReporte',
+        type:"GET",
+        success: function (response) {
+            $('#detalle-vista').html(response);
+        }
+    });
+});
+
+
+$('body').on('click',  '.btn-retornar', function (event) {
+    event.preventDefault();
+    window.location.href="clientes"
+});
+
+$('body').on('click',  '.btn-reporte-buscar', function (event) {
+    event.preventDefault();
+    personal_id = $('#personal_id').val()
+    estado = $('#estado').val()
+    $.ajax({
+        url: 'clienteReporteTabla',
+        data:{
+            personal_id : personal_id,
+            estado : estado
+        },
+        type: 'GET',
+        success: function (response) {
+           $('#reporte-tabla').html(response);
+           $('a').removeClass("disabled");
+        }
+    });
+});
+
+
+
+
