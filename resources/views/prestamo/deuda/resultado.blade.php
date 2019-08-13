@@ -1,11 +1,14 @@
 <div class="card-body">
-<h4 class="header-title">Reporte de Pr&eacute;stamos 
+<h4 class="header-title">Reporte de Pr&eacute;stamos
     <a href="prestamos" class="btn btn-danger btn-xs d-print-none">
         <i class="fas fa-times"></i> Cerrar
     </a>
     <button class="btn btn-blue btn-xs btn-imprimir d-print-none">
             <i class="fas fa-print"></i> Imprimir
-        </button>
+    </button>
+    <a href="/prestamo/exportar" class="btn btn-success btn-xs btn-descargar">
+        <i class="fas fa-file-excel"></i> Descargar
+    </a>
 </h4>
 <hr>
 
@@ -24,14 +27,18 @@
                     <th>Total Pr&eacute;stamo</th>
                     <th>Estado</th>
                 </tr>
-            </thead> 
+            </thead>
             <tbody>
                 @php
                     $total_prestamo=0;
+                    $total_interes = 0;
+                    $total_total = 0;
                 @endphp
                 @forelse ($prestamos as $prestamo)
                 @php
                     $total_prestamo += $prestamo->total;
+                    $total_interes += $prestamo->interes;
+                    $total_total += $prestamo->total;
                 @endphp
                 <tr>
                     <td>{{ $loop->iteration }}</td>
@@ -48,11 +55,14 @@
                     <td colspan="5" class="text-center">-- DATOS NO REGISTRADOS --</td>
                 </tr>
                 @endforelse
-            </tbody> 
+            </tbody>
             <tfoot>
                 <tr>
-                    <th colspan="4" class="text-right">Total Pr&eacute;stamo S/</th>
-                    <th>{{ number_format($total_prestamo,2) }}</th>
+                    <th colspan="4" class="bg-info text-white text-right">TOTALES S/</th>
+                    <th >{{ number_format($total_prestamo,2) }}</th>
+                    <th>{{ number_format($total_interes,2) }}</th>
+                    <th>{{ number_format($total_total,2) }}</th>
+                    <th class="bg-info"></th>
                 </tr>
             </tfoot>
         </table>
@@ -65,14 +75,18 @@
                     <th>Personal</th>
                     <th>Total Pr&eacute;stamo</th>
                 </tr>
-            </thead> 
+            </thead>
             <tbody>
             @php
                 $total_prestamo=0;
+                $total_interes =0;
+                $total_total = 0;
             @endphp
         @forelse ($prestamos as $prestamo)
             @php
                 $total_prestamo += $prestamo->total;
+                $total_interes += $prestamo->interes;
+                $total_total += $prestamo->total;
             @endphp
                 <tr>
                     <td>{{ $loop->iteration }}</td>
@@ -105,12 +119,15 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <th colspan="3" class="text-right">Total Pr&eacute;stamo S/</th>
-                    <th>{{ number_format($total_prestamo,2) }}</th>
+                    <th colspan="3" class="bg-info text-white text-right">Total Pr&eacute;stamo S/</th>
+                    <th class="bg-info">{{ number_format($total_prestamo,2) }}</th>
+                    <th >{{ number_format($total_interes,2) }}</th>
+                    <th>{{ number_format($total_total,2) }}</th>
+                    <th class="bg-info"></th>
                 </tr>
             </tfoot>
         </table>
-@endif        
+@endif
     </div>
 </div>
 </div>

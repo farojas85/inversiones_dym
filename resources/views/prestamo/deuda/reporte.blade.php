@@ -51,7 +51,7 @@
 </div>
 <script>
     function mostrar_rango(tipo_busqueda)
-    {    
+    {
         $.ajax({
             url: '/rangofechasPrestamo/'+tipo_busqueda,
             type:"GET",

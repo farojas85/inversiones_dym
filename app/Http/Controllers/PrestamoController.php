@@ -8,9 +8,12 @@ use App\personal;
 use App\personalMonto;
 use App\Cobranza;
 use Carbon\Carbon;
+use App\Exports\PrestamosExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Session;
 
 class PrestamoController extends Controller
 {
@@ -26,13 +29,13 @@ class PrestamoController extends Controller
         $this->middleware('permission:prestamos.show')->only('show');
         $this->middleware('permission:prestamos.destroy')->only('destroy');
         $this->middleware('permission:clienteprestamoTable')->only('table');
-        
+
         $this->tasas = array(
                 '0.10' =>'10%',
                 '0.15' => '15%',
                 '0.20' => '20%',
                 '0.25' => '25%');
-        
+
         $this->estadoprestamo = [
             'Generado' => 'Generado',
             'Pendiente' => 'Pendiente',
@@ -44,11 +47,11 @@ class PrestamoController extends Controller
 
     public function index()
     {
-       
+
         //Obtenemos Id del Usuatio
         $user_id = Auth::user()->id;
         $roles = Auth::user()->roles;
- 
+
         foreach($roles as $role){
             $role_name = $role->name;
         }
@@ -99,7 +102,7 @@ class PrestamoController extends Controller
 
 
         //
-       
+
         //$prestamos = Prestamo::all();
         return view('prestamo.deuda.index',compact('prestamos','role_name'));
 
@@ -110,7 +113,7 @@ class PrestamoController extends Controller
         //Obtenemos Id del Usuatio
         $user_id = Auth::user()->id;
         $roles = Auth::user()->roles;
- 
+
         foreach($roles as $role){
             $role_name = $role->name;
         }
@@ -154,8 +157,8 @@ class PrestamoController extends Controller
             $personmontos = PersonalMonto::where('personal_id','=',$personal->id)
                                         ->where('consumido','=',0)
                                         ->select('monto_saldo')
-                                        ->get()->first();   
-        }    
+                                        ->get()->first();
+        }
 
         $tasas = $this->tasas;
         $estadoform = 'create';
@@ -167,7 +170,7 @@ class PrestamoController extends Controller
 
     public function store(Request $request)
     {
-    
+
         $prestamo = new Prestamo;
         $prestamo->cliente_id = $request->cliente_id;
         $prestamo->fecha_prestamo = $request->fecha_prestamo;
@@ -176,16 +179,16 @@ class PrestamoController extends Controller
         $prestamo->dias = $request->dias;
         $prestamo->cuota = $request->cuota;
         $prestamo->estado = 'Generado';
-        $prestamo->fecha_vencimiento = \Carbon\Carbon::now();       
+        $prestamo->fecha_vencimiento = \Carbon\Carbon::now();
 
         $condicion = array(
             array('personal_id','=',$request->personal_id),
             array('consumido','=',0)
         );
-    
-        
+
+
         $personalmonto = personalMonto::where($condicion)->get();
-        
+
         $personalmontos = PersonalMonto::where('personal_id','=',$request->personal_id)
                                             ->where('consumido','=',0)
                                             ->select(
@@ -193,7 +196,7 @@ class PrestamoController extends Controller
                                                 DB::raw('SUM(monto_saldo) as total_saldo'))
                                             ->get()->first();
         $monto_saldo = $personalmontos->total_saldo ;
-        
+
         if( $monto_saldo === 0 || $monto_saldo === '' || $monto_saldo === null)
         {
             return 0;
@@ -207,9 +210,9 @@ class PrestamoController extends Controller
                     'monto_saldo' => $persmon->monto_saldo,
                     'consumido' => $persmon->consumido
                 );
-                $i+=1; 
+                $i+=1;
             }
-            
+
             for($x=0;$x<count($tempo);$x++){
                 if( $request->monto <= $tempo[$x]['monto_saldo'] ){
                     $condicion2 = array(
@@ -288,16 +291,16 @@ class PrestamoController extends Controller
     }
 
     public function edit(Prestamo $prestamo)
-    {    
+    {
         //Obtenemos Id del Usuatio
         $user_id = Auth::user()->id;
         $roles = Auth::user()->roles;
- 
+
         foreach($roles as $role){
             $role_name = $role->name;
         }
 
-        $clientes = Cliente::select( 
+        $clientes = Cliente::select(
                                 DB::raw("CONCAT(nombres,' ',apellidos) AS nombres"),'id')
                             ->pluck('nombres','id');
 
@@ -333,7 +336,7 @@ class PrestamoController extends Controller
         $prestamo->monto = $request->monto;
         $prestamo->dias = $request->dias;
         $prestamo->cuota = $request->cuota;
-        $prestamo->estado = $request->estado; 
+        $prestamo->estado = $request->estado;
 
 
         $condicion = array(
@@ -346,10 +349,10 @@ class PrestamoController extends Controller
         //OBTENEMOS DATOS DEL PRÉSTAMO ANTES DE ACTUALIZARLO
         $prestamo_anterior = Prestamo::findOrFail($prestamo->id);
         //OBTENEMOS LA DIFERENCIA DE MONTOS
-        $dif_montos = ($request->monto > $prestamo_anterior->monto) ? 
-                        ($request->monto - $prestamo_anterior->monto) : 
+        $dif_montos = ($request->monto > $prestamo_anterior->monto) ?
+                        ($request->monto - $prestamo_anterior->monto) :
                         ($prestamo_anterior->monto - $request->monto);
-        
+
 
         //Actualizamos el Saldo Disponible
         $tempo=0;
@@ -455,8 +458,7 @@ class PrestamoController extends Controller
                         ->select('personal_id')
                         ->where('cliente_id','=',$prestamo->cliente_id)
                         ->get()->first();
-                        
-   
+
         //obtenemos datos del monto asignado al personal
         $personalmonto = personalMonto::where('personal_id',$persona->personal_id)
                                     ->orderBy('created_at','DESC')
@@ -464,12 +466,12 @@ class PrestamoController extends Controller
 
         //actualizamos el monto
         $personalmonto->monto_saldo =   $personalmonto->monto_saldo  + $prestamo->monto;
-        
+
         $personalmonto->consumido = ($personalmonto->monto_saldo  == 0) ? 1 :0;
         $personalmonto->save();
         //ELIMINAS EL PRESTAMO
         $prestamo->delete();
-        
+
         return $prestamo;
     }
 
@@ -478,7 +480,7 @@ class PrestamoController extends Controller
         //Obtenemos Id del Usuatio
         $user_id = Auth::user()->id;
         $roles = Auth::user()->roles;
- 
+
         foreach($roles as $role){
             $role_name = $role->name;
         }
@@ -490,7 +492,7 @@ class PrestamoController extends Controller
         if($contarCobranza >0){
             $minSaldo = Cobranza::where('prestamo_id',$id)->min('saldo');
         }
-                
+
         $cobranzas = Cobranza::where('prestamo_id',$prestamo->id)->orderBy('fecha','DESC')->get();
 
         return view('prestamo.deuda.mostrarCobranza',compact('prestamo','minSaldo','cobranzas','role_name'));
@@ -531,7 +533,7 @@ class PrestamoController extends Controller
                         ->join('clientes as c' ,'cp.cliente_id','=', 'c.id')
                         ->select(DB::raw("CONCAT(c.nombres,' ',c.apellidos) AS nombres"),'c.id')
                         ->where('cp.personal_id','=',$id)
-                        ->pluck('nombres','id'); 
+                        ->pluck('nombres','id');
         return view('prestamo.deuda.clientePersonal',compact('clientes'));
     }
 
@@ -540,7 +542,7 @@ class PrestamoController extends Controller
         //Obtenemos Id del Usuatio
         $user_id = Auth::user()->id;
         $roles = Auth::user()->roles;
- 
+
         foreach($roles as $role){
             $role_name = $role->name;
         }
@@ -573,14 +575,13 @@ class PrestamoController extends Controller
                                     ->join('personals as p','cp.personal_id','=','p.id')
                                     ->where('p.user_id',$user_id)
                                     ->count('pr.id');
-                                
         }
 
         if($prestamo_count == 0){
             return 0;
         }
         else {
-            return view('prestamo.deuda.reporte',compact('tipos','personals','role_name'));            
+            return view('prestamo.deuda.reporte',compact('tipos','personals','role_name'));
         }
     }
 
@@ -624,6 +625,10 @@ class PrestamoController extends Controller
                         ->orderBy('fecha_prestamo','DESC')
                         ->get();
 
+        if(Session::has('prestamos') ) {Session::forget('prestamos');}
+
+        Session::put('prestamos',$prestamos->toArray());
+
         return view('prestamo.deuda.resultado',compact('personals','prestamos','request'));
     }
 
@@ -633,7 +638,7 @@ class PrestamoController extends Controller
         $mes_ini = $request->mes_ini;
         $mes_fin = $request->mes_fin;
 
-        if($request->personal_id == "%"){            
+        if($request->personal_id == "%"){
             $prestamos = DB::table('prestamos as pr')
                             ->join('cliente_personal  as cp','pr.cliente_id', '=', 'cp.cliente_id')
                             ->join('personals as p','cp.personal_id','=','p.id')
@@ -646,7 +651,7 @@ class PrestamoController extends Controller
                             ->where(DB::raw("MONTH(fecha_prestamo)"),'<=',$mes_fin)
                             ->groupBy(DB::raw('MONTH(fecha_prestamo)'),'p.nombres','p.apellidos')
                             ->orderByRaw('mes ASC, personal ASC')
-                            ->get();            
+                            ->get();
         }
         else{
             $prestamos = DB::table('prestamos as pr')
@@ -663,7 +668,7 @@ class PrestamoController extends Controller
                             ->groupBy(DB::raw('MONTH(fecha_prestamo)'),'p.nombres','p.apellidos')
                             ->orderByRaw('mes ASC, personal ASC')
                             ->get();
-        }       
+        }
 
         return view('prestamo.deuda.resultado',compact('prestamos','request'));
     }
@@ -673,7 +678,7 @@ class PrestamoController extends Controller
         //Obtenemos Id del Usuatio
         $user_id = Auth::user()->id;
         $roles = Auth::user()->roles;
- 
+
         foreach($roles as $role){
             $role_name = $role->name;
         }
@@ -683,7 +688,7 @@ class PrestamoController extends Controller
             "02" => 'Mensual',
             "03" => 'Anual'
         );
-       
+
          //Obteneos los clientes de acuerdo al rol
          if($role_name == 'admin' || $role_name == 'master'){
             $personals = DB::table('personals as p')
@@ -707,7 +712,7 @@ class PrestamoController extends Controller
                                     ->join('personals as p','cp.personal_id','=','p.id')
                                     ->where('p.user_id',$user_id)
                                     ->count('pr.id');
-                                
+
         }
 
         if($prestamo_count == 0){
@@ -811,7 +816,7 @@ class PrestamoController extends Controller
 
         if($request->personal_id == "%"){
             $like_condicion = $request->personal_id;
-            $cobranzas = DB::table('cobranzas as co') 
+            $cobranzas = DB::table('cobranzas as co')
                         ->join('prestamos as pr','co.prestamo_id','=','pr.id')
                         ->join('cliente_personal as cp','pr.cliente_id','=','cp.cliente_id')
                         ->join('personals as p','cp.personal_id','=','p.id')
@@ -826,7 +831,7 @@ class PrestamoController extends Controller
         }
         else{
             $like_condicion = '%'.$request->personal_id.'%';
-            $cobranzas = DB::table('cobranzas as co') 
+            $cobranzas = DB::table('cobranzas as co')
                         ->join('prestamos as pr','co.prestamo_id','=','pr.id')
                         ->join('cliente_personal as cp','pr.cliente_id','=','cp.cliente_id')
                         ->join('personals as p','cp.personal_id','=','p.id')
@@ -843,5 +848,10 @@ class PrestamoController extends Controller
 
         
         return view('prestamo.deuda.resultadoCobranza',compact('request','cobranzas'));
+    }
+
+    public function excelPrestamos() {
+        $prestamos = Session::get('prestamos');
+        return Excel::download(new PrestamosExport($prestamos),'Prestamos.xlsx');
     }
 }
