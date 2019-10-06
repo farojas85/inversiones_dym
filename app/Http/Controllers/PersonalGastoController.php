@@ -8,9 +8,13 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Session;
+use App\Exports\PersonalGastosExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PersonalGastoController extends Controller
 {
+    var $personalgastos_array;
     public function __construct()
     {
         $this->middleware('permission:personalgastos.create')->only(['create','store']);
@@ -25,7 +29,7 @@ class PersonalGastoController extends Controller
         //Obtenemos Id del Usuatio
         $user_id = Auth::user()->id;
         $roles = Auth::user()->roles;
- 
+
         foreach($roles as $role){
             $role_name = $role->name;
         }
@@ -40,7 +44,6 @@ class PersonalGastoController extends Controller
                             ->select('pg.id','pg.fecha',
                                 DB::raw("CONCAT(p.nombres,' ',p.apellidos) as personal"),
                                 'pg.fecha','pg.descripcion','pg.monto')
-                            ->whereMonth('pg.fecha','=',date('m'))
                             ->orderBy('personal','ASC')
                             ->orderBy('pg.fecha','ASC')
                             ->get();
@@ -63,7 +66,7 @@ class PersonalGastoController extends Controller
         //Obtenemos Id del Usuatio
         $user_id = Auth::user()->id;
         $roles = Auth::user()->roles;
- 
+
         foreach($roles as $role){
             $role_name = $role->name;
         }
@@ -88,12 +91,6 @@ class PersonalGastoController extends Controller
         return view('personal.gasto.create',compact('personal','role_name','estadoform'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $PersonalGasto = new PersonalGasto();
@@ -107,23 +104,12 @@ class PersonalGastoController extends Controller
         return "Datos Registrados Satisfactoriamente";
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\PersonalGasto  $personalGasto
-     * @return \Illuminate\Http\Response
-     */
+
     public function show(PersonalGasto $personalGasto)
     {
         return view('personal.gasto.show',compact('personalGasto'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\PersonalGasto  $personalGasto
-     * @return \Illuminate\Http\Response
-     */
     public function edit(PersonalGasto $personalGasto)
     {
         //
@@ -156,11 +142,15 @@ class PersonalGastoController extends Controller
 
     public function busqueda_modal()
     {
-         //El Personal
-         $personals = personal::select('id',
-                                    DB::raw("CONCAT(nombres,' ',apellidos) as personal"))
-                                ->where('estado','=','activo')
-                                ->get();
+        $personals = DB::table('personals as p')
+                        ->join('role_user as ru' ,'p.user_id','=','ru.user_id')
+                        ->join('roles as r','ru.role_id','=','r.id')
+                        ->select(
+                            DB::raw("CONCAT(p.nombres,' ',p.apellidos) AS personal"),
+                                'p.id')
+                        ->where('r.name','cobrador')
+                        ->where('p.estado','=','activo')
+                        ->get();
         return view('personal.gasto.busqueda_modal',compact('personals'));
     }
 
@@ -169,7 +159,7 @@ class PersonalGastoController extends Controller
         //Obtenemos Id del Usuatio
         $user_id = Auth::user()->id;
         $roles = Auth::user()->roles;
- 
+
         foreach($roles as $role){
             $role_name = $role->name;
         }
@@ -200,5 +190,32 @@ class PersonalGastoController extends Controller
         }
 
         return view('personal.gasto.table',compact('personalgastos','role_name'));
+    }
+
+    public function reporte(Request $request)
+    {
+        //obtenemos los gatos del personal seleccionado en un rango de fecha seleccionado
+        $personalgastos = DB::table('personal_gastos as pg')
+                                ->join('personals as p','pg.personal_id','=','p.id')
+                            ->select(
+                                DB::raw("CONCAT(p.apellidos,' ',p.nombres) as personal"),
+                                'pg.fecha','pg.descripcion','pg.monto'
+                                )
+                            ->where('pg.personal_id','LIKE',$request->personal_id)
+                            ->where('pg.fecha','>=',$request->fecha_inicio)
+                            ->where('pg.fecha','<=',$request->fecha_final)
+                            ->orderBy('personal','ASC')
+                            ->get();
+
+        //guardamos la Colección en una variable tipo arreglo
+        Session::put('personalgastos',$personalgastos->toArray());
+
+        return view('personal.gasto.reporte',compact('personalgastos'));
+    }
+
+    public function excel()
+    {
+        $datos = Session::get('personalgastos');
+        return Excel::download(new PersonalGastosExport($datos),'Reporte_Gastos_Personal.xlsx');
     }
 }

@@ -122,7 +122,7 @@ class PersonalMontoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, personalMonto $personalMonto)
-    {    
+    {
         $personalMonto = personalMonto::findOrFail($request->id);
 
         $personalMonto->personal_id = $request->personal_id;

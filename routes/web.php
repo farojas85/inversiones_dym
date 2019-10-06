@@ -47,6 +47,8 @@ Route::get('/resumen/exportar','ResumenController@exportar_excel');
 Route::get('/cliente/exportar','ClienteController@excel')->name('cliente.exportar');
 Route::get('/prestamo/exportar','PrestamoController@excelPrestamos')->name('prestamo.exportar');
 Route::get('/cobranza/exportar/{tipo}','PrestamoController@excelCobranzas')->name('cobranza.exportar');
+Route::get('/personalgastos/reporte','PersonalGastoController@reporte');
+Route::get('/personalgastos/exportar','PersonalGastoController@excel')->name('personalgastos.exportar');
 
 Route::group(['middleware' => 'checkRole:cobrador'], function() {
     Route::get('/home', 'HomeController@index')->name('home');
@@ -82,5 +84,5 @@ Route::middleware(['auth'])->group(function(){
     Route::get('clienteTabla','ClienteController@tabla');
     Route::get('clienteReporte','ClienteController@Reporte');
     Route::get('clienteReporteTabla','ClienteController@reporte_tabla');
-    
+
 });

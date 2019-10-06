@@ -45,12 +45,12 @@
                         <table id="prestamo-datatable" class="table table-striped dt-responsive table-sm" >
                             <thead>
                                 <tr>
-                                    <th >Acciones</th>
-                                    <th >fecha</th>
                                     <th >Cliente</th>
-                                    <th >Monto Deuda</th>                                 
+                                    <th >fecha</th>
+                                    <th >Monto Deuda</th>
                                     <th>Saldo</th>
                                     <th>Estado</th>
+                                    <th >Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -64,6 +64,19 @@
                                         }
                                     @endphp
                                     <tr>
+                                        <td>{{ $prestamo->nombres }}</td>
+                                        <td>{{ date('d/m/Y',strtotime($prestamo->fecha_prestamo)) }}</td>
+                                        <td>{{ "S/ ".number_format($prestamo->monto,2) }}</td>
+                                        <td>
+                                            @if ($prestamo->saldo == '' || $prestamo->saldo == null)
+                                                {{ 'S/ '.number_format($prestamo->monto,2) }}
+                                            @else
+                                                {{ "S/ ".number_format($prestamo->saldo,2)}}
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <span class="{{ $clase }}">{{ $prestamo->estado }}</span>
+                                        </td>
                                         <td>
                                             @can('prestamos.edit')
                                             <a class="btn btn-warning btn-xs modal-edit" title="Editar Préstamo"
@@ -84,19 +97,6 @@
                                             </a>
                                             @endcan
                                         </td>
-                                        <td>{{ date('d/m/Y',strtotime($prestamo->fecha_prestamo)) }}</td>
-                                        <td>{{ $prestamo->nombres }}</td>
-                                        <td>{{ "S/ ".number_format($prestamo->monto,2) }}</td>
-                                        <td>
-                                            @if ($prestamo->saldo == '' || $prestamo->saldo == null)
-                                                {{ 'S/ '.number_format($prestamo->monto,2) }}
-                                            @else
-                                                {{ "S/ ".number_format($prestamo->saldo,2)}}
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <span class="{{ $clase }}">{{ $prestamo->estado }}</span>
-                                        </td>
                                     </tr>
                                     @endforeach
                                 @else
@@ -109,14 +109,8 @@
                                         }
                                     @endphp
                                     <tr>
-                                        <td>
-                                            <button type="button" class="btn btn-success btn-xs mostrar-cobranza" 
-                                                title="Mostrar_Cobranza" onclick="mostrar_cobranza({{$prestamo->id}})">
-                                                <i class="fas fa-donate"></i>
-                                            </button>
-                                        </td>
-                                        <td>{{ date('d/m/Y',strtotime($prestamo->fecha_prestamo)) }}</td>
                                         <td>{{ $prestamo->nombres }}</td>
+                                        <td>{{ date('d/m/Y',strtotime($prestamo->fecha_prestamo)) }}</td>
                                         <td>{{ "S/ ".number_format($prestamo->monto,2) }}</td>
                                         <td>
                                             @if ($prestamo->saldo == '' || $prestamo->saldo == null)
@@ -128,10 +122,15 @@
                                         <td>
                                             <span class="{{ $clase }}">{{ $prestamo->estado }}</span>
                                         </td>
+                                        <td>
+                                            <button type="button" class="btn btn-success btn-xs mostrar-cobranza"
+                                                title="Mostrar_Cobranza" onclick="mostrar_cobranza({{$prestamo->id}})">
+                                                <i class="fas fa-donate"></i>
+                                            </button>
+                                        </td>
                                     </tr>
                                     @endforeach
                                 @endif
-                                    
                                 </tbody>
                         </table>
                     </div>

@@ -1,4 +1,33 @@
-//AGREGAR ROLE
+$('#model-datatable').DataTable({
+    "language":
+        {
+            "sProcessing":     "Procesando...",
+            "sLengthMenu":     "Mostrar _MENU_ registros",
+            "sZeroRecords":    "No se encontraron resultados",
+            "sEmptyTable":     "Ningún dato disponible en esta tabla",
+            "sInfo":           "Mostrando del _START_ al _END_ de un total de _TOTAL_",
+            "sInfoEmpty":      "Mostrando del 0 al 0 de un total de 0",
+            "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix":    "",
+            "sSearch":         "Buscar:",
+            "sUrl":            "",
+            "sInfoThousands":  ",",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst":    "Primero",
+                "sLast":     "Ultimo",
+                "sNext":     "Siguiente",
+                "sPrevious": "Anterior"
+            },
+            "oAria": {
+                "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            }
+        },
+    "pageLength": 5,
+    "lengthMenu": [[5,10, 25, 50, -1], [5,10, 25, 50, "All"]]
+});
+
 $('body').on('click', '#btn-buscar', function (event) {
     event.preventDefault();
 
@@ -147,3 +176,27 @@ function mostrar_tabla()
     });
 }
 
+$('body').on('click',  '.btn-generar-reporte', function (event) {
+    event.preventDefault()
+    personal_id = $('#personal_id').val()
+    fecha_inicio = $('#fecha_inicio').val()
+    fecha_final = $('#fecha_final').val()
+
+    $('#form').parsley().validate();
+
+    if ($('#form').parsley().isValid()) {
+        $.ajax({
+            url: '/personalgastos/reporte',
+            data:{
+                personal_id : personal_id,
+                fecha_inicio : fecha_inicio,
+                fecha_final : fecha_final
+            },
+            type: 'GET',
+            success: function (response) {
+                $('#section-body').html(response)
+                $('#modal-default').modal('hide')
+            }
+        });
+    }
+});
